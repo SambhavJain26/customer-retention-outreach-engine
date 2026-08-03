@@ -42,6 +42,8 @@ Run:
 
 The script verifies Docker, Docker Compose, Compose syntax, container status, local n8n reachability, and the n8n CLI version. UI-only checks and credential checks must still be completed manually in n8n.
 
+For CLI-executed smoke workflows, stop the running n8n service first and execute through a one-off Compose container. Running `n8n execute` inside the already-running service container can fail because the task broker port is already in use.
+
 ## Credentials To Create In n8n
 
 Create credentials by name only. Never export or commit credential JSON.
@@ -73,6 +75,12 @@ Use a demo-safe footer placeholder in later email templates. Do not present the 
 3. Capture the manager chat ID using Telegram `getUpdates` or an n8n Telegram node test.
 4. Send one test alert from n8n.
 
+Store the manager chat ID in local `.env` only:
+
+```env
+TELEGRAM_MANAGER_CHAT_ID=
+```
+
 ## OpenAI Model Check
 
 Official OpenAI docs currently list `gpt-5.6-luna` as the GPT-5.6 cost-sensitive model, with short-context Standard pricing of `$0.20` input and `$1.20` output per 1M tokens.
@@ -83,4 +91,16 @@ Stage 1 must still verify account-level access through n8n before workflows depe
 - If unavailable, test `gpt-5.4-nano`.
 - Use `gpt-5.4-mini` for drafting only if cheaper draft quality fails in Stage 5.
 
+In n8n `2.29.10`, the OpenAI Responses operation successfully calls `gpt-5.6-luna`, but the model rejects `temperature`, and `max_output_tokens` must be at least `16`.
+
 Record the callable model IDs and pricing check date in `progress-notes.md`.
+
+## Gmail Smoke Test
+
+Store the local smoke-test recipient in `.env` only:
+
+```env
+STAGE1_TEST_EMAIL=
+```
+
+For the local demo, this can be the same Gmail account used as the sender.

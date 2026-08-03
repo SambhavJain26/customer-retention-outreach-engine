@@ -45,9 +45,6 @@ Write-Host "n8n reachable: $url"
 Write-Step "n8n version"
 docker compose exec -T n8n n8n --version
 
-Write-Step "Manual Stage 1 checks still required"
-Write-Host "- Open http://localhost:5678 and confirm the Data Tables tab is visible."
-Write-Host "- Create/test n8n credentials named for OpenAI, Gmail OAuth2, and Telegram."
-Write-Host "- Verify a one-token OpenAI call through the built-in OpenAI/OpenAI Chat Model node."
-Write-Host "- Verify Gmail sends one test email from the demo Gmail account."
-Write-Host "- Verify Telegram sends one test alert to the manager chat."
+Write-Step "Credential checks"
+Write-Host "This script does not test private credentials."
+Write-Host "Credential smoke tests are tracked in progress-notes.md after they are run through n8n."

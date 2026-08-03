@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 1 local runtime scaffolding has been implemented and the n8n container is reachable locally. Credential and UI checks remain pending because they require private account access in the n8n UI.
+Stage 1 is complete. Local n8n is running, Data Tables are visible, and OpenAI, Gmail OAuth2, and Telegram credentials have passed smoke tests.
 
 ## Source Context Read
 
@@ -51,7 +51,7 @@ Current proposed direction:
 
 | Stage | Name | Status | Notes |
 |---|---|---|---|
-| 1 | Local Environment, Accounts, and Tooling | In progress | Repo-owned Compose runtime added and verified at `http://localhost:5678`; credential tests and Data Tables UI confirmation still pending. |
+| 1 | Local Environment, Accounts, and Tooling | Complete | Repo-owned Compose runtime verified at `http://localhost:5678`; Data Tables visible; OpenAI, Gmail OAuth2, and Telegram smoke tests passed. |
 | 2 | Data Model and Demo Fixtures | Not started | Create Data Tables, config, roster fixture, reply fixtures. |
 | 3 | WF1 Roster Ingestion | Not started | CSV upload, normalization, validation, idempotent upsert. |
 | 4 | WF2 Dashboard | Not started | n8n-served HTML board with cohorts, flags, approval/feed screens. |
@@ -82,6 +82,16 @@ Current proposed direction:
 
 2026-08-04: n8n logs currently show a Python task runner warning because Python 3 is not present in the image. This is not blocking for the demo as planned because workflows will use JavaScript Code nodes, not Python nodes.
 
+2026-08-04: User confirmed n8n Data Tables are visible and created credentials named `OpenAI account`, `Gmail account`, and `Telegram account`.
+
+2026-08-04: OpenAI smoke test passed through n8n's built-in OpenAI node using `gpt-5.6-luna`; response returned `OK` with token usage `11` input / `5` output. The model rejected `temperature`, so later workflows must omit that parameter for `gpt-5.6-luna`. The Responses operation also rejected `max_output_tokens=5`; use at least `16`.
+
+2026-08-04: Telegram smoke test passed through n8n using the `Telegram account` credential. The manager chat ID was discovered from the bot's `getUpdates` response and stored in local `.env` only.
+
+2026-08-04: Gmail OAuth2 smoke test passed through n8n using the `Gmail account` credential. The local demo sender/recipient email was stored in local `.env` only and not committed. Gmail returned a message/thread ID successfully.
+
+2026-08-04: n8n CLI workflow execution cannot be run inside the already-running service container because the task broker port is in use. Smoke tests were executed by stopping n8n, running a one-off `docker compose run --rm --no-deps n8n execute --id=<workflow-id> --rawOutput`, then restarting n8n.
+
 ## Stage 1 Verification Status
 
 Completed:
@@ -94,16 +104,12 @@ Completed:
 - Data Tables module is enabled through `N8N_ENABLED_MODULES=data-table`.
 - Runtime timezone is set to `America/New_York`.
 - Local `.env` exists and remains ignored by git.
-
-Pending manual UI/account checks:
-
-- Confirm the Data Tables tab is visible after opening n8n in the browser.
-- Create and test the n8n OpenAI credential.
-- Confirm `gpt-5.6-luna` is callable from the user's OpenAI account through n8n.
-- Create and test Gmail OAuth2 with the demo Gmail account.
-- Set Gmail display name to `Harborview Property Management`.
-- Create and test Telegram bot credential and manager chat ID.
+- Data Tables tab is visible in the n8n UI.
+- n8n OpenAI credential passes a smoke test.
+- `gpt-5.6-luna` is callable from the user's OpenAI account through n8n.
+- Gmail OAuth2 credential sends a real test email.
+- Telegram credential sends a real manager alert.
 
 ## Next Step
 
-Open `http://localhost:5678`, complete owner setup if prompted, then run the pending Stage 1 UI/account checks from `docs/stage-1-local-environment.md`. Do not start Stage 2 until the OpenAI, Gmail, and Telegram credential checks pass and are recorded here.
+Start Stage 2: create n8n Data Tables, config defaults, roster fixture, reply fixtures, and expected fixture outcomes.
