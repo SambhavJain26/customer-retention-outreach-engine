@@ -42,6 +42,7 @@ Useful commands:
 - `docker compose ps`: inspect services.
 - `docker compose logs n8n`: inspect n8n failures.
 - `docker compose up -d --force-recreate n8n`: recreate n8n after environment, webhook, or tunnel URL changes.
+- `.\scripts\verify-stage-1.ps1`: verify Docker, Compose config, n8n container status, local HTTP reachability, and n8n version for Stage 1.
 - `Get-Content -Raw .\n8n-workflows\<file>.json | ConvertFrom-Json | Out-Null`: validate workflow JSON.
 
 Do not assume package managers, Docker images, API keys, Gmail OAuth credentials, Telegram bots, OpenAI credentials, tunnels, or n8n credentials already exist.
@@ -77,6 +78,7 @@ Known gotchas to account for:
 - Docker Compose `restart` may not apply changed environment variables; recreate the n8n container when changing webhook/tunnel settings.
 - After n8n restart, active webhook registration can lag; verify with a real HTTP probe or execution record.
 - In PowerShell, piping JSON into native commands can introduce a UTF-8 BOM. If workflow import fails at the first character, check encoding or import through a BOM-safe path.
+- The current local `n8nio/n8n:latest` image may log a Python task runner warning because Python 3 is not present. This is acceptable for the demo as long as workflows use JavaScript Code nodes and n8n remains healthy.
 
 ## Testing And Verification
 

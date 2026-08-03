@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Planning phase complete. No implementation code, workflows, services, or demo fixtures have been built yet.
+Stage 1 local runtime scaffolding has been implemented and the n8n container is reachable locally. Credential and UI checks remain pending because they require private account access in the n8n UI.
 
 ## Source Context Read
 
@@ -14,7 +14,7 @@ Planning phase complete. No implementation code, workflows, services, or demo fi
 
 ## Approved Build Direction
 
-Pending user approval.
+Approved for Stage 1 implementation on 2026-08-04.
 
 Current proposed direction:
 
@@ -51,7 +51,7 @@ Current proposed direction:
 
 | Stage | Name | Status | Notes |
 |---|---|---|---|
-| 1 | Local Environment, Accounts, and Tooling | Not started | Verify local n8n, optional tunnel, Data Tables, n8n OpenAI credential, Gmail OAuth2, Telegram. VPS/Caddy/domain deferred. |
+| 1 | Local Environment, Accounts, and Tooling | In progress | Repo-owned Compose runtime added and verified at `http://localhost:5678`; credential tests and Data Tables UI confirmation still pending. |
 | 2 | Data Model and Demo Fixtures | Not started | Create Data Tables, config, roster fixture, reply fixtures. |
 | 3 | WF1 Roster Ingestion | Not started | CSV upload, normalization, validation, idempotent upsert. |
 | 4 | WF2 Dashboard | Not started | n8n-served HTML board with cohorts, flags, approval/feed screens. |
@@ -72,6 +72,38 @@ Current proposed direction:
 
 2026-08-04: Added Git workflow guidance to `AGENTS.md`: check status/log commands, commit and push to `main` after every completed task unless explicitly told not to, and report push failures clearly.
 
+2026-08-04: Implemented Stage 1 local-first runtime scaffolding using repo-owned Docker Compose instead of VPS/Caddy/domain setup. Added `.env.example`, ignored local `.env`, `docker-compose.yml`, `scripts/verify-stage-1.ps1`, and `docs/stage-1-local-environment.md`.
+
+2026-08-04: Verified Docker `29.1.3`, Docker Compose `v2.40.3-desktop.1`, `docker compose config`, local n8n HTTP reachability at `http://localhost:5678`, `/healthz` status `200`, `N8N_ENABLED_MODULES=data-table`, `GENERIC_TIMEZONE=America/New_York`, and n8n CLI version `2.29.10`.
+
+2026-08-04: Current local n8n image is `n8nio/n8n:latest`, digest `sha256:9cb60554716a0ab11a966e79ed65171e1bbf00b6d262ba12aa119bba22eb6000`, created `2026-07-10T07:29:13.441938867Z`.
+
+2026-08-04: Official OpenAI docs checked. `gpt-5.6-luna` is listed as the cost-sensitive GPT-5.6 model, with short-context Standard pricing of `$0.20` input / `$1.20` output per 1M tokens and lower-cost listed pricing of `$0.10` input / `$0.60` output per 1M tokens where applicable. Account-level model access was not verified because no `OPENAI_API_KEY` is present in the shell environment and n8n credentials have not yet been created.
+
+2026-08-04: n8n logs currently show a Python task runner warning because Python 3 is not present in the image. This is not blocking for the demo as planned because workflows will use JavaScript Code nodes, not Python nodes.
+
+## Stage 1 Verification Status
+
+Completed:
+
+- Docker and Docker Compose are installed.
+- n8n starts via repo-owned Docker Compose.
+- n8n is reachable at `http://localhost:5678`.
+- n8n health endpoint returns `200`.
+- Persistent Docker volume `renewal-retention_n8n_data` exists.
+- Data Tables module is enabled through `N8N_ENABLED_MODULES=data-table`.
+- Runtime timezone is set to `America/New_York`.
+- Local `.env` exists and remains ignored by git.
+
+Pending manual UI/account checks:
+
+- Confirm the Data Tables tab is visible after opening n8n in the browser.
+- Create and test the n8n OpenAI credential.
+- Confirm `gpt-5.6-luna` is callable from the user's OpenAI account through n8n.
+- Create and test Gmail OAuth2 with the demo Gmail account.
+- Set Gmail display name to `Harborview Property Management`.
+- Create and test Telegram bot credential and manager chat ID.
+
 ## Next Step
 
-Wait for user approval or edits to `build-plan.md`. After approval, start Stage 1 only.
+Open `http://localhost:5678`, complete owner setup if prompted, then run the pending Stage 1 UI/account checks from `docs/stage-1-local-environment.md`. Do not start Stage 2 until the OpenAI, Gmail, and Telegram credential checks pass and are recorded here.
