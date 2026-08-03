@@ -80,6 +80,7 @@ Known gotchas to account for:
 - In PowerShell, piping JSON into native commands can introduce a UTF-8 BOM. If workflow import fails at the first character, check encoding or import through a BOM-safe path.
 - The current local `n8nio/n8n:latest` image may log a Python task runner warning because Python 3 is not present. This is acceptable for the demo as long as workflows use JavaScript Code nodes and n8n remains healthy.
 - Running `n8n execute` inside the already-running n8n container can fail because the task broker port is already in use. For CLI smoke tests, stop the service container, run `docker compose run --rm --no-deps n8n execute --id=<workflow-id> --rawOutput`, then start n8n again.
+- In this local n8n `2.29.10` setup, Data Table nodes may report the module as disabled under one-off CLI `n8n execute` even when `N8N_ENABLED_MODULES=data-table` is set. Use active temporary webhook workflows against the running n8n service for Data Table setup/verification.
 - In n8n `2.29.10`, `gpt-5.6-luna` works through the built-in OpenAI Responses operation, but it rejects `temperature`; omit that option. The Responses API also rejects `max_output_tokens` below `16`.
 
 ## Testing And Verification

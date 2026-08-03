@@ -1,0 +1,157 @@
+[
+  {
+    "id": 1,
+    "label": "green-baseline",
+    "reply": "All good here, we're planning to stay. Thanks for checking in.",
+    "expected": {
+      "intent": "STAYING",
+      "grievance_category": "NONE",
+      "urgency": "LOW",
+      "compliance_flag": "NONE",
+      "confidence": "HIGH",
+      "requires_human": false,
+      "contains_question": false
+    }
+  },
+  {
+    "id": 2,
+    "label": "maintenance-grievance-demo",
+    "reply": "We're happy here but the extractor fan in the bathroom has been broken since summer and I've reported it twice.",
+    "expected": {
+      "intent": "GRIEVANCE",
+      "grievance_category": "MAINTENANCE",
+      "urgency": "HIGH",
+      "compliance_flag": "NONE",
+      "confidence": "HIGH",
+      "requires_human": true,
+      "summary_must_include": [
+        "extractor fan",
+        "reported it twice"
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "label": "leaving",
+    "reply": "Thanks - we'll actually be relocating to Denver in the spring for my husband's job.",
+    "expected": {
+      "intent": "LEAVING",
+      "grievance_category": "NONE",
+      "urgency": "HIGH",
+      "compliance_flag": "NONE",
+      "confidence": "HIGH",
+      "requires_human": true
+    }
+  },
+  {
+    "id": 4,
+    "label": "wavering-rent",
+    "reply": "Depends what happens with the rent honestly. We like the place.",
+    "expected": {
+      "intent": "WAVERING",
+      "grievance_category": "NONE",
+      "urgency": "MEDIUM",
+      "compliance_flag": "NONE",
+      "confidence": "MEDIUM",
+      "requires_human": true
+    }
+  },
+  {
+    "id": 5,
+    "label": "neighbour-parking",
+    "reply": "the parking situation is ridiculous, someone in 2C has been taking my spot for months and nobody does anything",
+    "expected": {
+      "intent": "GRIEVANCE",
+      "grievance_category": "NEIGHBOURS",
+      "urgency": "HIGH",
+      "compliance_flag": "NONE",
+      "confidence": "HIGH",
+      "requires_human": true
+    }
+  },
+  {
+    "id": 6,
+    "label": "habitability",
+    "reply": "there's black mould coming through the bathroom ceiling again, third time this year",
+    "expected": {
+      "intent": "GRIEVANCE",
+      "grievance_category": "PROPERTY_CONDITION",
+      "urgency": "HIGH",
+      "compliance_flag": "HABITABILITY",
+      "confidence": "HIGH",
+      "requires_human": true,
+      "no_auto_reply": true
+    }
+  },
+  {
+    "id": 7,
+    "label": "accommodation-request",
+    "reply": "My mother moved in with me and she uses a walker - is it possible to get a grab bar put in the bathroom?",
+    "expected": {
+      "intent": "GRIEVANCE",
+      "grievance_category": "PROPERTY_CONDITION",
+      "urgency": "HIGH",
+      "compliance_flag": "ACCOMMODATION_REQUEST",
+      "confidence": "HIGH",
+      "requires_human": true,
+      "no_auto_reply": true,
+      "contains_question": true
+    }
+  },
+  {
+    "id": 8,
+    "label": "auto-reply",
+    "reply": "I am out of the office until 14 August with limited access to email.",
+    "expected": {
+      "intent": "NO_SIGNAL",
+      "grievance_category": "NONE",
+      "urgency": "LOW",
+      "compliance_flag": "NONE",
+      "confidence": "HIGH",
+      "requires_human": false,
+      "no_alert": true,
+      "no_token_spend": true
+    }
+  },
+  {
+    "id": 9,
+    "label": "opt-out",
+    "reply": "stop emailing me",
+    "expected": {
+      "intent": "OPT_OUT",
+      "grievance_category": "NONE",
+      "urgency": "HIGH",
+      "compliance_flag": "OPT_OUT",
+      "confidence": "HIGH",
+      "requires_human": true,
+      "opted_out": true
+    }
+  },
+  {
+    "id": 10,
+    "label": "unclear-low-confidence",
+    "reply": "k",
+    "expected": {
+      "intent": "UNCLEAR",
+      "grievance_category": "NONE",
+      "urgency": "LOW",
+      "compliance_flag": "NONE",
+      "confidence": "LOW",
+      "requires_human": true
+    }
+  },
+  {
+    "id": 11,
+    "label": "staying-with-question",
+    "reply": "We'd love to stay another year - what are the terms going to look like?",
+    "expected": {
+      "intent": "STAYING",
+      "grievance_category": "NONE",
+      "urgency": "MEDIUM",
+      "compliance_flag": "NONE",
+      "confidence": "HIGH",
+      "requires_human": true,
+      "contains_question": true
+    }
+  }
+]

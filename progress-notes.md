@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 1 is complete. Local n8n is running, Data Tables are visible, and OpenAI, Gmail OAuth2, and Telegram credentials have passed smoke tests.
+Stage 2 is complete. Local n8n is running with the required Data Tables, seeded demo config, generated roster fixture, generated reply fixtures, and Stage 2 verification passing.
 
 ## Source Context Read
 
@@ -52,7 +52,7 @@ Current proposed direction:
 | Stage | Name | Status | Notes |
 |---|---|---|---|
 | 1 | Local Environment, Accounts, and Tooling | Complete | Repo-owned Compose runtime verified at `http://localhost:5678`; Data Tables visible; OpenAI, Gmail OAuth2, and Telegram smoke tests passed. |
-| 2 | Data Model and Demo Fixtures | Not started | Create Data Tables, config, roster fixture, reply fixtures. |
+| 2 | Data Model and Demo Fixtures | Complete | Created/reused `leases`, `outreach_log`, and `config`; generated roster and reply fixtures; verification passed. |
 | 3 | WF1 Roster Ingestion | Not started | CSV upload, normalization, validation, idempotent upsert. |
 | 4 | WF2 Dashboard | Not started | n8n-served HTML board with cohorts, flags, approval/feed screens. |
 | 5 | WF3 Draft, Approval, and Send | Not started | Generate 90-day drafts, guardrails, approval gate, Gmail send, idempotency. |
@@ -92,6 +92,18 @@ Current proposed direction:
 
 2026-08-04: n8n CLI workflow execution cannot be run inside the already-running service container because the task broker port is in use. Smoke tests were executed by stopping n8n, running a one-off `docker compose run --rm --no-deps n8n execute --id=<workflow-id> --rawOutput`, then restarting n8n.
 
+2026-08-04: Implemented Stage 2 fixture tooling and Data Table setup. `fixtures/roster-demo.csv` generates with 40 visible rows, two intentionally blank rows, BOM, trailing whitespace, a quoted comma in one unit, and 10 messy behavior rows. Expected cohort counts are `120=6`, `90=14`, `60=11`, `30=6`, `NONE=2`, and `EXPIRED=1`; the expected flagged-row count is `8`.
+
+2026-08-04: Stage 2 reply fixtures include 11 primary fixtures because the detailed table includes fixture 11 (`staying-with-question`) and six private adversarial fixtures: prompt injection, long rant, Spanish reply, image-only reply, unmatched sender, and duplicate rapid replies.
+
+2026-08-04: Created/reused n8n Data Tables `leases`, `outreach_log`, and `config` with the Stage 2 schema. Seeded non-secret defaults in `config`: `manager_name=Maya Chen`, `company_name=Harborview Property Management`, `timezone=America/New_York`, `total_units=168`, `send_delay_seconds=2`, `model_draft=gpt-5.6-luna`, and `model_classify=gpt-5.6-luna`. Local-only `manager_email`, `demo_recipient_email`, and `telegram_chat_id` were seeded from ignored `.env` only and were not committed.
+
+2026-08-04: Stage 2 Data Table IDs in local n8n are `leases=YNgP827yOAeU86Kc`, `outreach_log=gQ9UwQWvv1hOiOv5`, and `config=toE1K0zGE5DGWKIf`. These IDs are local runtime details and are written only to ignored `tmp/stage2-data-table-ids.json`.
+
+2026-08-04: Stage 2 Data Table operations were verified through active temporary webhook workflows. Direct CLI `n8n execute` was not used for Data Table operations because this local n8n reports the Data Table module as disabled in one-off CLI execution even though the running service has Data Tables enabled.
+
+2026-08-04: Stage 2 verification passed: CSV fixture parsing/regeneration, expected row and cohort counts, Data Table existence, config read, and insert/read/delete smoke checks for `leases` and `outreach_log`.
+
 ## Stage 1 Verification Status
 
 Completed:
@@ -110,6 +122,20 @@ Completed:
 - Gmail OAuth2 credential sends a real test email.
 - Telegram credential sends a real manager alert.
 
+## Stage 2 Verification Status
+
+Completed:
+
+- Generated and validated `fixtures/roster-demo.csv`.
+- Generated and validated `fixtures/roster-demo-expected.json`.
+- Generated `fixtures/reply-fixtures.md` and `fixtures/reply-fixtures-expected.json`.
+- Generated private adversarial reply fixtures in `fixtures/adversarial-reply-fixtures.json`.
+- Created/reused n8n Data Tables `leases`, `outreach_log`, and `config`.
+- Seeded required config rows from defaults plus ignored local `.env` values.
+- Verified Data Table insert/read/delete for `leases`.
+- Verified Data Table insert/read/delete for `outreach_log`.
+- Verified seeded `config.manager_name` reads back as `Maya Chen`.
+
 ## Next Step
 
-Start Stage 2: create n8n Data Tables, config defaults, roster fixture, reply fixtures, and expected fixture outcomes.
+Start Stage 3: build WF1 roster ingestion with CSV upload, normalization, validation, idempotent upsert, and visible ingest outcomes.

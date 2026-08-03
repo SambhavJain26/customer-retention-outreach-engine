@@ -1,0 +1,54 @@
+{
+  "tables": [
+    {
+      "name": "leases",
+      "columns": [
+        { "name": "lease_id", "type": "string" },
+        { "name": "tenant_name", "type": "string" },
+        { "name": "tenant_first_name", "type": "string" },
+        { "name": "unit", "type": "string" },
+        { "name": "email", "type": "string" },
+        { "name": "email_valid", "type": "boolean" },
+        { "name": "move_in_date", "type": "date" },
+        { "name": "lease_end_date", "type": "date" },
+        { "name": "days_to_expiry", "type": "number" },
+        { "name": "cohort", "type": "string" },
+        { "name": "tenure_months", "type": "number" },
+        { "name": "status", "type": "string" },
+        { "name": "draft_subject", "type": "string" },
+        { "name": "draft_body", "type": "string" },
+        { "name": "ref_token", "type": "string" },
+        { "name": "sent_at", "type": "date" },
+        { "name": "opted_out", "type": "boolean" },
+        { "name": "ingest_notes", "type": "string" }
+      ]
+    },
+    {
+      "name": "outreach_log",
+      "columns": [
+        { "name": "event_id", "type": "string" },
+        { "name": "lease_id", "type": "string" },
+        { "name": "event_type", "type": "string" },
+        { "name": "reply_text", "type": "string" },
+        { "name": "intent", "type": "string" },
+        { "name": "grievance_category", "type": "string" },
+        { "name": "grievance_summary", "type": "string" },
+        { "name": "urgency", "type": "string" },
+        { "name": "compliance_flag", "type": "string" },
+        { "name": "confidence", "type": "string" },
+        { "name": "requires_human", "type": "boolean" },
+        { "name": "created_at", "type": "date" }
+      ]
+    },
+    {
+      "name": "config",
+      "columns": [
+        { "name": "key", "type": "string" },
+        { "name": "value", "type": "string" },
+        { "name": "value_type", "type": "string" },
+        { "name": "description", "type": "string" },
+        { "name": "updated_at", "type": "date" }
+      ]
+    }
+  ]
+}

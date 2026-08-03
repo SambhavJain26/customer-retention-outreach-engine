@@ -1,0 +1,1062 @@
+{
+  "generated_at": "2026-08-03T20:53:02.546Z",
+  "timezone": "America/New_York",
+  "base_date": "2026-08-03",
+  "visible_row_count": 40,
+  "blank_row_count": 2,
+  "total_units": 168,
+  "cohort_counts": {
+    "30": 6,
+    "60": 11,
+    "90": 14,
+    "120": 6,
+    "NONE": 2,
+    "EXPIRED": 1
+  },
+  "expected_90_day_generation_candidates": 14,
+  "flagged_row_count": 8,
+  "flagged_rows": [
+    {
+      "case_id": "clean-60-02",
+      "row_number_after_header": 18,
+      "unit": "Oakridge 12",
+      "expected_notes": [
+        "DUPLICATE_UNIT"
+      ]
+    },
+    {
+      "case_id": "messy-ambiguous-date",
+      "row_number_after_header": 34,
+      "unit": "Spruce 10",
+      "expected_notes": [
+        "AMBIGUOUS_DATE"
+      ]
+    },
+    {
+      "case_id": "messy-email-typo-domain",
+      "row_number_after_header": 35,
+      "unit": "Meadow 6",
+      "expected_notes": [
+        "INVALID_EMAIL_DOMAIN"
+      ]
+    },
+    {
+      "case_id": "messy-missing-email",
+      "row_number_after_header": 36,
+      "unit": "Hillcrest 2",
+      "expected_notes": [
+        "MISSING_EMAIL"
+      ]
+    },
+    {
+      "case_id": "messy-duplicate-unit",
+      "row_number_after_header": 37,
+      "unit": "Oakridge 12",
+      "expected_notes": [
+        "DUPLICATE_UNIT"
+      ]
+    },
+    {
+      "case_id": "messy-expired-lease",
+      "row_number_after_header": 38,
+      "unit": "Sunset 7",
+      "expected_notes": [
+        "EXPIRED_LEASE"
+      ]
+    },
+    {
+      "case_id": "messy-no-end-date",
+      "row_number_after_header": 39,
+      "unit": "Orchard 21",
+      "expected_notes": [
+        "NO_END_DATE"
+      ]
+    },
+    {
+      "case_id": "messy-short-tenure",
+      "row_number_after_header": 40,
+      "unit": "Vista 16",
+      "expected_notes": [
+        "TENURE_UNDER_6M"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "case_id": "clean-120-01",
+      "row_number_after_header": 1,
+      "input": {
+        "tenant_name": "Emily Carter",
+        "unit": "Willow Court 4B",
+        "email": "emily.carter@example.com",
+        "move_in_date": "2022-06-15",
+        "lease_end_date": "2026-11-21",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Emily Carter",
+        "tenant_first_name": "Emily",
+        "email_valid": true,
+        "move_in_date": "2022-06-15",
+        "lease_end_date": "2026-11-21",
+        "days_to_expiry": 110,
+        "cohort": "120",
+        "tenure_months": 49,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-120-02",
+      "row_number_after_header": 2,
+      "input": {
+        "tenant_name": "Nadia Rahman",
+        "unit": "Oakridge 14",
+        "email": "nadia.rahman@example.com",
+        "move_in_date": "2024-05-05",
+        "lease_end_date": "2026-11-27",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Nadia Rahman",
+        "tenant_first_name": "Nadia",
+        "email_valid": true,
+        "move_in_date": "2024-05-05",
+        "lease_end_date": "2026-11-27",
+        "days_to_expiry": 116,
+        "cohort": "120",
+        "tenure_months": 26,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-120-03",
+      "row_number_after_header": 3,
+      "input": {
+        "tenant_name": "Marcus Hill",
+        "unit": "218 Harrison St",
+        "email": "marcus.hill@example.com",
+        "move_in_date": "2021-03-22",
+        "lease_end_date": "2026-12-02",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Marcus Hill",
+        "tenant_first_name": "Marcus",
+        "email_valid": true,
+        "move_in_date": "2021-03-22",
+        "lease_end_date": "2026-12-02",
+        "days_to_expiry": 121,
+        "cohort": "120",
+        "tenure_months": 64,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-120-04",
+      "row_number_after_header": 4,
+      "input": {
+        "tenant_name": "Priya Shah",
+        "unit": "Maple Villas 7C",
+        "email": "priya.shah@example.com",
+        "move_in_date": "2024-11-01",
+        "lease_end_date": "2026-12-09",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Priya Shah",
+        "tenant_first_name": "Priya",
+        "email_valid": true,
+        "move_in_date": "2024-11-01",
+        "lease_end_date": "2026-12-09",
+        "days_to_expiry": 128,
+        "cohort": "120",
+        "tenure_months": 21,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-120-05",
+      "row_number_after_header": 5,
+      "input": {
+        "tenant_name": "Owen Brooks",
+        "unit": "Pineview 2A",
+        "email": "owen.brooks@example.com",
+        "move_in_date": "2023-08-09",
+        "lease_end_date": "2026-12-14",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Owen Brooks",
+        "tenant_first_name": "Owen",
+        "email_valid": true,
+        "move_in_date": "2023-08-09",
+        "lease_end_date": "2026-12-14",
+        "days_to_expiry": 133,
+        "cohort": "120",
+        "tenure_months": 35,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-01",
+      "row_number_after_header": 6,
+      "input": {
+        "tenant_name": "Avery Brooks",
+        "unit": "Cedar Row 9",
+        "email": "demo.priority@example.com",
+        "move_in_date": "2023-05-11",
+        "lease_end_date": "2026-10-22",
+        "is_demo_priority": "true"
+      },
+      "expected": {
+        "tenant_name": "Avery Brooks",
+        "tenant_first_name": "Avery",
+        "email_valid": true,
+        "move_in_date": "2023-05-11",
+        "lease_end_date": "2026-10-22",
+        "days_to_expiry": 80,
+        "cohort": "90",
+        "tenure_months": 38,
+        "ingest_notes": [],
+        "is_demo_priority": true
+      }
+    },
+    {
+      "case_id": "clean-90-02",
+      "row_number_after_header": 7,
+      "input": {
+        "tenant_name": "Maria Santos",
+        "unit": "Brookline 3D",
+        "email": "maria.santos@example.com",
+        "move_in_date": "2022-08-14",
+        "lease_end_date": "2026-10-24",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Maria Santos",
+        "tenant_first_name": "Maria",
+        "email_valid": true,
+        "move_in_date": "2022-08-14",
+        "lease_end_date": "2026-10-24",
+        "days_to_expiry": 82,
+        "cohort": "90",
+        "tenure_months": 47,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-03",
+      "row_number_after_header": 8,
+      "input": {
+        "tenant_name": "Darius King",
+        "unit": "Riverside 5B",
+        "email": "darius.king@example.com",
+        "move_in_date": "2024-08-03",
+        "lease_end_date": "2026-10-26",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Darius King",
+        "tenant_first_name": "Darius",
+        "email_valid": true,
+        "move_in_date": "2024-08-03",
+        "lease_end_date": "2026-10-26",
+        "days_to_expiry": 84,
+        "cohort": "90",
+        "tenure_months": 23,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-04",
+      "row_number_after_header": 9,
+      "input": {
+        "tenant_name": "Hannah Patel ",
+        "unit": " Parkside Tower, Unit 8A",
+        "email": "hannah.patel@example.com",
+        "move_in_date": "2021-11-17",
+        "lease_end_date": "2026-10-28",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Hannah Patel",
+        "tenant_first_name": "Hannah",
+        "email_valid": true,
+        "move_in_date": "2021-11-17",
+        "lease_end_date": "2026-10-28",
+        "days_to_expiry": 86,
+        "cohort": "90",
+        "tenure_months": 56,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-05",
+      "row_number_after_header": 10,
+      "input": {
+        "tenant_name": "Ben Okafor",
+        "unit": "Linden House 14",
+        "email": "ben.okafor@example.com",
+        "move_in_date": "2023-11-27",
+        "lease_end_date": "2026-10-30",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Ben Okafor",
+        "tenant_first_name": "Ben",
+        "email_valid": true,
+        "move_in_date": "2023-11-27",
+        "lease_end_date": "2026-10-30",
+        "days_to_expiry": 88,
+        "cohort": "90",
+        "tenure_months": 32,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-06",
+      "row_number_after_header": 11,
+      "input": {
+        "tenant_name": "Grace Lee",
+        "unit": "Summit 10C",
+        "email": "grace.lee@example.com",
+        "move_in_date": "2025-01-30",
+        "lease_end_date": "2026-11-01",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Grace Lee",
+        "tenant_first_name": "Grace",
+        "email_valid": true,
+        "move_in_date": "2025-01-30",
+        "lease_end_date": "2026-11-01",
+        "days_to_expiry": 90,
+        "cohort": "90",
+        "tenure_months": 18,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-07",
+      "row_number_after_header": 12,
+      "input": {
+        "tenant_name": "Isaac Moreno",
+        "unit": "Elm Terrace 6",
+        "email": "isaac.moreno@example.com",
+        "move_in_date": "2020-05-26",
+        "lease_end_date": "2026-11-03",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Isaac Moreno",
+        "tenant_first_name": "Isaac",
+        "email_valid": true,
+        "move_in_date": "2020-05-26",
+        "lease_end_date": "2026-11-03",
+        "days_to_expiry": 92,
+        "cohort": "90",
+        "tenure_months": 74,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-08",
+      "row_number_after_header": 13,
+      "input": {
+        "tenant_name": "Lila Anderson",
+        "unit": "Juniper 1B",
+        "email": "lila.anderson@example.com",
+        "move_in_date": "2025-05-20",
+        "lease_end_date": "2026-11-06",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Lila Anderson",
+        "tenant_first_name": "Lila",
+        "email_valid": true,
+        "move_in_date": "2025-05-20",
+        "lease_end_date": "2026-11-06",
+        "days_to_expiry": 95,
+        "cohort": "90",
+        "tenure_months": 14,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-09",
+      "row_number_after_header": 14,
+      "input": {
+        "tenant_name": "Noah Kim",
+        "unit": "Harbor Flats 11",
+        "email": "noah.kim@example.com",
+        "move_in_date": "2022-12-02",
+        "lease_end_date": "2026-11-08",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Noah Kim",
+        "tenant_first_name": "Noah",
+        "email_valid": true,
+        "move_in_date": "2022-12-02",
+        "lease_end_date": "2026-11-08",
+        "days_to_expiry": 97,
+        "cohort": "90",
+        "tenure_months": 44,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-10",
+      "row_number_after_header": 15,
+      "input": {
+        "tenant_name": "Fatima Ali",
+        "unit": "Ash Court 2D",
+        "email": "fatima.ali@example.com",
+        "move_in_date": "2021-01-01",
+        "lease_end_date": "2026-11-11",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Fatima Ali",
+        "tenant_first_name": "Fatima",
+        "email_valid": true,
+        "move_in_date": "2021-01-01",
+        "lease_end_date": "2026-11-11",
+        "days_to_expiry": 100,
+        "cohort": "90",
+        "tenure_months": 67,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-90-11",
+      "row_number_after_header": 16,
+      "input": {
+        "tenant_name": "Ethan Wells",
+        "unit": "Canyon Ridge 15",
+        "email": "ethan.wells@example.com",
+        "move_in_date": "2024-09-12",
+        "lease_end_date": "2026-11-14",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Ethan Wells",
+        "tenant_first_name": "Ethan",
+        "email_valid": true,
+        "move_in_date": "2024-09-12",
+        "lease_end_date": "2026-11-14",
+        "days_to_expiry": 103,
+        "cohort": "90",
+        "tenure_months": 22,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-01",
+      "row_number_after_header": 17,
+      "input": {
+        "tenant_name": "Sofia Ramirez",
+        "unit": "Garden Walk 4",
+        "email": "sofia.ramirez@example.com",
+        "move_in_date": "2024-03-11",
+        "lease_end_date": "2026-09-20",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Sofia Ramirez",
+        "tenant_first_name": "Sofia",
+        "email_valid": true,
+        "move_in_date": "2024-03-11",
+        "lease_end_date": "2026-09-20",
+        "days_to_expiry": 48,
+        "cohort": "60",
+        "tenure_months": 28,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-02",
+      "row_number_after_header": 18,
+      "input": {
+        "tenant_name": "Caleb Turner",
+        "unit": "Oakridge 12",
+        "email": "caleb.turner@example.com",
+        "move_in_date": "2023-03-12",
+        "lease_end_date": "2026-09-23",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Caleb Turner",
+        "tenant_first_name": "Caleb",
+        "email_valid": true,
+        "move_in_date": "2023-03-12",
+        "lease_end_date": "2026-09-23",
+        "days_to_expiry": 51,
+        "cohort": "60",
+        "tenure_months": 40,
+        "ingest_notes": [
+          "DUPLICATE_UNIT"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-03",
+      "row_number_after_header": 19,
+      "input": {
+        "tenant_name": "Mei Chen",
+        "unit": "Sycamore 6A",
+        "email": "mei.chen@example.com",
+        "move_in_date": "2021-08-19",
+        "lease_end_date": "2026-09-27",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Mei Chen",
+        "tenant_first_name": "Mei",
+        "email_valid": true,
+        "move_in_date": "2021-08-19",
+        "lease_end_date": "2026-09-27",
+        "days_to_expiry": 55,
+        "cohort": "60",
+        "tenure_months": 59,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-04",
+      "row_number_after_header": 20,
+      "input": {
+        "tenant_name": "Julian Price",
+        "unit": "Magnolia 8",
+        "email": "julian.price@example.com",
+        "move_in_date": "2024-06-14",
+        "lease_end_date": "2026-09-30",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Julian Price",
+        "tenant_first_name": "Julian",
+        "email_valid": true,
+        "move_in_date": "2024-06-14",
+        "lease_end_date": "2026-09-30",
+        "days_to_expiry": 58,
+        "cohort": "60",
+        "tenure_months": 25,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-05",
+      "row_number_after_header": 21,
+      "input": {
+        "tenant_name": "Anika Desai",
+        "unit": "Eastbank 20B",
+        "email": "anika.desai@example.com",
+        "move_in_date": "2022-06-15",
+        "lease_end_date": "2026-10-03",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Anika Desai",
+        "tenant_first_name": "Anika",
+        "email_valid": true,
+        "move_in_date": "2022-06-15",
+        "lease_end_date": "2026-10-03",
+        "days_to_expiry": 61,
+        "cohort": "60",
+        "tenure_months": 49,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-06",
+      "row_number_after_header": 22,
+      "input": {
+        "tenant_name": "Tyler Nguyen",
+        "unit": "Westview 9C",
+        "email": "tyler.nguyen@example.com",
+        "move_in_date": "2023-07-10",
+        "lease_end_date": "2026-10-07",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Tyler Nguyen",
+        "tenant_first_name": "Tyler",
+        "email_valid": true,
+        "move_in_date": "2023-07-10",
+        "lease_end_date": "2026-10-07",
+        "days_to_expiry": 65,
+        "cohort": "60",
+        "tenure_months": 36,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-07",
+      "row_number_after_header": 23,
+      "input": {
+        "tenant_name": "Maya Foster",
+        "unit": "Hawthorne 2",
+        "email": "maya.foster@example.com",
+        "move_in_date": "2025-03-21",
+        "lease_end_date": "2026-10-11",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Maya Foster",
+        "tenant_first_name": "Maya",
+        "email_valid": true,
+        "move_in_date": "2025-03-21",
+        "lease_end_date": "2026-10-11",
+        "days_to_expiry": 69,
+        "cohort": "60",
+        "tenure_months": 16,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-60-08",
+      "row_number_after_header": 24,
+      "input": {
+        "tenant_name": "Ravi Menon",
+        "unit": "Lakeview 17",
+        "email": "ravi.menon@example.com",
+        "move_in_date": "2020-09-23",
+        "lease_end_date": "2026-10-14",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Ravi Menon",
+        "tenant_first_name": "Ravi",
+        "email_valid": true,
+        "move_in_date": "2020-09-23",
+        "lease_end_date": "2026-10-14",
+        "days_to_expiry": 72,
+        "cohort": "60",
+        "tenure_months": 70,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-30-01",
+      "row_number_after_header": 25,
+      "input": {
+        "tenant_name": "Chloe Bennett",
+        "unit": "Briar Lane 5",
+        "email": "chloe.bennett@example.com",
+        "move_in_date": "2024-08-13",
+        "lease_end_date": "2026-08-25",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Chloe Bennett",
+        "tenant_first_name": "Chloe",
+        "email_valid": true,
+        "move_in_date": "2024-08-13",
+        "lease_end_date": "2026-08-25",
+        "days_to_expiry": 22,
+        "cohort": "30",
+        "tenure_months": 23,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-30-02",
+      "row_number_after_header": 26,
+      "input": {
+        "tenant_name": "Mateo Rivera",
+        "unit": "Highland 13A",
+        "email": "mateo.rivera@example.com",
+        "move_in_date": "2024-01-16",
+        "lease_end_date": "2026-08-30",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Mateo Rivera",
+        "tenant_first_name": "Mateo",
+        "email_valid": true,
+        "move_in_date": "2024-01-16",
+        "lease_end_date": "2026-08-30",
+        "days_to_expiry": 27,
+        "cohort": "30",
+        "tenure_months": 30,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-30-03",
+      "row_number_after_header": 27,
+      "input": {
+        "tenant_name": "Aisha Coleman",
+        "unit": "Northstar 3",
+        "email": "aisha.coleman@example.com",
+        "move_in_date": "2022-03-07",
+        "lease_end_date": "2026-09-03",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Aisha Coleman",
+        "tenant_first_name": "Aisha",
+        "email_valid": true,
+        "move_in_date": "2022-03-07",
+        "lease_end_date": "2026-09-03",
+        "days_to_expiry": 31,
+        "cohort": "30",
+        "tenure_months": 52,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-30-04",
+      "row_number_after_header": 28,
+      "input": {
+        "tenant_name": "Daniel Cho",
+        "unit": "Southgate 22",
+        "email": "daniel.cho@example.com",
+        "move_in_date": "2025-06-19",
+        "lease_end_date": "2026-09-07",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Daniel Cho",
+        "tenant_first_name": "Daniel",
+        "email_valid": true,
+        "move_in_date": "2025-06-19",
+        "lease_end_date": "2026-09-07",
+        "days_to_expiry": 35,
+        "cohort": "30",
+        "tenure_months": 13,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-30-05",
+      "row_number_after_header": 29,
+      "input": {
+        "tenant_name": "Mina Hassan",
+        "unit": "Redwood 18D",
+        "email": "mina.hassan@example.com",
+        "move_in_date": "2021-06-10",
+        "lease_end_date": "2026-09-11",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Mina Hassan",
+        "tenant_first_name": "Mina",
+        "email_valid": true,
+        "move_in_date": "2021-06-10",
+        "lease_end_date": "2026-09-11",
+        "days_to_expiry": 39,
+        "cohort": "30",
+        "tenure_months": 61,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "clean-30-06",
+      "row_number_after_header": 30,
+      "input": {
+        "tenant_name": "Luke Harper",
+        "unit": "Beacon 1",
+        "email": "luke.harper@example.com",
+        "move_in_date": "2024-12-01",
+        "lease_end_date": "2026-09-15",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Luke Harper",
+        "tenant_first_name": "Luke",
+        "email_valid": true,
+        "move_in_date": "2024-12-01",
+        "lease_end_date": "2026-09-15",
+        "days_to_expiry": 43,
+        "cohort": "30",
+        "tenure_months": 20,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-name-surname-first",
+      "row_number_after_header": 31,
+      "input": {
+        "tenant_name": "ALVAREZ, MARIA",
+        "unit": "Willow Court 5A",
+        "email": "maria.alvarez@example.com",
+        "move_in_date": "2023-09-28",
+        "lease_end_date": "2026-11-29",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Maria Alvarez",
+        "tenant_first_name": "Maria",
+        "email_valid": true,
+        "move_in_date": "2023-09-28",
+        "lease_end_date": "2026-11-29",
+        "days_to_expiry": 118,
+        "cohort": "120",
+        "tenure_months": 34,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-name-cotenants",
+      "row_number_after_header": 32,
+      "input": {
+        "tenant_name": "John & Maria Alvarez",
+        "unit": "Willow Court 5B",
+        "email": "john.alvarez@example.com",
+        "move_in_date": "2024-03-26",
+        "lease_end_date": "2026-11-01",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "John & Maria Alvarez",
+        "tenant_first_name": "John",
+        "email_valid": true,
+        "move_in_date": "2024-03-26",
+        "lease_end_date": "2026-11-01",
+        "days_to_expiry": 90,
+        "cohort": "90",
+        "tenure_months": 28,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-name-diacritics",
+      "row_number_after_header": 33,
+      "input": {
+        "tenant_name": "josé núñez",
+        "unit": "Cypress 4",
+        "email": "jose.nunez@example.com",
+        "move_in_date": "2022-12-22",
+        "lease_end_date": "2026-10-18",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "José Núñez",
+        "tenant_first_name": "José",
+        "email_valid": true,
+        "move_in_date": "2022-12-22",
+        "lease_end_date": "2026-10-18",
+        "days_to_expiry": 76,
+        "cohort": "90",
+        "tenure_months": 43,
+        "ingest_notes": [],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-ambiguous-date",
+      "row_number_after_header": 34,
+      "input": {
+        "tenant_name": "Alyssa Park",
+        "unit": "Spruce 10",
+        "email": "alyssa.park@example.com",
+        "move_in_date": "2024-02-15",
+        "lease_end_date": "03/04/2027",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Alyssa Park",
+        "tenant_first_name": "Alyssa",
+        "email_valid": true,
+        "move_in_date": "2024-02-15",
+        "lease_end_date": "03/04/2027",
+        "days_to_expiry": null,
+        "cohort": "NONE",
+        "tenure_months": 29,
+        "ingest_notes": [
+          "AMBIGUOUS_DATE"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-email-typo-domain",
+      "row_number_after_header": 35,
+      "input": {
+        "tenant_name": "Nora Alvarez ",
+        "unit": " Meadow 6",
+        "email": "m.alvarez@gmial.com",
+        "move_in_date": "2023-11-17",
+        "lease_end_date": "2026-10-04",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Nora Alvarez",
+        "tenant_first_name": "Nora",
+        "email_valid": false,
+        "move_in_date": "2023-11-17",
+        "lease_end_date": "2026-10-04",
+        "days_to_expiry": 62,
+        "cohort": "60",
+        "tenure_months": 32,
+        "ingest_notes": [
+          "INVALID_EMAIL_DOMAIN"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-missing-email",
+      "row_number_after_header": 36,
+      "input": {
+        "tenant_name": "Peter Walsh",
+        "unit": "Hillcrest 2",
+        "email": "",
+        "move_in_date": "2024-10-02",
+        "lease_end_date": "2026-09-26",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Peter Walsh",
+        "tenant_first_name": "Peter",
+        "email_valid": false,
+        "move_in_date": "2024-10-02",
+        "lease_end_date": "2026-09-26",
+        "days_to_expiry": 54,
+        "cohort": "60",
+        "tenure_months": 22,
+        "ingest_notes": [
+          "MISSING_EMAIL"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-duplicate-unit",
+      "row_number_after_header": 37,
+      "input": {
+        "tenant_name": "Irene Novak",
+        "unit": "Oakridge 12",
+        "email": "irene.novak@example.com",
+        "move_in_date": "2024-07-04",
+        "lease_end_date": "2026-10-10",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Irene Novak",
+        "tenant_first_name": "Irene",
+        "email_valid": true,
+        "move_in_date": "2024-07-04",
+        "lease_end_date": "2026-10-10",
+        "days_to_expiry": 68,
+        "cohort": "60",
+        "tenure_months": 24,
+        "ingest_notes": [
+          "DUPLICATE_UNIT"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-expired-lease",
+      "row_number_after_header": 38,
+      "input": {
+        "tenant_name": "Victor Reed",
+        "unit": "Sunset 7",
+        "email": "victor.reed@example.com",
+        "move_in_date": "2022-06-25",
+        "lease_end_date": "2026-06-04",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Victor Reed",
+        "tenant_first_name": "Victor",
+        "email_valid": true,
+        "move_in_date": "2022-06-25",
+        "lease_end_date": "2026-06-04",
+        "days_to_expiry": -60,
+        "cohort": "EXPIRED",
+        "tenure_months": 49,
+        "ingest_notes": [
+          "EXPIRED_LEASE"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-no-end-date",
+      "row_number_after_header": 39,
+      "input": {
+        "tenant_name": "Monica Bell ",
+        "unit": " Orchard 21",
+        "email": "monica.bell@example.com",
+        "move_in_date": "2023-03-02",
+        "lease_end_date": "",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Monica Bell",
+        "tenant_first_name": "Monica",
+        "email_valid": true,
+        "move_in_date": "2023-03-02",
+        "lease_end_date": null,
+        "days_to_expiry": null,
+        "cohort": "NONE",
+        "tenure_months": 41,
+        "ingest_notes": [
+          "NO_END_DATE"
+        ],
+        "is_demo_priority": false
+      }
+    },
+    {
+      "case_id": "messy-short-tenure",
+      "row_number_after_header": 40,
+      "input": {
+        "tenant_name": "Devon Young",
+        "unit": "Vista 16",
+        "email": "devon.young@example.com",
+        "move_in_date": "2026-05-03",
+        "lease_end_date": "2026-10-30",
+        "is_demo_priority": "false"
+      },
+      "expected": {
+        "tenant_name": "Devon Young",
+        "tenant_first_name": "Devon",
+        "email_valid": true,
+        "move_in_date": "2026-05-03",
+        "lease_end_date": "2026-10-30",
+        "days_to_expiry": 88,
+        "cohort": "90",
+        "tenure_months": 3,
+        "ingest_notes": [
+          "TENURE_UNDER_6M"
+        ],
+        "is_demo_priority": false
+      }
+    }
+  ]
+}
