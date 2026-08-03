@@ -1,0 +1,20 @@
+# Local secrets and environment
+.env
+.env.*
+!.env.example
+
+# n8n local state and credential exports
+.n8n/
+*.credentials.json
+*credentials*.json
+
+# Generated local artifacts
+tmp/
+data/
+*.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
