@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 7 is complete at POC depth. WF5 Daily Sweep, Error Alerts, and Reset is imported in local n8n with `/daily-sweep`, `/reset-demo`, a daily 08:00 schedule trigger, Telegram sweep/error alerts, and a verifier-owned test-error path. The demo was left in clean reset state after verification.
+Stage 8 is complete at POC depth. The local demo has a runbook, package helper, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
 
 ## Source Context Read
 
@@ -58,7 +58,7 @@ Current proposed direction:
 | 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Complete | POC-complete: manual reply webhook, optional Gmail unread read path, deterministic matching, classifier fallback, Telegram routing, duplicate protection, and board feed verified. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Complete | POC-complete: fixture reset, deterministic cohort recompute, non-response `ESCALATE`, Telegram digest/error alerts, and hidden reset endpoint verified. |
-| 8 | End-to-End Rehearsal and Demo Package | Not started | Pre-flight, three rehearsals, fallback recording, workflow exports. |
+| 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, package helper, and three cold-start rehearsals passed. |
 
 ## Deviations From Original Plan
 
@@ -161,6 +161,16 @@ Current proposed direction:
 2026-08-04: Stage 7 verification passed. Checks covered JSON/JavaScript/PowerShell syntax, WF5 import/activation, reset to exactly 40 lease rows and empty `outreach_log`, fixture cohort counts, demo-priority email substitution, board load with no reset endpoint visible, seeded sweep preservation/escalation cases, Telegram sweep digest, no Gmail send/reply nodes, verifier-only error alert path, and final clean reset.
 
 2026-08-04: Stage 7 POC deviation: `/reset-demo` accepts `clear_gmail_processed=true` metadata, but WF5 does not currently mutate Gmail labels. The default demo reset intentionally avoids broad mailbox mutations; opt-in Gmail processed-label cleanup remains production/prospect-hardening scope unless specifically needed for rehearsal.
+
+2026-08-04: Implemented Stage 8 demo readiness. Added `docs/stage-8-demo-runbook.md`, `scripts/package-stage-8-demo.ps1`, and `scripts/verify-stage-8.ps1`.
+
+2026-08-04: Stage 8 fallback is docs-only by explicit choice. No video file is generated because `ffmpeg` is not installed on PATH and the POC scope uses a written runbook plus reproducible verifier evidence as the fallback artifact.
+
+2026-08-04: Stage 8 verification passed with three consecutive cold-start rehearsals. Each run restarted n8n, reset the demo, loaded the board, generated 14 draft-ready 90-day check-ins, approved drafts, sent exactly one priority Gmail message, confirmed duplicate-send idempotency, routed fixture 2 as `GRIEVANCE / MAINTENANCE / HIGH`, routed fixture 7 as `ACCOMMODATION_REQUEST`, exercised Telegram alerts, generated the local demo package, and performed a final clean reset.
+
+2026-08-04: Stage 8 rehearsal timings: run 1 total `89032ms`, generation `15056ms`, fixture 2 `4201ms`, fixture 7 `2636ms`; run 2 total `75837ms`, generation `28182ms`, fixture 2 `3850ms`, fixture 7 `3584ms`; run 3 total `68422ms`, generation `13504ms`, fixture 2 `8945ms`, fixture 7 `5395ms`. Each run sent `1` priority email and the duplicate-send check returned `0`.
+
+2026-08-04: Stage 8 local package helper writes the handoff bundle to ignored `tmp/stage-8-demo-package/` with workflow JSON, fixtures, runbook/docs, and helper scripts. No credentials, `.env`, real tenant data, or n8n credential exports are included.
 
 ## Stage 1 Verification Status
 
@@ -276,6 +286,22 @@ Completed:
 - Verified Telegram sweep digest path and verifier-only error alert path.
 - Verified final reset leaves the demo rehearsal-ready.
 
+## Stage 8 Verification Status
+
+Completed:
+
+- Added the Stage 8 demo runbook with pre-flight checklist, five-minute script, failure recovery, docs-only fallback, and limitations to say out loud.
+- Added the Stage 8 package helper and verified it creates `tmp/stage-8-demo-package/`.
+- Added and ran the Stage 8 verifier.
+- Verified all WF1-WF5 workflow JSON exports parse.
+- Verified Stage 3-7 JavaScript helpers pass syntax checks.
+- Verified Stage 8 PowerShell scripts parse.
+- Verified no committed workflow contains a Gmail Trigger that could compete with manual `/check-replies`.
+- Re-imported/activated WF1-WF5 and WF2 dashboard.
+- Completed three consecutive cold-start rehearsals.
+- Verified reset, board load, draft generation, approve-all, priority Gmail send, duplicate-send idempotency, fixture 2 routing, fixture 7 compliance routing, Telegram alerts, and final clean reset.
+- Verified the final demo state is clean: 40 lease rows and empty `outreach_log`.
+
 ## Next Step
 
-Start Stage 8: run the end-to-end rehearsal and package the demo materials.
+The local POC demo is ready. Next work is outside the demo build: prospect-specific rehearsal, optional manual screen recording, or production/pre-sales hardening.
