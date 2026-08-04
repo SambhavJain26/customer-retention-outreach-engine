@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 3 is complete. WF1 Roster Ingestion is imported in local n8n, accepts the demo CSV through the form/API upload paths, writes exactly 40 lease rows, preserves workflow-owned fields on re-upload, and passes Stage 3 verification.
+Stage 4 is complete. WF2 Dashboard is imported in local n8n at `http://localhost:5678/webhook/board`, reads `leases`, `outreach_log`, and `config`, renders the self-contained HTML board, and passes Stage 4 verification.
 
 ## Source Context Read
 
@@ -54,7 +54,7 @@ Current proposed direction:
 | 1 | Local Environment, Accounts, and Tooling | Complete | Repo-owned Compose runtime verified at `http://localhost:5678`; Data Tables visible; OpenAI, Gmail OAuth2, and Telegram smoke tests passed. |
 | 2 | Data Model and Demo Fixtures | Complete | Created/reused `leases`, `outreach_log`, and `config`; generated roster and reply fixtures; verification passed. |
 | 3 | WF1 Roster Ingestion | Complete | `WF1 Roster Ingestion` active with form/API upload paths; fixture upload, idempotency, messy-row flags, and state preservation verified. |
-| 4 | WF2 Dashboard | Not started | n8n-served HTML board with cohorts, flags, approval/feed screens. |
+| 4 | WF2 Dashboard | Complete | `WF2 Dashboard` active at `http://localhost:5678/webhook/board`; renders cohorts, flagged rows, approval queue placeholder, and at-risk feed placeholder. |
 | 5 | WF3 Draft, Approval, and Send | Not started | Generate 90-day drafts, guardrails, approval gate, Gmail send, idempotency. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Not started | Gmail/manual reply handling, classifier, Telegram alerts, no auto-replies. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Not started | Cohort recompute, escalation flags, error alerts, reset workflow. |
@@ -118,6 +118,14 @@ Current proposed direction:
 
 2026-08-04: Durable PowerShell gotcha: Data Table webhook responses that are JSON arrays can be wrapped as a nested `Object[]` when returned through helper functions. Stage 3 verifier now flattens those responses before row-count assertions.
 
+2026-08-04: Implemented Stage 4 WF2 dashboard. Added `n8n-workflows/wf2-dashboard.json`, dashboard HTML builder `scripts/stage-4-dashboard-lib.js`, import helper `scripts/import-wf2-dashboard.ps1`, and verifier `scripts/verify-stage-4.ps1`.
+
+2026-08-04: Stage 4 dashboard is intentionally read-only until WF3/WF4 exist. Generate, approval, send, and check-replies controls render as realistic stubbed UI and show Stage 5/6 messaging instead of calling missing endpoints.
+
+2026-08-04: Stage 4 verification passed against local n8n. The board returned HTTP 200 with `text/html; charset=utf-8`, rendered the `40 of 168` header, `8 need attention`, `14 in the 90-day window`, 120/90/60/30 cohort counts, known flagged rows, and no external URL dependencies. Raw board fetch completed in `554ms`; browser timing at 1440px reached response end in `386ms` and DOMContentLoaded in `490ms`.
+
+2026-08-04: Stage 4 browser smoke test used local Chrome because Playwright's bundled Chromium executable was not installed. Screenshots at 1440px desktop and 390px mobile showed no horizontal overflow and the expected board content.
+
 ## Stage 1 Verification Status
 
 Completed:
@@ -166,6 +174,20 @@ Completed:
 - Verified duplicate units remain separate rows with distinct deterministic `lease_id`s.
 - Verified re-upload preserves workflow-owned state fields.
 
+## Stage 4 Verification Status
+
+Completed:
+
+- Imported and activated `WF2 Dashboard`.
+- Verified board URL `http://localhost:5678/webhook/board`.
+- Verified board returns HTTP `200` and `text/html; charset=utf-8`.
+- Verified response time under one second by raw HTTP fetch.
+- Verified header counts: `40 of 168` units, `8 need attention`, and `14 in the 90-day window`.
+- Verified all four cohort headings and expected 120/90/60/30 counts.
+- Verified known flagged rows are visible, including `Spruce 10`, `Meadow 6`, `Hillcrest 2`, `Sunset 7`, `Orchard 21`, and `Vista 16`.
+- Verified no external URL dependencies in the generated HTML.
+- Verified desktop and mobile smoke screenshots with no horizontal overflow.
+
 ## Next Step
 
-Start Stage 4: build WF2 dashboard with cohort board, flagged-row panel, and placeholder approval/at-risk surfaces.
+Start Stage 5: build WF3 draft generation, approval, and Gmail send flow.
