@@ -78,6 +78,7 @@ Known gotchas to account for:
 - Docker Compose `restart` may not apply changed environment variables; recreate the n8n container when changing webhook/tunnel settings.
 - After n8n restart, active webhook registration can lag; verify with a real HTTP probe or execution record.
 - In PowerShell, piping JSON into native commands can introduce a UTF-8 BOM. If workflow import fails at the first character, check encoding or import through a BOM-safe path.
+- In PowerShell helper functions, `ConvertFrom-Json` array results can cross function boundaries as one nested `Object[]`. Flatten webhook/Data Table responses explicitly before counting rows.
 - The current local `n8nio/n8n:latest` image may log a Python task runner warning because Python 3 is not present. This is acceptable for the demo as long as workflows use JavaScript Code nodes and n8n remains healthy.
 - Running `n8n execute` inside the already-running n8n container can fail because the task broker port is already in use. For CLI smoke tests, stop the service container, run `docker compose run --rm --no-deps n8n execute --id=<workflow-id> --rawOutput`, then start n8n again.
 - In this local n8n `2.29.10` setup, Data Table nodes may report the module as disabled under one-off CLI `n8n execute` even when `N8N_ENABLED_MODULES=data-table` is set. Use active temporary webhook workflows against the running n8n service for Data Table setup/verification.

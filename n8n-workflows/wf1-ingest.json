@@ -1,0 +1,268 @@
+{
+  "id": "wf1-ingest",
+  "name": "WF1 Roster Ingestion",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "roster-upload-api",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {
+          "binaryData": true,
+          "binaryPropertyName": "lease_roster",
+          "responseContentType": "application/json"
+        }
+      },
+      "id": "wf1-api-upload-trigger",
+      "name": "Roster Upload API Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, -120],
+      "webhookId": "wf1-api-upload-trigger"
+    },
+    {
+      "parameters": {
+        "path": "roster-upload",
+        "formTitle": "Upload Lease Roster",
+        "formDescription": "Upload the renewal-retention demo CSV roster.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "lease_roster",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".csv",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "wf1-form-upload-trigger",
+      "name": "Roster Upload Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.1,
+      "position": [0, 120],
+      "webhookId": "wf1-form-upload-trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "__EXTRACT_UPLOAD_CSV_TEXT_CODE__"
+      },
+      "id": "wf1-extract-upload-csv-text",
+      "name": "Extract Upload CSV Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 0]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__CONFIG_TABLE_ID__"
+        },
+        "returnAll": true
+      },
+      "id": "wf1-read-config-rows",
+      "name": "Read Config Rows",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [600, 0],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "__COLLECT_CONFIG_ROWS_CODE__"
+      },
+      "id": "wf1-collect-config-rows",
+      "name": "Collect Config Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 0]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__LEASES_TABLE_ID__"
+        },
+        "returnAll": true
+      },
+      "id": "wf1-read-existing-leases",
+      "name": "Read Existing Leases",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [1200, 0],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "__BUILD_LEASE_ROWS_CODE__"
+      },
+      "id": "wf1-build-lease-rows",
+      "name": "Build Lease Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1500, 0]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__LEASES_TABLE_ID__"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lease_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.lease_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lease_id": "={{ $json.lease_id }}",
+            "tenant_name": "={{ $json.tenant_name }}",
+            "tenant_first_name": "={{ $json.tenant_first_name }}",
+            "unit": "={{ $json.unit }}",
+            "email": "={{ $json.email }}",
+            "email_valid": "={{ $json.email_valid }}",
+            "move_in_date": "={{ $json.move_in_date }}",
+            "lease_end_date": "={{ $json.lease_end_date }}",
+            "days_to_expiry": "={{ $json.days_to_expiry }}",
+            "cohort": "={{ $json.cohort }}",
+            "tenure_months": "={{ $json.tenure_months }}",
+            "status": "={{ $json.status }}",
+            "draft_subject": "={{ $json.draft_subject }}",
+            "draft_body": "={{ $json.draft_body }}",
+            "ref_token": "={{ $json.ref_token }}",
+            "sent_at": "={{ $json.sent_at }}",
+            "opted_out": "={{ $json.opted_out }}",
+            "ingest_notes": "={{ $json.ingest_notes }}"
+          }
+        }
+      },
+      "id": "wf1-upsert-lease-rows",
+      "name": "Upsert Lease Rows",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [1800, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "__BUILD_UPLOAD_RESPONSE_CODE__"
+      },
+      "id": "wf1-build-upload-response",
+      "name": "Build Upload Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2100, 0]
+    }
+  ],
+  "connections": {
+    "Roster Upload API Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Upload CSV Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Roster Upload Form Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Upload CSV Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Upload CSV Text": {
+      "main": [
+        [
+          {
+            "node": "Read Config Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Config Rows": {
+      "main": [
+        [
+          {
+            "node": "Collect Config Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Config Rows": {
+      "main": [
+        [
+          {
+            "node": "Read Existing Leases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Existing Leases": {
+      "main": [
+        [
+          {
+            "node": "Build Lease Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Lease Rows": {
+      "main": [
+        [
+          {
+            "node": "Upsert Lease Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Lease Rows": {
+      "main": [
+        [
+          {
+            "node": "Build Upload Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}

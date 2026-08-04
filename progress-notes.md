@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 2 is complete. Local n8n is running with the required Data Tables, seeded demo config, generated roster fixture, generated reply fixtures, and Stage 2 verification passing.
+Stage 3 is complete. WF1 Roster Ingestion is imported in local n8n, accepts the demo CSV through the form/API upload paths, writes exactly 40 lease rows, preserves workflow-owned fields on re-upload, and passes Stage 3 verification.
 
 ## Source Context Read
 
@@ -53,7 +53,7 @@ Current proposed direction:
 |---|---|---|---|
 | 1 | Local Environment, Accounts, and Tooling | Complete | Repo-owned Compose runtime verified at `http://localhost:5678`; Data Tables visible; OpenAI, Gmail OAuth2, and Telegram smoke tests passed. |
 | 2 | Data Model and Demo Fixtures | Complete | Created/reused `leases`, `outreach_log`, and `config`; generated roster and reply fixtures; verification passed. |
-| 3 | WF1 Roster Ingestion | Not started | CSV upload, normalization, validation, idempotent upsert. |
+| 3 | WF1 Roster Ingestion | Complete | `WF1 Roster Ingestion` active with form/API upload paths; fixture upload, idempotency, messy-row flags, and state preservation verified. |
 | 4 | WF2 Dashboard | Not started | n8n-served HTML board with cohorts, flags, approval/feed screens. |
 | 5 | WF3 Draft, Approval, and Send | Not started | Generate 90-day drafts, guardrails, approval gate, Gmail send, idempotency. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Not started | Gmail/manual reply handling, classifier, Telegram alerts, no auto-replies. |
@@ -104,6 +104,20 @@ Current proposed direction:
 
 2026-08-04: Stage 2 verification passed: CSV fixture parsing/regeneration, expected row and cohort counts, Data Table existence, config read, and insert/read/delete smoke checks for `leases` and `outreach_log`.
 
+2026-08-04: Implemented Stage 3 WF1 ingest. Added a placeholder-safe workflow template at `n8n-workflows/wf1-ingest.json`, shared normalization helper `scripts/stage-3-ingest-lib.js`, import helper `scripts/import-wf1-ingest.ps1`, and verifier `scripts/verify-stage-3.ps1`.
+
+2026-08-04: WF1 upload endpoints are active locally: form `http://localhost:5678/form/roster-upload` and API `http://localhost:5678/webhook/roster-upload-api`. Both use multipart file field `lease_roster`; the API path is the stable verification path.
+
+2026-08-04: Stage 3 regenerated the relative-date roster fixture with `base_date=2026-08-04`. Counts remain unchanged: 40 visible rows, 2 blank rows, cohorts `120=6`, `90=14`, `60=11`, `30=6`, `NONE=2`, `EXPIRED=1`, and 8 flagged rows.
+
+2026-08-04: WF1 normalizes names, trims whitespace, strips BOM, skips blank CSV records, flags ambiguous slash dates without guessing, validates missing/typo-domain emails, computes cohorts from `lease_end_date` only in `America/New_York`, and writes semicolon-delimited `ingest_notes`.
+
+2026-08-04: WF1 reads `config.demo_recipient_email` at ingest time and substitutes it only for CSV rows marked `is_demo_priority=true`. The real demo email remains local-only in n8n/Data Tables and ignored `.env`; it is not committed.
+
+2026-08-04: Stage 3 verification passed against local n8n. Checks covered form URL registration, API fixture upload, exact 40-row table count, cohort counts, known messy-row notes, invalid/missing email visibility, ambiguous date routing to `NONE`, duplicate unit preservation with distinct `lease_id`s, idempotent second upload, and preservation of `status`, `draft_subject`, `draft_body`, `ref_token`, `sent_at`, and `opted_out` after re-upload.
+
+2026-08-04: Durable PowerShell gotcha: Data Table webhook responses that are JSON arrays can be wrapped as a nested `Object[]` when returned through helper functions. Stage 3 verifier now flattens those responses before row-count assertions.
+
 ## Stage 1 Verification Status
 
 Completed:
@@ -136,6 +150,22 @@ Completed:
 - Verified Data Table insert/read/delete for `outreach_log`.
 - Verified seeded `config.manager_name` reads back as `Maya Chen`.
 
+## Stage 3 Verification Status
+
+Completed:
+
+- Imported and activated `WF1 Roster Ingestion`.
+- Verified form upload page registration at `http://localhost:5678/form/roster-upload`.
+- Uploaded `fixtures/roster-demo.csv` through `http://localhost:5678/webhook/roster-upload-api`.
+- Verified upload response reports 40 loaded rows and 8 flagged rows.
+- Verified `leases` contains exactly 40 rows after upload and after re-upload.
+- Verified cohort counts match fixture expectations.
+- Verified known messy rows carry expected `ingest_notes`.
+- Verified invalid/missing emails remain visible with `email_valid=false`.
+- Verified ambiguous dates land in `cohort=NONE`.
+- Verified duplicate units remain separate rows with distinct deterministic `lease_id`s.
+- Verified re-upload preserves workflow-owned state fields.
+
 ## Next Step
 
-Start Stage 3: build WF1 roster ingestion with CSV upload, normalization, validation, idempotent upsert, and visible ingest outcomes.
+Start Stage 4: build WF2 dashboard with cohort board, flagged-row panel, and placeholder approval/at-risk surfaces.
