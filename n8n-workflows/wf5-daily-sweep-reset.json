@@ -1,0 +1,519 @@
+{
+  "id": "wf5-daily-sweep-reset",
+  "name": "WF5 Daily Sweep, Error Alerts, and Reset",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "daily-sweep",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": { "responseContentType": "application/json" }
+      },
+      "id": "wf5-daily-sweep-webhook",
+      "name": "Daily Sweep Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, -520],
+      "webhookId": "wf5-daily-sweep-webhook"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "wf5-scheduled-daily-sweep",
+      "name": "Scheduled Daily Sweep 0800",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [0, -320]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__CONFIG_TABLE_ID__" },
+        "returnAll": true
+      },
+      "id": "wf5-read-config-sweep",
+      "name": "Read Config for Sweep",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [280, -520],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__LEASES_TABLE_ID__" },
+        "returnAll": true
+      },
+      "id": "wf5-read-leases-sweep",
+      "name": "Read Leases for Sweep",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [560, -520],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__OUTREACH_LOG_TABLE_ID__" },
+        "returnAll": true
+      },
+      "id": "wf5-read-log-sweep",
+      "name": "Read Outreach Log for Sweep",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [840, -520],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": { "jsCode": "__PREPARE_SWEEP_UPDATES_CODE__" },
+      "id": "wf5-prepare-sweep-updates",
+      "name": "Prepare Sweep Updates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, -520]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "wf5-has-sweep-updates-condition",
+              "leftValue": "={{ $json._has_updates }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf5-if-has-sweep-updates",
+      "name": "If Has Sweep Updates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [1400, -520]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__LEASES_TABLE_ID__" },
+        "matchType": "allConditions",
+        "filters": { "conditions": [{ "keyName": "lease_id", "condition": "eq", "keyValue": "={{ $json.lease_id }}" }] },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lease_id": "={{ $json.lease_id }}",
+            "tenant_name": "={{ $json.tenant_name }}",
+            "tenant_first_name": "={{ $json.tenant_first_name }}",
+            "unit": "={{ $json.unit }}",
+            "email": "={{ $json.email }}",
+            "email_valid": "={{ $json.email_valid }}",
+            "move_in_date": "={{ $json.move_in_date }}",
+            "lease_end_date": "={{ $json.lease_end_date }}",
+            "days_to_expiry": "={{ $json.days_to_expiry }}",
+            "cohort": "={{ $json.cohort }}",
+            "tenure_months": "={{ $json.tenure_months }}",
+            "status": "={{ $json.status }}",
+            "draft_subject": "={{ $json.draft_subject }}",
+            "draft_body": "={{ $json.draft_body }}",
+            "ref_token": "={{ $json.ref_token }}",
+            "sent_at": "={{ $json.sent_at }}",
+            "opted_out": "={{ $json.opted_out }}",
+            "ingest_notes": "={{ $json.ingest_notes }}"
+          }
+        }
+      },
+      "id": "wf5-upsert-sweep-lease-rows",
+      "name": "Upsert Sweep Lease Rows",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [1680, -640]
+    },
+    {
+      "parameters": { "jsCode": "__PREPARE_SWEEP_DIGEST_CODE__" },
+      "id": "wf5-prepare-sweep-digest",
+      "name": "Prepare Sweep Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1960, -520]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "wf5-send-digest-condition",
+              "leftValue": "={{ $json._send_digest }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf5-if-send-digest",
+      "name": "If Send Sweep Digest",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [2240, -520]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json._telegram_chat_id }}",
+        "text": "={{ $json._digest_text }}"
+      },
+      "id": "wf5-telegram-sweep-digest",
+      "name": "Telegram Sweep Digest",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [2520, -640],
+      "continueOnFail": true,
+      "credentials": { "telegramApi": { "id": "__TELEGRAM_CREDENTIAL_ID__", "name": "Telegram account" } }
+    },
+    {
+      "parameters": { "jsCode": "__BUILD_SWEEP_RESPONSE_CODE__" },
+      "id": "wf5-build-sweep-response",
+      "name": "Build Sweep Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2800, -520]
+    },
+
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reset-demo",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": { "responseContentType": "application/json" }
+      },
+      "id": "wf5-reset-demo-webhook",
+      "name": "Reset Demo Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 80],
+      "webhookId": "wf5-reset-demo-webhook"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__CONFIG_TABLE_ID__" },
+        "returnAll": true
+      },
+      "id": "wf5-read-config-reset",
+      "name": "Read Config for Reset",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [280, 80],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": { "jsCode": "__BUILD_RESET_ROWS_CODE__" },
+      "id": "wf5-build-reset-rows",
+      "name": "Build Reset Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [560, 80]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__OUTREACH_LOG_TABLE_ID__" },
+        "matchType": "allConditions",
+        "filters": { "conditions": [{ "keyName": "event_id", "condition": "isNotEmpty" }] }
+      },
+      "id": "wf5-delete-outreach-log-reset",
+      "name": "Delete Outreach Log for Reset",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [840, 80],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__LEASES_TABLE_ID__" },
+        "matchType": "allConditions",
+        "filters": { "conditions": [{ "keyName": "lease_id", "condition": "isNotEmpty" }] }
+      },
+      "id": "wf5-delete-leases-reset",
+      "name": "Delete Leases for Reset",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [1120, 80],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": { "jsCode": "__EMIT_RESET_LEASE_ROWS_CODE__" },
+      "id": "wf5-emit-reset-lease-rows",
+      "name": "Emit Reset Lease Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 80]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__LEASES_TABLE_ID__" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lease_id": "={{ $json.lease_id }}",
+            "tenant_name": "={{ $json.tenant_name }}",
+            "tenant_first_name": "={{ $json.tenant_first_name }}",
+            "unit": "={{ $json.unit }}",
+            "email": "={{ $json.email }}",
+            "email_valid": "={{ $json.email_valid }}",
+            "move_in_date": "={{ $json.move_in_date }}",
+            "lease_end_date": "={{ $json.lease_end_date }}",
+            "days_to_expiry": "={{ $json.days_to_expiry }}",
+            "cohort": "={{ $json.cohort }}",
+            "tenure_months": "={{ $json.tenure_months }}",
+            "status": "={{ $json.status }}",
+            "draft_subject": "={{ $json.draft_subject }}",
+            "draft_body": "={{ $json.draft_body }}",
+            "ref_token": "={{ $json.ref_token }}",
+            "sent_at": "={{ $json.sent_at }}",
+            "opted_out": "={{ $json.opted_out }}",
+            "ingest_notes": "={{ $json.ingest_notes }}"
+          }
+        }
+      },
+      "id": "wf5-insert-reset-lease-rows-v2",
+      "name": "Insert Reset Lease Rows",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [1680, 80]
+    },
+    {
+      "parameters": { "jsCode": "__BUILD_RESET_RESPONSE_CODE__" },
+      "id": "wf5-build-reset-response",
+      "name": "Build Reset Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1960, 80]
+    },
+
+    {
+      "parameters": {},
+      "id": "wf5-error-trigger",
+      "name": "Workflow Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 560]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__CONFIG_TABLE_ID__" },
+        "returnAll": true
+      },
+      "id": "wf5-read-config-error",
+      "name": "Read Config for Error Alert",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [280, 560],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": { "jsCode": "__BUILD_ERROR_ALERT_CODE__" },
+      "id": "wf5-build-error-alert",
+      "name": "Build Error Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [560, 560]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json._telegram_chat_id }}",
+        "text": "={{ $json._error_text }}"
+      },
+      "id": "wf5-telegram-error-alert",
+      "name": "Telegram Error Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [840, 560],
+      "continueOnFail": true,
+      "credentials": { "telegramApi": { "id": "__TELEGRAM_CREDENTIAL_ID__", "name": "Telegram account" } }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stage7-test-error",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": { "responseContentType": "application/json" }
+      },
+      "id": "wf5-test-error-webhook",
+      "name": "Stage 7 Test Error Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 840],
+      "webhookId": "wf5-test-error-webhook"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": { "__rl": true, "mode": "id", "value": "__CONFIG_TABLE_ID__" },
+        "returnAll": true
+      },
+      "id": "wf5-read-config-test-error",
+      "name": "Read Config for Test Error",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [280, 840],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": { "jsCode": "__BUILD_TEST_ERROR_ALERT_CODE__" },
+      "id": "wf5-build-test-error-alert",
+      "name": "Build Test Error Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [560, 840]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json._telegram_chat_id }}",
+        "text": "={{ $json._error_text }}"
+      },
+      "id": "wf5-telegram-test-error-alert",
+      "name": "Telegram Test Error Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [840, 840],
+      "continueOnFail": true,
+      "credentials": { "telegramApi": { "id": "__TELEGRAM_CREDENTIAL_ID__", "name": "Telegram account" } }
+    },
+    {
+      "parameters": {
+        "errorType": "errorMessage",
+        "errorMessage": "Stage 7 verifier intentional error after Telegram alert."
+      },
+      "id": "wf5-stop-and-error-test",
+      "name": "Stop and Error for Stage 7 Test",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [1120, 840]
+    }
+  ],
+  "connections": {
+    "Daily Sweep Webhook": {
+      "main": [[{ "node": "Read Config for Sweep", "type": "main", "index": 0 }]]
+    },
+    "Scheduled Daily Sweep 0800": {
+      "main": [[{ "node": "Read Config for Sweep", "type": "main", "index": 0 }]]
+    },
+    "Read Config for Sweep": {
+      "main": [[{ "node": "Read Leases for Sweep", "type": "main", "index": 0 }]]
+    },
+    "Read Leases for Sweep": {
+      "main": [[{ "node": "Read Outreach Log for Sweep", "type": "main", "index": 0 }]]
+    },
+    "Read Outreach Log for Sweep": {
+      "main": [[{ "node": "Prepare Sweep Updates", "type": "main", "index": 0 }]]
+    },
+    "Prepare Sweep Updates": {
+      "main": [[{ "node": "If Has Sweep Updates", "type": "main", "index": 0 }]]
+    },
+    "If Has Sweep Updates": {
+      "main": [
+        [{ "node": "Upsert Sweep Lease Rows", "type": "main", "index": 0 }],
+        [{ "node": "Prepare Sweep Digest", "type": "main", "index": 0 }]
+      ]
+    },
+    "Upsert Sweep Lease Rows": {
+      "main": [[{ "node": "Prepare Sweep Digest", "type": "main", "index": 0 }]]
+    },
+    "Prepare Sweep Digest": {
+      "main": [[{ "node": "If Send Sweep Digest", "type": "main", "index": 0 }]]
+    },
+    "If Send Sweep Digest": {
+      "main": [
+        [{ "node": "Telegram Sweep Digest", "type": "main", "index": 0 }],
+        [{ "node": "Build Sweep Response", "type": "main", "index": 0 }]
+      ]
+    },
+    "Telegram Sweep Digest": {
+      "main": [[{ "node": "Build Sweep Response", "type": "main", "index": 0 }]]
+    },
+
+    "Reset Demo Webhook": {
+      "main": [[{ "node": "Read Config for Reset", "type": "main", "index": 0 }]]
+    },
+    "Read Config for Reset": {
+      "main": [[{ "node": "Build Reset Rows", "type": "main", "index": 0 }]]
+    },
+    "Build Reset Rows": {
+      "main": [[{ "node": "Delete Outreach Log for Reset", "type": "main", "index": 0 }]]
+    },
+    "Delete Outreach Log for Reset": {
+      "main": [[{ "node": "Delete Leases for Reset", "type": "main", "index": 0 }]]
+    },
+    "Delete Leases for Reset": {
+      "main": [[{ "node": "Emit Reset Lease Rows", "type": "main", "index": 0 }]]
+    },
+    "Emit Reset Lease Rows": {
+      "main": [[{ "node": "Insert Reset Lease Rows", "type": "main", "index": 0 }]]
+    },
+    "Insert Reset Lease Rows": {
+      "main": [[{ "node": "Build Reset Response", "type": "main", "index": 0 }]]
+    },
+
+    "Workflow Error Trigger": {
+      "main": [[{ "node": "Read Config for Error Alert", "type": "main", "index": 0 }]]
+    },
+    "Read Config for Error Alert": {
+      "main": [[{ "node": "Build Error Alert", "type": "main", "index": 0 }]]
+    },
+    "Build Error Alert": {
+      "main": [[{ "node": "Telegram Error Alert", "type": "main", "index": 0 }]]
+    },
+    "Stage 7 Test Error Webhook": {
+      "main": [[{ "node": "Read Config for Test Error", "type": "main", "index": 0 }]]
+    },
+    "Read Config for Test Error": {
+      "main": [[{ "node": "Build Test Error Alert", "type": "main", "index": 0 }]]
+    },
+    "Build Test Error Alert": {
+      "main": [[{ "node": "Telegram Test Error Alert", "type": "main", "index": 0 }]]
+    },
+    "Telegram Test Error Alert": {
+      "main": [[{ "node": "Stop and Error for Stage 7 Test", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {}
+}

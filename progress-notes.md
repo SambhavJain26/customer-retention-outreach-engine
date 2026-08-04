@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 6 is complete at POC depth. WF4 Reply Matching, Classification, and Routing is imported in local n8n with `/check-replies`, the dashboard calls the live reply-check endpoint, reply fixtures route correctly, and no WF4 path can send tenant replies.
+Stage 7 is complete at POC depth. WF5 Daily Sweep, Error Alerts, and Reset is imported in local n8n with `/daily-sweep`, `/reset-demo`, a daily 08:00 schedule trigger, Telegram sweep/error alerts, and a verifier-owned test-error path. The demo was left in clean reset state after verification.
 
 ## Source Context Read
 
@@ -57,7 +57,7 @@ Current proposed direction:
 | 4 | WF2 Dashboard | Complete | `WF2 Dashboard` active at `http://localhost:5678/webhook/board`; renders cohorts, flagged rows, approval queue placeholder, and at-risk feed placeholder. |
 | 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Complete | POC-complete: manual reply webhook, optional Gmail unread read path, deterministic matching, classifier fallback, Telegram routing, duplicate protection, and board feed verified. |
-| 7 | WF5 Daily Sweep, Error Alerts, and Reset | Not started | Cohort recompute, escalation flags, error alerts, reset workflow. |
+| 7 | WF5 Daily Sweep, Error Alerts, and Reset | Complete | POC-complete: fixture reset, deterministic cohort recompute, non-response `ESCALATE`, Telegram digest/error alerts, and hidden reset endpoint verified. |
 | 8 | End-to-End Rehearsal and Demo Package | Not started | Pre-flight, three rehearsals, fallback recording, workflow exports. |
 
 ## Deviations From Original Plan
@@ -149,6 +149,18 @@ Current proposed direction:
 2026-08-04: Stage 6 verification passed at POC scope. All 11 public reply fixtures routed correctly through `/check-replies`; fixture 2 became `GRIEVANCE / MAINTENANCE / HIGH`; fixture 7 flagged `ACCOMMODATION_REQUEST`; fixture 8 logged `NO_SIGNAL` without alert; fixture 9 persisted `opted_out=true`; fixture 11 routed human despite positive intent because it contains a question; duplicate message IDs skipped; unmatched sender was logged as alertable without lease assignment; WF4 contains no Gmail send/reply node; and the board has no Stage 6 stub messaging.
 
 2026-08-04: Stage 6 timing note: after repeated verifier runs accumulated many reply logs, the full verifier measured fixture 2 at `10852ms`; a warm manual smoke on the same accumulated data set measured `8310ms`. This is acceptable for the POC but the strict under-eight-second demo goal should be rechecked after Stage 7 reset clears demo tables before rehearsal.
+
+2026-08-04: Implemented Stage 7 WF5 Daily Sweep, Error Alerts, and Reset. Added `n8n-workflows/wf5-daily-sweep-reset.json`, shared ops helper `scripts/stage-7-ops-lib.js`, import helper `scripts/import-wf5-daily-sweep-reset.ps1`, and verifier `scripts/verify-stage-7.ps1`.
+
+2026-08-04: Stage 7 exposes local webhook endpoints `POST /daily-sweep`, `POST /reset-demo`, and verifier-only `POST /stage7-test-error`. Reset remains hidden from the board; the dashboard still only exposes prospect-facing demo controls.
+
+2026-08-04: Stage 7 reset rebuilds the 40-row demo lease table from committed `fixtures/roster-demo.csv` using the Stage 3 normalizer, anchors fixture math to `2026-08-04`, substitutes `config.demo_recipient_email` for the demo-priority row, clears `outreach_log`, and resets workflow-owned fields to clean `PENDING` state.
+
+2026-08-04: Stage 7 sweep recomputes `days_to_expiry` and `cohort` from `lease_end_date` only, preserves existing workflow-owned state, and sets `ESCALATE` only for old `SENT` rows whose `sent_at` is more than 15 days old and no meaningful tenant reply log exists. `NO_SIGNAL` logs do not block non-response escalation.
+
+2026-08-04: Stage 7 verification passed. Checks covered JSON/JavaScript/PowerShell syntax, WF5 import/activation, reset to exactly 40 lease rows and empty `outreach_log`, fixture cohort counts, demo-priority email substitution, board load with no reset endpoint visible, seeded sweep preservation/escalation cases, Telegram sweep digest, no Gmail send/reply nodes, verifier-only error alert path, and final clean reset.
+
+2026-08-04: Stage 7 POC deviation: `/reset-demo` accepts `clear_gmail_processed=true` metadata, but WF5 does not currently mutate Gmail labels. The default demo reset intentionally avoids broad mailbox mutations; opt-in Gmail processed-label cleanup remains production/prospect-hardening scope unless specifically needed for rehearsal.
 
 ## Stage 1 Verification Status
 
@@ -244,6 +256,26 @@ Completed:
 - Verified unmatched replies do not assign a lease.
 - Verified the board calls `/webhook/check-replies` and no longer contains Stage 6 stub messaging.
 
+## Stage 7 Verification Status
+
+Completed:
+
+- Imported and activated `WF5 Daily Sweep, Error Alerts, and Reset`.
+- Re-imported `WF2 Dashboard` and verified reset is not visible on the board.
+- Verified workflow JSON, JavaScript syntax, PowerShell parser syntax, and helper unit cases.
+- Verified WF5 contains no Gmail send or reply node.
+- Verified `POST /reset-demo` leaves `leases` with exactly 40 rows and `outreach_log` empty.
+- Verified reset cohort counts match fixture expectations and the demo-priority row uses `config.demo_recipient_email`.
+- Verified reset clears drafts, tokens, sent timestamps, and opted-out state to clean demo state.
+- Verified board loads after reset.
+- Verified `POST /daily-sweep` recomputes stale days/cohorts.
+- Verified old `SENT` rows without meaningful replies become `ESCALATE`.
+- Verified old `SENT` rows with meaningful reply logs do not escalate.
+- Verified `NO_SIGNAL` logs do not block non-response escalation.
+- Verified `AT_RISK`, `STAYING`, `DRAFT`, `APPROVED`, recent `SENT`, and `opted_out=true` states are preserved.
+- Verified Telegram sweep digest path and verifier-only error alert path.
+- Verified final reset leaves the demo rehearsal-ready.
+
 ## Next Step
 
-Start Stage 7: build WF5 daily sweep, error alerts, and reset-demo workflow.
+Start Stage 8: run the end-to-end rehearsal and package the demo materials.
