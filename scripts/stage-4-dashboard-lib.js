@@ -51,8 +51,13 @@ function statusMeta(lease, latestLog) {
     return { key: "risk", label: rawStatus.replace(/_/g, " ") };
   }
   if (rawStatus === "STAYING") return { key: "staying", label: "Staying" };
-  if (["DRAFT", "APPROVED"].includes(rawStatus)) {
-    return { key: "draft", label: rawStatus === "DRAFT" ? "Draft ready" : "Approved" };
+  if (["DRAFT", "APPROVED", "SENDING"].includes(rawStatus)) {
+    const labels = { DRAFT: "Draft ready", APPROVED: "Approved", SENDING: "Sending" };
+    return { key: "draft", label: labels[rawStatus] };
+  }
+  if (rawStatus === "SENT") return { key: "staying", label: "Sent" };
+  if (["REVIEW_FAILED", "SEND_FAILED"].includes(rawStatus)) {
+    return { key: "risk", label: rawStatus === "REVIEW_FAILED" ? "Needs wording" : "Send failed" };
   }
   if (rawStatus === "PENDING") return { key: "pending", label: "Pending" };
   return { key: "unknown", label: rawStatus.replace(/_/g, " ") };
@@ -151,31 +156,40 @@ function renderFlaggedRows(flaggedRows) {
 
 function renderApprovalQueue(leases) {
   const draftRows = leases
-    .filter((lease) => ["DRAFT", "APPROVED"].includes(normalizeText(lease.status).toUpperCase()))
+    .filter((lease) => ["DRAFT", "APPROVED", "REVIEW_FAILED", "SENDING", "SEND_FAILED", "SENT"].includes(normalizeText(lease.status).toUpperCase()))
     .sort((a, b) => normalizeText(a.tenant_name).localeCompare(normalizeText(b.tenant_name)));
 
   const cards = draftRows.length
-    ? draftRows.map((lease) => `
-      <article class="approval-card">
+    ? draftRows.map((lease) => {
+      const status = normalizeText(lease.status).toUpperCase();
+      const isEditable = ["DRAFT", "APPROVED", "REVIEW_FAILED", "SEND_FAILED"].includes(status);
+      const isApprovable = ["DRAFT", "REVIEW_FAILED", "SEND_FAILED"].includes(status);
+      const isTerminal = ["SENDING", "SENT"].includes(status);
+      return `
+      <article class="approval-card" data-lease-id="${escapeHtml(lease.lease_id)}">
         <div class="approval-meta">
-          <h3>${escapeHtml(lease.tenant_name || "Unnamed tenant")}</h3>
-          <span>${escapeHtml(lease.unit || "No unit")}</span>
+          <div>
+            <h3>${escapeHtml(lease.tenant_name || "Unnamed tenant")}</h3>
+            <span>${escapeHtml(lease.unit || "No unit")}</span>
+          </div>
+          ${renderBadge(status.replace(/_/g, " "))}
         </div>
         <label>
           <span>Subject</span>
-          <input type="text" value="${escapeHtml(lease.draft_subject || "")}" readonly>
+          <input data-field="subject" type="text" value="${escapeHtml(lease.draft_subject || "")}" ${isEditable ? "" : "readonly"}>
         </label>
         <label>
           <span>Body</span>
-          <textarea readonly>${escapeHtml(lease.draft_body || "")}</textarea>
+          <textarea data-field="body" ${isEditable ? "" : "readonly"}>${escapeHtml(lease.draft_body || "")}</textarea>
         </label>
         <div class="button-row">
-          <button type="button" data-stub="approve">Approve</button>
-          <button type="button" data-stub="skip">Skip</button>
-          <button type="button" data-stub="edit">Edit</button>
+          <button type="button" data-action="approve" ${isApprovable ? "" : "disabled"}>Approve</button>
+          <button type="button" data-action="skip" ${isTerminal ? "disabled" : ""}>Skip</button>
+          <button type="button" data-action="edit" ${isEditable ? "" : "disabled"}>Save edit</button>
         </div>
-      </article>`).join("")
-    : `<div class="empty-state">Drafts will appear here after Stage 5 generation runs.</div>`;
+      </article>`;
+    }).join("")
+    : `<div class="empty-state">Drafts will appear here after generation runs.</div>`;
 
   const approvedCount = draftRows.filter((lease) => normalizeText(lease.status).toUpperCase() === "APPROVED").length;
 
@@ -183,8 +197,8 @@ function renderApprovalQueue(leases) {
     <div class="approval-banner">Nothing has been sent. Nothing sends until you press Send approved below.</div>
     <div class="approval-grid">${cards}</div>
     <div class="approval-footer">
-      <button type="button" data-stub="approve-all">Approve all</button>
-      <button type="button" class="primary" data-stub="send">Send approved (${approvedCount} of ${draftRows.length})</button>
+      <button type="button" data-action="approve-all" ${draftRows.length ? "" : "disabled"}>Approve all</button>
+      <button type="button" class="primary" data-action="send" ${approvedCount ? "" : "disabled"}>Send approved (${approvedCount} of ${draftRows.length})</button>
     </div>`;
 }
 
@@ -560,6 +574,10 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
       cursor: pointer;
     }
     button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    button:disabled {
+      opacity: 0.52;
+      cursor: not-allowed;
+    }
     button:hover { filter: brightness(0.98); }
     button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
       outline: 3px solid rgba(15, 118, 110, 0.35);
@@ -641,7 +659,7 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
         <h1>Renewal Retention Board</h1>
         <p class="eyebrow">Demo roster last rendered ${escapeHtml(updatedLabel || "just now")}</p>
       </div>
-      <button class="stage-action" type="button" data-stub="generate">Generate check-ins for the 90-day window (${ninetyCount})</button>
+      <button class="stage-action" type="button" data-action="generate">Generate check-ins for the 90-day window (${ninetyCount})</button>
     </header>
 
     <div class="header-strip" aria-label="Portfolio summary">
@@ -711,6 +729,88 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
         }, 2600);
       }
 
+      function postJson(path, payload) {
+        return fetch(path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload || {})
+        }).then(function (response) {
+          return response.text().then(function (text) {
+            var data = {};
+            if (text) {
+              try { data = JSON.parse(text); } catch (error) { data = { raw: text }; }
+            }
+            if (!response.ok || data.ok === false) {
+              throw new Error(data.message || data.error || ('Request failed with HTTP ' + response.status));
+            }
+            return data;
+          });
+        });
+      }
+
+      function reloadSoon() {
+        window.setTimeout(function () { window.location.reload(); }, 650);
+      }
+
+      function setBusy(button, label) {
+        button.disabled = true;
+        button.dataset.originalText = button.textContent;
+        button.textContent = label;
+      }
+
+      function clearBusy(button) {
+        if (button.dataset.originalText) button.textContent = button.dataset.originalText;
+        button.disabled = false;
+      }
+
+      function approvalPayload(card, action) {
+        return {
+          action: action,
+          lease_id: card.getAttribute('data-lease-id'),
+          edited_subject: card.querySelector('[data-field="subject"]').value,
+          edited_body: card.querySelector('[data-field="body"]').value
+        };
+      }
+
+      function handleAction(button) {
+        var action = button.getAttribute('data-action');
+        var request;
+        if (action === 'generate') {
+          setBusy(button, 'Generating...');
+          request = postJson('/webhook/generate', { cohort: '90' }).then(function (data) {
+            showToast('Generated ' + data.generated_count + ' drafts.');
+            showTab(document.getElementById('tab-approval'));
+            reloadSoon();
+          });
+        } else if (action === 'approve-all') {
+          setBusy(button, 'Approving...');
+          request = postJson('/webhook/approve', { action: 'approve_all' }).then(function (data) {
+            showToast('Approved ' + data.updated_count + ' drafts.');
+            reloadSoon();
+          });
+        } else if (action === 'send') {
+          setBusy(button, 'Sending...');
+          request = postJson('/webhook/send', {}).then(function (data) {
+            showToast('Sent ' + data.sent_count + ' check-ins.');
+            reloadSoon();
+          });
+        } else if (['approve', 'skip', 'edit'].indexOf(action) >= 0) {
+          var card = button.closest('.approval-card');
+          setBusy(button, action === 'edit' ? 'Saving...' : 'Working...');
+          request = postJson('/webhook/approve', approvalPayload(card, action)).then(function () {
+            showToast(action === 'edit' ? 'Edit saved.' : 'Draft updated.');
+            reloadSoon();
+          });
+        }
+
+        if (request) {
+          request.catch(function (error) {
+            showToast(error.message || 'Action failed.');
+            clearBusy(button);
+          });
+        }
+      }
+
       tabs.forEach(function (tab) {
         tab.addEventListener('click', function () { showTab(tab); });
       });
@@ -720,11 +820,14 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
         document.getElementById('flagged-rows').scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
 
+      document.querySelectorAll('[data-action]').forEach(function (button) {
+        button.addEventListener('click', function () { handleAction(button); });
+      });
+
       document.querySelectorAll('[data-stub]').forEach(function (button) {
         button.addEventListener('click', function () {
           var action = button.getAttribute('data-stub');
-          var stage = action === 'check-replies' ? 'Stage 6' : 'Stage 5';
-          showToast(stage + ' will wire this control. Stage 4 is read-only.');
+          if (action === 'check-replies') showToast('Stage 6 will wire reply checking.');
         });
       });
     }());

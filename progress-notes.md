@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 4 is complete. WF2 Dashboard is imported in local n8n at `http://localhost:5678/webhook/board`, reads `leases`, `outreach_log`, and `config`, renders the self-contained HTML board, and passes Stage 4 verification.
+Stage 5 is complete at POC depth. WF3 Draft, Approval, and Send is imported in local n8n with `/generate`, `/approve`, and `/send` endpoints, the dashboard calls real Stage 5 actions, and the priority Gmail send/idempotency path has been verified.
 
 ## Source Context Read
 
@@ -55,7 +55,7 @@ Current proposed direction:
 | 2 | Data Model and Demo Fixtures | Complete | Created/reused `leases`, `outreach_log`, and `config`; generated roster and reply fixtures; verification passed. |
 | 3 | WF1 Roster Ingestion | Complete | `WF1 Roster Ingestion` active with form/API upload paths; fixture upload, idempotency, messy-row flags, and state preservation verified. |
 | 4 | WF2 Dashboard | Complete | `WF2 Dashboard` active at `http://localhost:5678/webhook/board`; renders cohorts, flagged rows, approval queue placeholder, and at-risk feed placeholder. |
-| 5 | WF3 Draft, Approval, and Send | Not started | Generate 90-day drafts, guardrails, approval gate, Gmail send, idempotency. |
+| 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Not started | Gmail/manual reply handling, classifier, Telegram alerts, no auto-replies. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Not started | Cohort recompute, escalation flags, error alerts, reset workflow. |
 | 8 | End-to-End Rehearsal and Demo Package | Not started | Pre-flight, three rehearsals, fallback recording, workflow exports. |
@@ -126,6 +126,16 @@ Current proposed direction:
 
 2026-08-04: Stage 4 browser smoke test used local Chrome because Playwright's bundled Chromium executable was not installed. Screenshots at 1440px desktop and 390px mobile showed no horizontal overflow and the expected board content.
 
+2026-08-04: Implemented Stage 5 WF3 Draft, Approval, and Send. Added `n8n-workflows/wf3-draft-approve-send.json`, shared outbound/guardrail helper `scripts/stage-5-outbound-lib.js`, import helper `scripts/import-wf3-draft-approve-send.ps1`, and verifier `scripts/verify-stage-5.ps1`.
+
+2026-08-04: Stage 5 dashboard wiring replaced Stage 5 stubs with real POST calls to `http://localhost:5678/webhook/generate`, `http://localhost:5678/webhook/approve`, and `http://localhost:5678/webhook/send`. The Stage 6 check-replies control remains a stub until WF4.
+
+2026-08-04: Stage 5 generation uses n8n's built-in OpenAI Responses node with JSON Schema structured output and `model_draft` from config. In POC verification, the batch generated 13 usable 90-day drafts and 1 visible `REVIEW_FAILED` / needs-wording row. This is accepted for the proof of concept because the board now allows manager editing/approval of needs-wording rows and no row can send without approval.
+
+2026-08-04: Stage 5 approval/send smoke passed at POC scope. `POST /approve` with `approve_all` approved 13 current draft rows. `POST /send` for the demo-priority lease `cedar-row-9-2026-10-23` sent exactly one Gmail message with tokenized subject `[R-CE9B]`; a second identical `/send` call returned `sent_count=0`, confirming idempotency for the live demo path.
+
+2026-08-04: Stage 5 implementation notes: Data Table residue from interrupted verifier runs can produce duplicate rows in local n8n. WF3 defensively dedupes eligible generation rows by `lease_id`; the verifier reset helper now loops until demo tables are empty. Guardrails were adjusted to avoid false positives on the word `may` and to compare first names accent-insensitively.
+
 ## Stage 1 Verification Status
 
 Completed:
@@ -188,6 +198,20 @@ Completed:
 - Verified no external URL dependencies in the generated HTML.
 - Verified desktop and mobile smoke screenshots with no horizontal overflow.
 
+## Stage 5 Verification Status
+
+Completed:
+
+- Imported and activated `WF3 Draft, Approval, and Send`.
+- Re-imported `WF2 Dashboard` with real Stage 5 controls.
+- Verified the board contains real `data-action` controls for generate, approve-all, and send, with no Stage 5 stub messaging.
+- Verified OpenAI generation handled the 90-day cohort at POC depth: 13 draft-ready rows and 1 visible needs-wording row.
+- Verified the needs-wording row appears on the board as an editable approval-queue item.
+- Verified unsafe edited text is blocked by deterministic guardrails in helper tests.
+- Verified approve-all updates current draft rows to `APPROVED`.
+- Verified priority-row Gmail send for `cedar-row-9-2026-10-23`.
+- Verified a second send request for the same priority row sends `0` messages.
+
 ## Next Step
 
-Start Stage 5: build WF3 draft generation, approval, and Gmail send flow.
+Start Stage 6: build WF4 reply matching, classification, Telegram routing, and no-auto-reply safeguards.
