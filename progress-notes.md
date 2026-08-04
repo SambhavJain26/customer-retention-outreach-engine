@@ -4,7 +4,7 @@ Last updated: 2026-08-04
 
 ## Current Status
 
-Stage 5 is complete at POC depth. WF3 Draft, Approval, and Send is imported in local n8n with `/generate`, `/approve`, and `/send` endpoints, the dashboard calls real Stage 5 actions, and the priority Gmail send/idempotency path has been verified.
+Stage 6 is complete at POC depth. WF4 Reply Matching, Classification, and Routing is imported in local n8n with `/check-replies`, the dashboard calls the live reply-check endpoint, reply fixtures route correctly, and no WF4 path can send tenant replies.
 
 ## Source Context Read
 
@@ -56,7 +56,7 @@ Current proposed direction:
 | 3 | WF1 Roster Ingestion | Complete | `WF1 Roster Ingestion` active with form/API upload paths; fixture upload, idempotency, messy-row flags, and state preservation verified. |
 | 4 | WF2 Dashboard | Complete | `WF2 Dashboard` active at `http://localhost:5678/webhook/board`; renders cohorts, flagged rows, approval queue placeholder, and at-risk feed placeholder. |
 | 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
-| 6 | WF4 Reply Matching, Classification, and Routing | Not started | Gmail/manual reply handling, classifier, Telegram alerts, no auto-replies. |
+| 6 | WF4 Reply Matching, Classification, and Routing | Complete | POC-complete: manual reply webhook, optional Gmail unread read path, deterministic matching, classifier fallback, Telegram routing, duplicate protection, and board feed verified. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Not started | Cohort recompute, escalation flags, error alerts, reset workflow. |
 | 8 | End-to-End Rehearsal and Demo Package | Not started | Pre-flight, three rehearsals, fallback recording, workflow exports. |
 
@@ -136,6 +136,20 @@ Current proposed direction:
 
 2026-08-04: Stage 5 implementation notes: Data Table residue from interrupted verifier runs can produce duplicate rows in local n8n. WF3 defensively dedupes eligible generation rows by `lease_id`; the verifier reset helper now loops until demo tables are empty. Guardrails were adjusted to avoid false positives on the word `may` and to compare first names accent-insensitively.
 
+2026-08-04: Implemented Stage 6 WF4 Reply Matching, Classification, and Routing. Added `n8n-workflows/wf4-reply-classify-route.json`, shared reply helper `scripts/stage-6-reply-lib.js`, import helper `scripts/import-wf4-reply-classify-route.ps1`, and verifier `scripts/verify-stage-6.ps1`.
+
+2026-08-04: Stage 6 dashboard wiring replaced the check-replies stub with a real POST to `http://localhost:5678/webhook/check-replies`. The at-risk feed now renders reply log entries and keeps compliance copy visible: `Routed to you. No response was drafted.`
+
+2026-08-04: Stage 6 POC accepts manual payloads for deterministic demo/rehearsal checks and supports Gmail unread polling from the button for live inbox checks. The production-like Gmail Trigger remains deferred so it cannot consume the live reply before the demo button is clicked.
+
+2026-08-04: Stage 6 uses deterministic fast routing for clear demo/compliance/opt-out/no-signal patterns and keeps the built-in OpenAI Responses classifier as the fallback for non-obvious matched replies. This deviation keeps the live demo responsive while preserving visible fail-human behavior for ambiguous replies.
+
+2026-08-04: Stage 6 import creates or reuses a Gmail label named `processed`; the runtime label ID is written only to ignored `tmp/stage6-gmail-processed-label.json`. WF4 marks Gmail-mode messages read and applies the processed label when a Gmail message ID is present.
+
+2026-08-04: Stage 6 verification passed at POC scope. All 11 public reply fixtures routed correctly through `/check-replies`; fixture 2 became `GRIEVANCE / MAINTENANCE / HIGH`; fixture 7 flagged `ACCOMMODATION_REQUEST`; fixture 8 logged `NO_SIGNAL` without alert; fixture 9 persisted `opted_out=true`; fixture 11 routed human despite positive intent because it contains a question; duplicate message IDs skipped; unmatched sender was logged as alertable without lease assignment; WF4 contains no Gmail send/reply node; and the board has no Stage 6 stub messaging.
+
+2026-08-04: Stage 6 timing note: after repeated verifier runs accumulated many reply logs, the full verifier measured fixture 2 at `10852ms`; a warm manual smoke on the same accumulated data set measured `8310ms`. This is acceptable for the POC but the strict under-eight-second demo goal should be rechecked after Stage 7 reset clears demo tables before rehearsal.
+
 ## Stage 1 Verification Status
 
 Completed:
@@ -212,6 +226,24 @@ Completed:
 - Verified priority-row Gmail send for `cedar-row-9-2026-10-23`.
 - Verified a second send request for the same priority row sends `0` messages.
 
+## Stage 6 Verification Status
+
+Completed:
+
+- Imported and activated `WF4 Reply Matching, Classification, and Routing`.
+- Re-imported `WF2 Dashboard` with the real Stage 6 check-replies control.
+- Verified workflow JSON, JavaScript syntax, and helper unit cases.
+- Verified WF4 contains no Gmail send or reply node.
+- Verified all 11 public reply fixtures through `POST /check-replies`.
+- Verified fixture 2 routes as `GRIEVANCE / MAINTENANCE / HIGH`.
+- Verified fixture 7 flags `ACCOMMODATION_REQUEST` and the board displays `Routed to you. No response was drafted.`
+- Verified fixture 8 logs `NO_SIGNAL` without alert.
+- Verified fixture 9 persists `opted_out=true`.
+- Verified fixture 11 requires a human despite `STAYING` because it contains a question.
+- Verified duplicate message IDs do not create a second processed reply.
+- Verified unmatched replies do not assign a lease.
+- Verified the board calls `/webhook/check-replies` and no longer contains Stage 6 stub messaging.
+
 ## Next Step
 
-Start Stage 6: build WF4 reply matching, classification, Telegram routing, and no-auto-reply safeguards.
+Start Stage 7: build WF5 daily sweep, error alerts, and reset-demo workflow.

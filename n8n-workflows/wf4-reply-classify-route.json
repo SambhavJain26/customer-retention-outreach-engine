@@ -1,0 +1,734 @@
+{
+  "id": "wf4-reply-classify-route",
+  "name": "WF4 Reply Matching, Classification, and Routing",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "check-replies",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {
+          "responseContentType": "application/json"
+        }
+      },
+      "id": "wf4-check-replies-webhook",
+      "name": "Check Replies Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 0],
+      "webhookId": "wf4-check-replies-webhook"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__CONFIG_TABLE_ID__"
+        },
+        "returnAll": true
+      },
+      "id": "wf4-read-config",
+      "name": "Read Config for Replies",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [280, 0],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__LEASES_TABLE_ID__"
+        },
+        "returnAll": true
+      },
+      "id": "wf4-read-leases",
+      "name": "Read Leases for Replies",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [560, 0],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__OUTREACH_LOG_TABLE_ID__"
+        },
+        "returnAll": true
+      },
+      "id": "wf4-read-outreach-log",
+      "name": "Read Outreach Log for Replies",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [840, 0],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "__PREPARE_REPLY_SOURCE_CODE__"
+      },
+      "id": "wf4-prepare-reply-source",
+      "name": "Prepare Reply Source",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-use-gmail-condition",
+              "leftValue": "={{ $json._use_gmail }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-use-gmail",
+      "name": "If Use Gmail",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [1400, 0]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 1,
+        "simple": false,
+        "filters": {
+          "q": "is:unread -from:me -label:processed",
+          "readStatus": "unread"
+        },
+        "options": {
+          "downloadAttachments": false
+        }
+      },
+      "id": "wf4-gmail-get-unread-replies",
+      "name": "Gmail Get Unread Replies",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [1680, -160],
+      "alwaysOutputData": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "__GMAIL_CREDENTIAL_ID__",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "__BUILD_GMAIL_WORK_ITEM_CODE__"
+      },
+      "id": "wf4-build-gmail-work-item",
+      "name": "Build Gmail Work Item",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1960, -160]
+    },
+    {
+      "parameters": {
+        "jsCode": "__BUILD_MANUAL_WORK_ITEM_CODE__"
+      },
+      "id": "wf4-build-manual-work-item",
+      "name": "Build Manual Work Item",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1680, 160]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-needs-ai-condition",
+              "leftValue": "={{ $json._needs_ai }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-needs-ai",
+      "name": "If Needs AI Classification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [2240, 0]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "response",
+        "modelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.model_classify }}"
+        },
+        "responses": {
+          "values": [
+            {
+              "type": "text",
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "instructions": "={{ $json.instructions }}",
+          "maxTokens": 800,
+          "store": false,
+          "textFormat": {
+            "textOptions": [
+              {
+                "type": "json_schema",
+                "name": "reply_classification",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "intent": {
+                      "type": "string",
+                      "enum": ["STAYING", "WAVERING", "LEAVING", "GRIEVANCE", "UNCLEAR", "NO_SIGNAL", "OPT_OUT"]
+                    },
+                    "grievance_present": { "type": "boolean" },
+                    "grievance_summary": { "type": "string", "maxLength": 200 },
+                    "grievance_category": {
+                      "type": "string",
+                      "enum": ["NONE", "MAINTENANCE", "NEIGHBOURS", "FEES", "COMMUNICATION", "PROPERTY_CONDITION", "OTHER"]
+                    },
+                    "urgency": {
+                      "type": "string",
+                      "enum": ["HIGH", "MEDIUM", "LOW"]
+                    },
+                    "compliance_flag": {
+                      "type": "string",
+                      "enum": ["NONE", "ACCOMMODATION_REQUEST", "HABITABILITY", "LEGAL_THREAT", "OPT_OUT", "DISCRIMINATION_CONCERN"]
+                    },
+                    "suggested_human_action": { "type": "string", "maxLength": 160 },
+                    "confidence": {
+                      "type": "string",
+                      "enum": ["HIGH", "MEDIUM", "LOW"]
+                    }
+                  },
+                  "required": ["intent", "grievance_present", "grievance_summary", "grievance_category", "urgency", "compliance_flag", "suggested_human_action", "confidence"],
+                  "additionalProperties": false
+                },
+                "description": "Classification of one inbound tenant reply. Never includes tenant_id or requires_human.",
+                "strict": true
+              }
+            ]
+          }
+        }
+      },
+      "id": "wf4-openai-classify-reply",
+      "name": "OpenAI Classify Reply",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [2520, -120],
+      "continueOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "__OPENAI_CREDENTIAL_ID__",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "__FINALIZE_AI_ROUTE_CODE__"
+      },
+      "id": "wf4-finalize-ai-route",
+      "name": "Finalize AI Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2800, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "__FINALIZE_TERMINAL_ROUTE_CODE__"
+      },
+      "id": "wf4-finalize-terminal-route",
+      "name": "Finalize Terminal Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2520, 160]
+    },
+    {
+      "parameters": {
+        "jsCode": "__EMIT_LEASE_UPDATE_CODE__"
+      },
+      "id": "wf4-emit-lease-update",
+      "name": "Emit Lease Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3080, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-has-lease-update-condition",
+              "leftValue": "={{ $json._has_lease_update }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-has-lease-update",
+      "name": "If Has Lease Update",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [3360, 0]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__LEASES_TABLE_ID__"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lease_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.lease_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lease_id": "={{ $json.lease_id }}",
+            "tenant_name": "={{ $json.tenant_name }}",
+            "tenant_first_name": "={{ $json.tenant_first_name }}",
+            "unit": "={{ $json.unit }}",
+            "email": "={{ $json.email }}",
+            "email_valid": "={{ $json.email_valid }}",
+            "move_in_date": "={{ $json.move_in_date }}",
+            "lease_end_date": "={{ $json.lease_end_date }}",
+            "days_to_expiry": "={{ $json.days_to_expiry }}",
+            "cohort": "={{ $json.cohort }}",
+            "tenure_months": "={{ $json.tenure_months }}",
+            "status": "={{ $json.status }}",
+            "draft_subject": "={{ $json.draft_subject }}",
+            "draft_body": "={{ $json.draft_body }}",
+            "ref_token": "={{ $json.ref_token }}",
+            "sent_at": "={{ $json.sent_at }}",
+            "opted_out": "={{ $json.opted_out }}",
+            "ingest_notes": "={{ $json.ingest_notes }}"
+          }
+        }
+      },
+      "id": "wf4-upsert-lease-route",
+      "name": "Upsert Lease Route",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [3640, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "__EMIT_LOG_ROW_CODE__"
+      },
+      "id": "wf4-emit-log-row",
+      "name": "Emit Reply Log Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3920, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-has-log-row-condition",
+              "leftValue": "={{ $json._has_log_row }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-has-log-row",
+      "name": "If Has Reply Log Row",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [4200, 0]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "__OUTREACH_LOG_TABLE_ID__"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ $json.event_id }}",
+            "lease_id": "={{ $json.lease_id }}",
+            "event_type": "={{ $json.event_type }}",
+            "reply_text": "={{ $json.reply_text }}",
+            "intent": "={{ $json.intent }}",
+            "grievance_category": "={{ $json.grievance_category }}",
+            "grievance_summary": "={{ $json.grievance_summary }}",
+            "urgency": "={{ $json.urgency }}",
+            "compliance_flag": "={{ $json.compliance_flag }}",
+            "confidence": "={{ $json.confidence }}",
+            "requires_human": "={{ $json.requires_human }}",
+            "created_at": "={{ $json.created_at }}"
+          }
+        }
+      },
+      "id": "wf4-insert-reply-log-row",
+      "name": "Insert Reply Log Row",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [4480, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "__PREPARE_ALERT_CODE__"
+      },
+      "id": "wf4-prepare-alert",
+      "name": "Prepare Telegram Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [4760, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-send-alert-condition",
+              "leftValue": "={{ $json._send_alert }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-send-alert",
+      "name": "If Send Telegram Alert",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [5040, 0]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json._telegram_chat_id }}",
+        "text": "={{ $json._telegram_text }}"
+      },
+      "id": "wf4-telegram-manager-alert",
+      "name": "Telegram Manager Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [5320, -120],
+      "continueOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "__TELEGRAM_CREDENTIAL_ID__",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-has-gmail-condition",
+              "leftValue": "={{ $json._has_gmail_message }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-has-gmail-message",
+      "name": "If Has Gmail Message",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [5600, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "wf4-has-processed-label-condition",
+              "leftValue": "={{ $json._has_processed_label }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "id": "wf4-if-has-processed-label",
+      "name": "If Has Gmail Processed Label",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [5880, -120]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "addLabels",
+        "messageId": "={{ $json._gmail_message_id }}",
+        "labelIds": "={{ [$json._processed_label_id] }}"
+      },
+      "id": "wf4-gmail-add-processed-label",
+      "name": "Gmail Add Processed Label",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [6160, -220],
+      "continueOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "__GMAIL_CREDENTIAL_ID__",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "markAsRead",
+        "messageId": "={{ $json._gmail_message_id }}"
+      },
+      "id": "wf4-gmail-mark-read",
+      "name": "Gmail Mark Reply Read",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [6440, -120],
+      "continueOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "__GMAIL_CREDENTIAL_ID__",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "__BUILD_CHECK_REPLIES_RESPONSE_CODE__"
+      },
+      "id": "wf4-build-check-replies-response",
+      "name": "Build Check Replies Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [6720, 0]
+    }
+  ],
+  "connections": {
+    "Check Replies Webhook": {
+      "main": [[{ "node": "Read Config for Replies", "type": "main", "index": 0 }]]
+    },
+    "Read Config for Replies": {
+      "main": [[{ "node": "Read Leases for Replies", "type": "main", "index": 0 }]]
+    },
+    "Read Leases for Replies": {
+      "main": [[{ "node": "Read Outreach Log for Replies", "type": "main", "index": 0 }]]
+    },
+    "Read Outreach Log for Replies": {
+      "main": [[{ "node": "Prepare Reply Source", "type": "main", "index": 0 }]]
+    },
+    "Prepare Reply Source": {
+      "main": [[{ "node": "If Use Gmail", "type": "main", "index": 0 }]]
+    },
+    "If Use Gmail": {
+      "main": [
+        [{ "node": "Gmail Get Unread Replies", "type": "main", "index": 0 }],
+        [{ "node": "Build Manual Work Item", "type": "main", "index": 0 }]
+      ]
+    },
+    "Gmail Get Unread Replies": {
+      "main": [[{ "node": "Build Gmail Work Item", "type": "main", "index": 0 }]]
+    },
+    "Build Gmail Work Item": {
+      "main": [[{ "node": "If Needs AI Classification", "type": "main", "index": 0 }]]
+    },
+    "Build Manual Work Item": {
+      "main": [[{ "node": "If Needs AI Classification", "type": "main", "index": 0 }]]
+    },
+    "If Needs AI Classification": {
+      "main": [
+        [{ "node": "OpenAI Classify Reply", "type": "main", "index": 0 }],
+        [{ "node": "Finalize Terminal Route", "type": "main", "index": 0 }]
+      ]
+    },
+    "OpenAI Classify Reply": {
+      "main": [[{ "node": "Finalize AI Route", "type": "main", "index": 0 }]]
+    },
+    "Finalize AI Route": {
+      "main": [[{ "node": "Emit Lease Update", "type": "main", "index": 0 }]]
+    },
+    "Finalize Terminal Route": {
+      "main": [[{ "node": "Emit Lease Update", "type": "main", "index": 0 }]]
+    },
+    "Emit Lease Update": {
+      "main": [[{ "node": "If Has Lease Update", "type": "main", "index": 0 }]]
+    },
+    "If Has Lease Update": {
+      "main": [
+        [{ "node": "Upsert Lease Route", "type": "main", "index": 0 }],
+        [{ "node": "Emit Reply Log Row", "type": "main", "index": 0 }]
+      ]
+    },
+    "Upsert Lease Route": {
+      "main": [[{ "node": "Emit Reply Log Row", "type": "main", "index": 0 }]]
+    },
+    "Emit Reply Log Row": {
+      "main": [[{ "node": "If Has Reply Log Row", "type": "main", "index": 0 }]]
+    },
+    "If Has Reply Log Row": {
+      "main": [
+        [{ "node": "Insert Reply Log Row", "type": "main", "index": 0 }],
+        [{ "node": "Prepare Telegram Alert", "type": "main", "index": 0 }]
+      ]
+    },
+    "Insert Reply Log Row": {
+      "main": [[{ "node": "Prepare Telegram Alert", "type": "main", "index": 0 }]]
+    },
+    "Prepare Telegram Alert": {
+      "main": [[{ "node": "If Send Telegram Alert", "type": "main", "index": 0 }]]
+    },
+    "If Send Telegram Alert": {
+      "main": [
+        [{ "node": "Telegram Manager Alert", "type": "main", "index": 0 }],
+        [{ "node": "If Has Gmail Message", "type": "main", "index": 0 }]
+      ]
+    },
+    "Telegram Manager Alert": {
+      "main": [[{ "node": "If Has Gmail Message", "type": "main", "index": 0 }]]
+    },
+    "If Has Gmail Message": {
+      "main": [
+        [{ "node": "If Has Gmail Processed Label", "type": "main", "index": 0 }],
+        [{ "node": "Build Check Replies Response", "type": "main", "index": 0 }]
+      ]
+    },
+    "If Has Gmail Processed Label": {
+      "main": [
+        [{ "node": "Gmail Add Processed Label", "type": "main", "index": 0 }],
+        [{ "node": "Gmail Mark Reply Read", "type": "main", "index": 0 }]
+      ]
+    },
+    "Gmail Add Processed Label": {
+      "main": [[{ "node": "Gmail Mark Reply Read", "type": "main", "index": 0 }]]
+    },
+    "Gmail Mark Reply Read": {
+      "main": [[{ "node": "Build Check Replies Response", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {}
+}

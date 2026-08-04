@@ -211,12 +211,17 @@ function renderRiskFeed(logRows, leasesById) {
     .sort((a, b) => (Date.parse(b.created_at || "") || 0) - (Date.parse(a.created_at || "") || 0));
 
   if (!riskRows.length) {
-    return `<div class="empty-state">Reply classifications will appear here after Stage 6 handles inbound replies.</div>`;
+    return `<div class="empty-state">Reply classifications will appear here after inbound replies are checked.</div>`;
   }
 
   return riskRows.map((log) => {
     const lease = leasesById[normalizeText(log.lease_id)] || {};
     const isCompliance = Boolean(normalizeText(log.compliance_flag));
+    const actionText = isCompliance
+      ? "Routed to you. No response was drafted."
+      : normalizeText(log.event_type) === "UNMATCHED_REPLY"
+        ? "Find the tenant manually before replying."
+        : normalizeText(log.grievance_summary) || "Review this reply and follow up personally.";
     return `
       <article class="risk-entry ${isCompliance ? "compliance-entry" : ""}">
         <div class="risk-heading">
@@ -234,7 +239,7 @@ function renderRiskFeed(logRows, leasesById) {
           ${renderBadge(log.confidence || "Confidence pending")}
           ${renderBadge(log.compliance_flag, "compliance")}
         </div>
-        <p class="human-action">${isCompliance ? "Routed to you. No response was drafted." : "Suggested human action will appear here after Stage 6."}</p>
+        <p class="human-action">${escapeHtml(actionText)}</p>
       </article>`;
   }).join("");
 }
@@ -696,7 +701,7 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
 
       <section id="panel-risk" class="tab-panel" role="tabpanel" aria-labelledby="tab-risk" hidden>
         <div class="risk-tools">
-          <button type="button" data-stub="check-replies">Check for replies now</button>
+          <button type="button" data-action="check-replies">Check for replies now</button>
         </div>
         <div class="risk-list">${renderRiskFeed(cleanLogs, leasesById)}</div>
       </section>
@@ -794,6 +799,13 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
             showToast('Sent ' + data.sent_count + ' check-ins.');
             reloadSoon();
           });
+        } else if (action === 'check-replies') {
+          setBusy(button, 'Checking...');
+          request = postJson('/webhook/check-replies', {}).then(function (data) {
+            showToast('Processed ' + data.processed_count + ' replies. Alerts ' + data.alerted_count + '.');
+            showTab(document.getElementById('tab-risk'));
+            reloadSoon();
+          });
         } else if (['approve', 'skip', 'edit'].indexOf(action) >= 0) {
           var card = button.closest('.approval-card');
           setBusy(button, action === 'edit' ? 'Saving...' : 'Working...');
@@ -825,10 +837,7 @@ function buildDashboardHtml({ leases, outreachLog, configRows, generatedAt }) {
       });
 
       document.querySelectorAll('[data-stub]').forEach(function (button) {
-        button.addEventListener('click', function () {
-          var action = button.getAttribute('data-stub');
-          if (action === 'check-replies') showToast('Stage 6 will wire reply checking.');
-        });
+        button.addEventListener('click', function () { showToast('This action is not wired yet.'); });
       });
     }());
   </script>

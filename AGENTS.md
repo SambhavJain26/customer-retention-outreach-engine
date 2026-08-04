@@ -84,6 +84,7 @@ Known gotchas to account for:
 - In this local n8n `2.29.10` setup, Data Table nodes may report the module as disabled under one-off CLI `n8n execute` even when `N8N_ENABLED_MODULES=data-table` is set. Use active temporary webhook workflows against the running n8n service for Data Table setup/verification.
 - In n8n `2.29.10`, `gpt-5.6-luna` works through the built-in OpenAI Responses operation, but it rejects `temperature`; omit that option. The Responses API also rejects `max_output_tokens` below `16`.
 - The bundled Playwright package may not have its managed Chromium executable installed. For local dashboard/browser smoke tests, use the system Chrome executable at `C:\Program Files\Google\Chrome\Application\chrome.exe` when present.
+- Stage 6 reply timing slows as local `outreach_log` fixture residue grows because the POC duplicate check reads log rows from Data Tables. Run the Stage 7 reset path, or clear demo log rows with verifier-owned temporary workflows, before rehearsing strict timing.
 
 ## Testing And Verification
 
