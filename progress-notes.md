@@ -1,10 +1,10 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-08-04
+Last updated: 2026-08-13
 
 ## Current Status
 
-Stage 8 is complete at POC depth. The local demo has a runbook, package helper, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
+Stage 8 is complete at POC depth. The local demo has a runbook, package helper, operator guide, prospect-facing system explainer, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
 
 ## Source Context Read
 
@@ -58,7 +58,7 @@ Current proposed direction:
 | 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Complete | POC-complete: manual reply webhook, optional Gmail unread read path, deterministic matching, classifier fallback, Telegram routing, duplicate protection, and board feed verified. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Complete | POC-complete: fixture reset, deterministic cohort recompute, non-response `ESCALATE`, Telegram digest/error alerts, and hidden reset endpoint verified. |
-| 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, package helper, and three cold-start rehearsals passed. |
+| 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, operator guide, prospect-facing explainer, package helper, and three cold-start rehearsals passed. |
 
 ## Deviations From Original Plan
 
@@ -171,6 +171,8 @@ Current proposed direction:
 2026-08-04: Stage 8 rehearsal timings: run 1 total `89032ms`, generation `15056ms`, fixture 2 `4201ms`, fixture 7 `2636ms`; run 2 total `75837ms`, generation `28182ms`, fixture 2 `3850ms`, fixture 7 `3584ms`; run 3 total `68422ms`, generation `13504ms`, fixture 2 `8945ms`, fixture 7 `5395ms`. Each run sent `1` priority email and the duplicate-send check returned `0`.
 
 2026-08-04: Stage 8 local package helper writes the handoff bundle to ignored `tmp/stage-8-demo-package/` with workflow JSON, fixtures, runbook/docs, and helper scripts. No credentials, `.env`, real tenant data, or n8n credential exports are included.
+
+2026-08-13: Added `docs/operating-guide.md` for no-script manual operation/testing through the board, n8n UI, and WF5 reset path, plus `docs/how-the-system-works.md` as a non-technical client/prospect explainer. Both docs reflect the completed WF1-WF5 build, local n8n/Data Tables stack, OpenAI drafting/classification, Gmail sending/reply reading, Telegram alerts, hidden reset, idempotent send behavior, and no-auto-reply/legal-notice boundaries.
 
 ## Stage 1 Verification Status
 
@@ -291,6 +293,8 @@ Completed:
 Completed:
 
 - Added the Stage 8 demo runbook with pre-flight checklist, five-minute script, failure recovery, docs-only fallback, and limitations to say out loud.
+- Added `docs/operating-guide.md` for manual no-script operation/testing, with only the WF5 demo reset path as the allowed reset helper.
+- Added `docs/how-the-system-works.md` for non-technical client/prospect explanation of the five workflows and service responsibilities.
 - Added the Stage 8 package helper and verified it creates `tmp/stage-8-demo-package/`.
 - Added and ran the Stage 8 verifier.
 - Verified all WF1-WF5 workflow JSON exports parse.
