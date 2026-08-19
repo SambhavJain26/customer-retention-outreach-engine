@@ -1,180 +1,246 @@
-# How The System Works
+# How The Renewal Retention System Works
 
-Last updated: 2026-08-13
+Last updated: 2026-08-19
 
-This proof of concept helps a property manager find tenant issues before the renewal conversation starts.
+## The Problem
 
-It does not replace the property manager's renewal process. It does not send legal notices. It does not decide rent. It does not answer tenants. It asks a soft check-in question, reads the reply, and routes anything risky to a human.
+**Problem statement:** Property managers often enter the renewal conversation without a timely, organized view of the resident concerns that may influence whether someone stays or leaves.
 
-## The Simple Version
+Property teams often learn about a resident's real concern too late.
 
-A property manager uploads a lease roster.
+The formal renewal process may tell the team whether a resident plans to stay, but it does not always reveal what has been shaping that decision: an unresolved repair, a recurring parking problem, poor communication, a safety concern, or a question that no one has answered.
 
-The system finds leases coming up in the next 120 days and shows them on a dashboard. At the 90-day point, it drafts short check-in emails. A manager reviews and approves those messages before anything sends.
+By the time a renewal offer goes out, the resident may already have made a decision.
 
-When a tenant replies, the system reads the reply, decides whether it is clean or needs attention, updates the dashboard, and sends a Telegram alert to the manager when a human should step in.
+There is a second problem. Property managers spend much of their week on routine and reactive work. That makes it hard to check in personally with every resident at the right time, read every reply closely, and make sure the important ones reach the right person.
 
-## The Tools Used
+The result is a gap between lease administration and resident experience. The lease date is known. The resident's concerns often are not.
 
-| Tool or service | What it does |
-|---|---|
-| n8n | Runs the automation workflows locally for the demo. |
-| n8n Data Tables | Stores the demo lease roster, message status, and reply log. |
-| OpenAI | Drafts 90-day check-in emails and classifies tenant replies. |
-| Gmail | Sends approved check-in emails and reads tenant replies. |
-| Telegram | Sends manager alerts for risk, compliance, opt-out, unmatched replies, daily digests, and workflow errors. |
-| Demo dashboard | Gives the manager one page to review leases, drafts, approvals, sent messages, and risky replies. |
-| CSV roster | Supplies the lease data for the proof of concept. No property-management-system integration is used in this demo. |
+## Is This A Real Industry Problem?
 
-## The Five Workflows
+Yes. Current property-management research supports four parts of the problem.
 
-### WF1: Roster Ingestion
+### Turnover Has A Material Cost
 
-WF1 takes the lease roster CSV and turns it into clean demo records.
+The National Apartment Association reported an average turn cost of about **$4,000 per unit**, including lost rent, concessions, and maintenance. Its report also noted a gap between why property managers think residents leave and what residents report: renters ranked rent, safety, poor maintenance, and management communication among their leading concerns. [National Apartment Association: Resident Retention at All-Time High](https://naahq.org/news/resident-retention-all-time-high)
 
-It checks names, emails, move-in dates, lease end dates, duplicate units, missing fields, and messy rows. It does not hide bad data. If a row has a problem, the row still appears on the board with a note.
+That does not mean every resident can or should be retained. It means avoidable turnover deserves attention because one missed concern can carry a real operating cost.
 
-It groups leases by lease end date only:
+### Managers And Residents Do Not Always See The Same Problem
 
-- 120 days
-- 90 days
-- 60 days
-- 30 days
+Zego's 2026 resident-experience research reports that average retention fell from 60% in 2024 to 57%. Property managers tended to attribute non-renewals to external life changes, while renters pointed to controllable factors such as rent increases, poor maintenance, and security concerns. [Zego: 2026 Resident Experience Management Report](https://www.gozego.com/publications-media/state-of-resident-experience-management/)
 
-That matters. The system does not choose tenants based on who they are, where they live, payment history, protected characteristics, or any model score. The timing comes from the lease end date.
+This is the visibility problem the system addresses. It gives residents an earlier opportunity to say what is happening, rather than asking the property team to infer it from a renewal outcome.
 
-### WF2: Dashboard
+### Property Teams Are Stuck In Reactive Work
 
-WF2 serves the local dashboard.
+Research from the National Apartment Association and AppFolio surveyed 1,984 industry professionals in 2025. The report says property-management leaders spend 66% of their time on routine operational and reactive work, while only 33% goes to stakeholder engagement and strategic work. [AppFolio and NAA: 2025 property-management performance findings](https://www.appfolio.com/newsroom/technology-implementation-now-a-top-challenge-for-real-estate-leaders)
 
-The dashboard shows the leases coming up in the next four months, the rows that need data attention, the 90-day approval queue, and the at-risk reply feed.
+That supports demand for a workflow that handles timing, first drafts, logging, and routing while leaving judgment and resident relationships with the property team.
 
-It is the main demo screen. The manager can generate check-ins, approve drafts, send approved emails, and check replies from this board.
+### The Market Is Already Asking For Automation With Human Oversight
 
-### WF3: Draft, Approval, And Send
+Buildium reports that property-management AI adoption rose from 20% in 2024 to 58% in 2025, but only 8% of companies had fully automated any process. Its research also links proactive maintenance with owner value, trust, and resident retention. [Buildium: 2026 State of the Property Management Industry](https://www.buildium.com/resource/2026-property-management-industry-report/)
 
-WF3 handles the outbound check-in.
+AppFolio's 2025 AI research identifies resident communication as the most common property-management AI use case. The same research stresses human oversight, checking outputs, and using AI within existing policies and laws. [AppFolio: State of AI in Property Management](https://www.appfolio.com/blog/ai-report)
 
-At 90 days, it uses OpenAI to draft short, personal check-in emails. These are not renewal offers. They do not include rent, legal terms, deadlines, or lease-change language.
+Taken together, these findings point to demand for systems that remove repetitive coordination and help people respond sooner, with the property manager still in control.
 
-Before anything can send, the manager sees the draft on the dashboard. The manager can edit it, approve it, skip it, or approve the batch.
+## What The Research Does And Does Not Prove
 
-After approval, Gmail sends the message. Each email includes a small reference code in the subject so replies can be matched back to the right lease.
+The evidence validates the problem: retention matters, turnover is costly, maintenance and communication influence resident decisions, property teams are heavily reactive, and the industry is adopting AI for resident communication.
 
-WF3 also prevents duplicate sends. If someone clicks send twice, the same approved row should not send twice.
+It does **not** prove that this proof of concept increases renewals. That claim would require a live pilot with real portfolios, a comparison group or baseline, and measured outcomes over a renewal cycle.
 
-### WF4: Reply Matching, Classification, And Routing
+The cited studies are industry and vendor-sponsored surveys rather than controlled academic trials. They provide directional evidence of market demand and operating priorities, but they should not be presented as guaranteed financial results.
 
-WF4 handles tenant replies.
+## The Solution
 
-It first matches the reply to the right lease using the reference code in the subject. If that is missing, it can fall back to the sender email. If it still cannot match the reply, it alerts the manager instead of guessing.
+**Solution statement:** Start a controlled resident check-in before formal renewal, then turn each reply into a visible signal and route anything important to a person.
 
-Then it reads the tenant's message.
+The Renewal Retention System creates an early-warning loop before the formal renewal conversation.
 
-Clear positive replies can be marked as staying. Anything with a grievance, question, uncertainty, opt-out, low confidence, legal concern, habitability issue, discrimination concern, or accommodation request routes to a human.
+It uses the lease end date to identify residents approaching renewal, prepares a short 90-day check-in, requires a manager to approve it, sends it through Gmail, and watches for the resident's reply.
 
-Telegram gets an alert with the tenant, unit, reply quote, classification, urgency, and suggested next step.
+When a reply arrives, the system looks for the signal underneath the words. A resident can sound positive and still mention a repair that has been ignored. Another may ask for an accommodation. A third may say they are leaving, wavering, or do not want more email.
 
-The system never drafts a tenant response. For sensitive replies, the board explicitly says: `Routed to you. No response was drafted.`
+The system brings those signals to the property manager. It does not make the decision for them.
 
-### WF5: Daily Sweep, Reset, And Alerts
+## The Complete Flow
 
-WF5 covers demo operations.
+### 1. The Lease Roster Enters The System
 
-Every day at 08:00, it refreshes the lease timing on the board. If a check-in was sent more than 15 days ago and there has been no meaningful reply, the row becomes an escalation for human follow-up.
+The property manager supplies a CSV export containing resident name, unit, email, move-in date, and lease end date.
 
-WF5 also sends a short Telegram digest so the manager can see the current counts.
+**WF1: Roster Ingestion** checks and organizes that roster. It keeps questionable rows visible instead of quietly dropping them. Missing emails, unclear dates, duplicate units, expired leases, and other data problems appear on the board for correction.
 
-For rehearsals, WF5 has a reset path that restores the demo to the original 40-row fixture state. That reset is hidden from the prospect-facing board.
+For this proof of concept, the roster contains synthetic data. A production version would receive approved data from the client's property-management system or reporting process.
 
-WF5 also sends Telegram alerts when workflows fail, so problems are visible during testing.
+### 2. Upcoming Leases Become Visible
 
-## What Happens In A Demo
+**WF2: Dashboard** presents leases in four windows: 120, 90, 60, and 30 days before lease end.
 
-1. The board opens with 40 demo leases from a 168-unit portfolio.
-2. The manager sees 14 leases in the 90-day window.
-3. The manager clicks generate.
-4. OpenAI drafts soft check-in emails.
-5. The manager reviews the drafts.
-6. The manager approves the safe messages.
-7. Gmail sends the approved message to the demo recipient.
-8. The recipient replies with a tenant issue.
-9. WF4 matches and classifies the reply.
-10. Telegram alerts the manager.
-11. The dashboard moves the row to at risk and shows the reply.
+The timing comes only from the lease end date. OpenAI does not choose who enters a group, and the system does not use payment history, screening information, protected characteristics, or a prediction score.
 
-The main point is simple: the property manager sees a hidden tenant issue while there is still time to fix it.
+The dashboard gives the manager three working views:
 
-## What The System Looks For In Replies
+- The lease-expiry pipeline
+- The draft approval queue
+- The at-risk reply feed
 
-The system separates replies into practical buckets:
+### 3. OpenAI Prepares The 90-Day Check-In
 
-- Staying
+At the 90-day point, **WF3: Draft, Approval, and Send** asks OpenAI to prepare a short, personal check-in.
+
+The message is deliberately limited. It asks how things are going. It is not a renewal offer, legal notice, rent discussion, or lease negotiation.
+
+Before the manager sees the draft, the workflow checks it for unsafe or unsuitable language. It blocks rent or money language, renewal or legal wording, deadlines, generic greetings, missing resident names, excessive questions, and messages outside the allowed length.
+
+If a draft fails twice, the board marks it as needing the manager's wording. It does not quietly pass.
+
+### 4. A Manager Decides What Sends
+
+The manager reviews each draft on the dashboard. They can edit the wording, approve it, skip it, or approve a safe batch.
+
+Nothing sends until a manager approves it and then chooses `Send approved`.
+
+The workflow checks edited text again. This keeps the same boundaries in place even after a manual change.
+
+### 5. Gmail Sends The Approved Message
+
+Gmail sends approved check-ins from the configured account.
+
+Each subject contains a small reference code. The resident does not need to do anything with it; the code helps the system connect a reply to the correct lease.
+
+The send process also protects against duplicate clicks. Once a row begins sending, the same approved row cannot be picked up again by a second click.
+
+### 6. The Resident Replies Normally
+
+The resident replies in Gmail as they would to any email.
+
+**WF4: Reply Matching, Classification, and Routing** first connects the reply to the correct lease. It uses the reference code in the email subject, then the sender's email as a fallback.
+
+If neither method produces a clear match, the workflow alerts the manager. It does not guess.
+
+### 7. OpenAI Reads The Meaning; Rules Decide The Route
+
+OpenAI classifies the resident's message. It can identify signals such as:
+
+- Planning to stay
 - Wavering
-- Leaving
-- Grievance
-- Maintenance issue
+- Planning to leave
+- Maintenance or property-condition grievance
 - Neighbor or parking issue
-- Property condition issue
-- Opt-out
-- Compliance-sensitive issue
-- Unclear or low-confidence reply
-- No-signal reply, such as an out-of-office email
+- A question that needs a person
+- Opt-out request
+- Accommodation, habitability, legal, or discrimination concern
+- Unclear or low-confidence meaning
+- No real resident signal, such as an out-of-office response
 
-Clean, confident, positive replies can stay green.
+Fixed workflow rules decide what happens next.
 
-Everything else goes to a human.
+A clean, confident staying message with no grievance, sensitive issue, or question can be recorded as `STAYING`.
 
-## The Safety Boundaries
+Everything that needs judgment becomes `AT_RISK` and goes to a person. Telegram sends the manager the resident, unit, reply quote, category, urgency, and suggested next action.
 
-The system is built around a few hard boundaries:
+Obvious automatic replies are recorded without creating a false risk alert.
 
-- A human approves every outbound tenant email.
-- The 90-day email is a check-in, not a renewal notice.
-- The email does not mention rent, renewal terms, lease changes, legal notices, or deadlines.
-- Tenant replies do not receive automated answers.
-- Sensitive replies route to a human.
-- Tenant matching is deterministic. The model does not decide who a reply belongs to.
-- Cohort timing is based only on lease end date.
-- Opt-outs are honored.
+### 8. The Property Manager Takes Over
 
-These boundaries are the product. The system is meant to surface risk early, not take over the property manager's judgment.
+The dashboard shows the reply and why it was routed.
 
-## What Data The Demo Uses
+For sensitive messages, it displays:
 
-The demo stores only what it needs:
+`Routed to you. No response was drafted.`
 
-- Tenant name
-- First name
-- Unit
-- Email
-- Move-in date
-- Lease end date
-- Current workflow status
-- Draft message, if generated
-- Send timestamp, if sent
-- Reply log, if a reply is processed
+That line defines the system's role. It detects and organizes the signal. The property team owns the response, repair, accommodation process, legal review, and renewal decision.
 
-The demo does not use financial data, screening data, Social Security numbers, IDs, payment history, maintenance history, or protected-characteristic data.
+### 9. The Daily Sweep Keeps The Queue Current
 
-## What This Proof Of Concept Does Not Do
+**WF5: Daily Sweep, Error Alerts, and Reset** refreshes lease timing each morning at 08:00 in the local n8n timezone.
 
-- It does not integrate with Buildium, Rentec, AppFolio, Propertyware, or any other PMS.
-- It does not send SMS.
-- It does not send legal notices.
-- It does not create renewal offers.
-- It does not decide rent.
-- It does not predict renewal probability.
-- It does not track whether the manager fixed the issue after the alert.
-- It does not run on production hosting.
-- It does not include client authentication, data retention policy, DPA, or production security hardening.
+If a check-in was sent more than 15 days ago and no meaningful reply arrived, the row becomes an escalation for human follow-up. Existing draft, approval, risk, staying, and opt-out states remain intact unless a specific rule changes them.
 
-Those are production decisions. The proof of concept exists to show the workflow: roster in, check-in drafted, manager approves, Gmail sends, tenant replies, risk routes to a human.
+Telegram receives a short daily count of the portfolio's current state. WF5 also alerts the manager when a workflow fails.
 
-## Why It Matters
+The proof of concept includes a hidden reset for rehearsals. Clients and residents do not see that control.
 
-Most renewal processes start too late. By the time the formal renewal offer goes out, the tenant may have already decided to leave.
+## What Each Tool Does
 
-This system creates an earlier conversation. It gives the manager a chance to hear about the noisy fan, unresolved repair, parking issue, neighbor problem, or accommodation request before the renewal conversation becomes a yes-or-no decision.
+| Tool or service | Role in the system |
+|---|---|
+| **n8n** | Runs and connects all five workflows |
+| **n8n Data Tables** | Hold the demo lease roster, current status, drafts, and activity history |
+| **OpenAI** | Writes check-in drafts and classifies the meaning of replies |
+| **Gmail** | Sends manager-approved check-ins and receives resident replies |
+| **Telegram** | Alerts the manager about risk, sensitive replies, opt-outs, unmatched messages, daily counts, and workflow failures |
+| **Renewal Retention Board** | Gives the manager one place to view the pipeline, approve drafts, send messages, and review routed replies |
+| **CSV roster** | Supplies lease data in the proof of concept |
 
-One small issue fixed early can be cheaper than one avoidable turnover.
+## The Human Boundaries
+
+This system is designed to support property managers, not replace their judgment.
+
+It never:
+
+- Sends a check-in without manager approval
+- Creates a renewal offer
+- Recommends or decides rent
+- Sends a legal notice
+- Promises a repair or outcome
+- Automatically replies to a resident
+- Lets OpenAI decide which resident owns a reply
+- Uses protected characteristics to choose outreach
+- Treats an unclear reply as safe
+
+These limits are central to the design.
+
+## What The Proof Of Concept Proves Today
+
+The working demo proves that the full information loop can operate:
+
+1. Load and check a lease roster.
+2. Group leases by time to expiry.
+3. Draft 90-day resident check-ins.
+4. Hold every message for manager approval.
+5. Send an approved message through Gmail once.
+6. Match a resident reply to the lease.
+7. Identify maintenance, risk, opt-out, questions, and sensitive content.
+8. Update the board and notify the manager in Telegram.
+9. Avoid automated resident responses.
+10. Escalate old sends that receive no meaningful reply.
+
+The completed demo uses 40 synthetic lease rows representing the upcoming expiries in a 168-unit portfolio. It runs locally and has passed three cold-start rehearsals.
+
+## What A Client Pilot Must Measure
+
+A real pilot should test whether this process changes operating outcomes. Useful measures include:
+
+- Percentage of eligible residents reached at the intended time
+- Draft approval, edit, and rejection rates
+- Resident reply rate
+- Number and type of concerns found before formal renewal
+- Time from risk alert to manager follow-up
+- Number of unresolved issues closed before the renewal decision
+- Renewal rate compared with the client's prior baseline
+- Avoided turnover cost, using the client's own accounting
+
+The last two measures matter most, but they require a complete renewal cycle. The proof of concept should not promise them in advance.
+
+## What Production Would Add
+
+This is a local proof of concept, not a production deployment.
+
+A production version would require:
+
+- Connection to the client's approved property-management system or data export
+- Client-approved message policy and brand voice
+- Defined team ownership and response deadlines
+- Proper user access and authentication
+- Security, privacy, retention, and audit policies
+- Compliance and legal review for the client's location and portfolio
+- Production email and notification setup
+- Monitoring, support, and recovery procedures
+- Pilot reporting against the client's baseline
+
+The core idea remains the same: contact residents early, keep a person in control, and bring hidden concerns to the property team before the renewal decision is already made.

@@ -42,6 +42,7 @@ Useful commands:
 - `docker compose ps`: inspect services.
 - `docker compose logs n8n`: inspect n8n failures.
 - `docker compose up -d --force-recreate n8n`: recreate n8n after environment, webhook, or tunnel URL changes.
+- `.\scripts\reset-demo.ps1`: restore the 40-row synthetic demo fixture through WF5 before or after a rehearsal.
 - `.\scripts\verify-stage-1.ps1`: verify Docker, Compose config, n8n container status, local HTTP reachability, and n8n version for Stage 1.
 - `Get-Content -Raw .\n8n-workflows\<file>.json | ConvertFrom-Json | Out-Null`: validate workflow JSON.
 

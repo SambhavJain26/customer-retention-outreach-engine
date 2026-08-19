@@ -1,10 +1,10 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-08-13
+Last updated: 2026-08-19
 
 ## Current Status
 
-Stage 8 is complete at POC depth. The local demo has a runbook, package helper, operator guide, prospect-facing system explainer, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
+Stage 8 is complete at POC depth. The local demo has a runbook, package helper, step-by-step demo operating guide, research-backed prospect explainer, one-purpose reset helper, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
 
 ## Source Context Read
 
@@ -61,6 +61,10 @@ Current proposed direction:
 | 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, operator guide, prospect-facing explainer, package helper, and three cold-start rehearsals passed. |
 
 ## Deviations From Original Plan
+
+2026-08-19: Reworked `docs/operating-guide.md` into the literal prospect-demo sequence, with preparation, talk track, exact board/Gmail/Telegram actions, expected results, failure signals, full branch testing, and cleanup. Added `scripts/reset-demo.ps1` as the guide's only helper command.
+
+2026-08-19: Reworked `docs/how-the-system-works.md` around the problem, evidence, solution, actual WF1-WF5 flow, service ownership, safety limits, POC proof, and pilot measures. Web research from NAA, Zego, AppFolio, and Buildium validates turnover cost, resident/manager perception gaps, reactive workload, and demand for human-supervised communication automation. The document explicitly avoids claiming that the POC has already improved renewal rates.
 
 2026-08-03: Tightened the plan after a second pass through `renewal-retention-demo-build-plan.md` to explicitly include schema-constrained AI output via n8n Information Extractor / structured output and sender/footer identity for outbound emails.
 
