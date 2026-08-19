@@ -1,5 +1,7 @@
 # Repository Guidelines
 
+This file is the Codex counterpart of `CLAUDE.md`. Both files carry the same guidance; `CLAUDE.md` is the Claude Code-facing copy. Keep them in sync — any rule added to one must be added to the other.
+
 This repository is the planning and implementation workspace for a local-first n8n pre-renewal retention automation demo. Treat it as an automation project, not a SaaS app or compiled software product. Core behavior will live in n8n workflow exports, n8n Data Tables, synthetic fixtures, a demo board, prompts/schemas, and helper scripts.
 
 ## Read Order And Authority
@@ -111,6 +113,6 @@ Reset scripts must wipe fixture/demo data only. Never run reset/delete logic aga
 
 ## Completion Guidelines
 
-Before finishing implementation work, decide whether the task exposed a durable command, workaround, gotcha, or rule. If yes, update `AGENTS.md` and `progress-notes.md`.
+Before finishing implementation work, decide whether the task exposed a durable command, workaround, gotcha, or rule. If yes, update both `AGENTS.md` and `CLAUDE.md` (keeping them identical in substance) and `progress-notes.md`.
 
 After every completed task, commit and push changes to `main` unless the user explicitly says not to. Use short imperative or conventional commit messages, for example `docs: update tunnel guidance` or `feat: add wf1 ingest export`. If push fails because no remote or authentication is configured, report that clearly and include the local commit hash if a commit was created.
