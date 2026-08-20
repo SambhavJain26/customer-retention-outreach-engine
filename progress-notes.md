@@ -1,8 +1,12 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-08-19
+Last updated: 2026-08-20
 
 ## Current Status
+
+Stage 9 (Airtable + Telegram demo rebuild, v2) is in progress. Steps 1 and 2 are complete and
+verified against a live Airtable base. The v1 board build remains intact and runnable as a
+fallback, tagged `poc-v1-board`.
 
 Stage 8 is complete at POC depth. The local demo has a runbook, package helper, step-by-step demo operating guide, research-backed prospect explainer, one-purpose reset helper, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
 
@@ -58,9 +62,40 @@ Current proposed direction:
 | 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Complete | POC-complete: manual reply webhook, optional Gmail unread read path, deterministic matching, classifier fallback, Telegram routing, duplicate protection, and board feed verified. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Complete | POC-complete: fixture reset, deterministic cohort recompute, non-response `ESCALATE`, Telegram digest/error alerts, and hidden reset endpoint verified. |
+| 9 | Airtable + Telegram Demo Rebuild (v2) | In progress | Steps 1-2 complete: Airtable schema, roster re-anchoring, seed/reset, and the Telegram/cadence/metrics libraries. Workflows WF6-WF9 not yet built. |
 | 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, operator guide, prospect-facing explainer, package helper, and three cold-start rehearsals passed. |
 
 ## Deviations From Original Plan
+
+2026-08-20: Stage 9 approved as an explicit plan revision. Two committed rules changed by user
+decision. First, Airtable is now permitted and replaces n8n Data Tables as demo state; the HTML
+board is removed and Airtable becomes the manager's visible surface. Second, the invariant "no
+workflow drafts or sends a response to a resident reply" becomes "no resident-facing message is
+ever sent automatically; a manager approves every individual outbound message." This is required
+by the new reply-assist and fix-confirmation features and keeps the human-approval guarantee
+while dropping the never-replies guarantee.
+
+2026-08-20: Tagged the verified v1 board build as `poc-v1-board` before starting v2. v1 files stay
+in place and runnable until v2 passes rehearsal; the cleanup commit is deferred.
+
+2026-08-20: Airtable Meta API cannot create formula, rollup, lookup, or count fields. Derived
+values (`days_to_expiry`, `cohort`, `tenure_months`, `data_quality`, `turnover_exposure`,
+`days_to_resolve`) are therefore plain fields written by n8n, exactly as v1 wrote them into Data
+Tables. `cohort` as a coloured single-select also reads better on camera than a formula would.
+
+2026-08-20: Stage 9 setup and seed scripts are Node, not PowerShell. The documented PowerShell
+BOM and `ConvertTo-Json` wrapping gotchas make PowerShell a poor fit for Airtable REST work, and
+Node 24 is already present with global `fetch`.
+
+2026-08-20: The seed re-anchors `fixtures/roster-demo.csv` from its 2026-08-04 fixture anchor to
+the seed run date, shifting only ISO dates and leaving the deliberately messy cells untouched.
+This fixes a latent v1 issue where fixture cohorts drifted from the sweep's live recomputation as
+real time passed. Cohort distribution is preserved exactly.
+
+2026-08-20: The demo now uses a single Gmail mailbox (`Gmail account` credential) as both sender
+and recipient. Because Gmail marks self-sent mail as read, v1's unread-based reply detection is
+unreliable in this setup. WF8 must find replies by `[R-xxxx]` token and `Re:` subject rather than
+by unread state.
 
 2026-08-19: Reworked `docs/operating-guide.md` into the literal prospect-demo sequence, with preparation, talk track, exact board/Gmail/Telegram actions, expected results, failure signals, full branch testing, and cleanup. Added `scripts/reset-demo.ps1` as the guide's only helper command.
 
@@ -310,6 +345,40 @@ Completed:
 - Verified reset, board load, draft generation, approve-all, priority Gmail send, duplicate-send idempotency, fixture 2 routing, fixture 7 compliance routing, Telegram alerts, and final clean reset.
 - Verified the final demo state is clean: 40 lease rows and empty `outreach_log`.
 
+## Stage 9 Verification Status
+
+Step 1 - Airtable data layer (complete, verified against live base):
+
+- Created `Leases` (34 fields), `Outreach Log` (16 fields + link to Leases), `Config`, and
+  `Metrics` via the Airtable Meta API. No field-type rejections.
+- Seeded and read back from the live base: exactly 40 residents, all `PENDING`, none opted out.
+- Cohorts verified from the base: `120=6 90=14 60=11 30=6 NONE=2 EXPIRED=1`.
+- 8 rows flagged with the expected reasons: `NO_END_DATE`, `TENURE_UNDER_6M`, `DUPLICATE_UNIT`
+  (x2), `EXPIRED_LEASE`, `MISSING_EMAIL`, `INVALID_EMAIL_DOMAIN`, `AMBIGUOUS_DATE`.
+- Demo priority resident is Avery Brooks, Cedar Row 9, cohort 90, 80 days out, using the local
+  `DEMO_RECIPIENT_EMAIL` from ignored `.env`.
+- All 12 config keys seeded with non-empty values; `Metrics` snapshot written zeroed.
+
+Step 2 - shared libraries (complete, unit-exercised):
+
+- `telegram-ui-lib.js`: callback payloads measured at 22 bytes against Telegram's 64-byte cap;
+  compliance-flagged alerts verified to omit the reply-assist button and retain
+  `No response was drafted.`
+- `cadence-lib.js`: selection against the seeded roster returns 6 watchlist, 14 check-ins,
+  0 nudges (correct before any send), 6 handoffs, 11 skipped. `guardReply()` rejects
+  outcome promises, dates, and rent wording.
+- `metrics-lib.js`: exposure and recovered-exposure maths exercised.
+
+Outstanding for Stage 9:
+
+- Manual Airtable steps: delete default `Table 1`, create the six demo views, add the
+  `Airtable account` credential in n8n.
+- Build and verify WF6 (Telegram router), WF7 (outreach), WF8 (replies), WF9 (ops).
+- Establish the cloudflared tunnel and confirm Telegram button callbacks reach n8n.
+- Full v2 rehearsal, doc updates, then the v1 cleanup commit.
+
 ## Next Step
 
-The local POC demo is ready. Next work is outside the demo build: prospect-specific rehearsal, optional manual screen recording, or production/pre-sales hardening.
+Continue Stage 9. Immediate blockers are the manual Airtable view setup, the `Airtable account`
+credential in n8n, a running n8n container, and a cloudflared tunnel for the Telegram Trigger.
+Once those exist, build WF6-WF9 and rehearse the v2 path end to end.
