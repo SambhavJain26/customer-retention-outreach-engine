@@ -28,7 +28,7 @@ part of the story.
 
 ## Before You Record
 
-Allow five minutes.
+Two minutes.
 
 ### 1. Start the stack
 
@@ -36,39 +36,32 @@ Allow five minutes.
 docker compose up -d n8n
 ```
 
-### 2. Re-establish the tunnel
-
-```bash
-node scripts/v2/start-tunnel.js
-node scripts/v2/import-v2-workflows.js wf6-telegram-router
-```
-
-cloudflared quick tunnels get a **new hostname every run**, and n8n only reads `WEBHOOK_URL`
-at container start. If the tunnel dropped, every Telegram button is dead until this runs.
-
-Failure signal: tapping a button does nothing. That is almost always the tunnel.
-
-### 3. Clear the Telegram chat
+### 2. Clear the Telegram chat
 
 Telegram bakes buttons into a message when it is sent, so old cards keep old behaviour.
 
-### 4. Run the only command
+### 3. Run the only command
 
 ```bash
 node scripts/v2/demo-start.js
 ```
 
-It checks the stack, refuses to continue if anything is wrong, resets to 40 clean residents,
-and generates the 90-day check-ins. Telegram receives the summary card and the first approval
-card about thirty seconds later.
+It health-checks n8n, the public tunnel, and all five workflows; repairs the tunnel and
+re-registers the bot webhook automatically if it has dropped; refuses to continue if anything
+is still wrong; resets to 40 clean residents; and generates the 90-day check-ins. Telegram
+receives the summary card and the first approval card about thirty seconds later.
 
-Expected in Airtable after the reset: 40 residents all `PENDING`, cohorts
+Expected after the reset: 40 residents all `PENDING`, cohorts
 `120=6 90=14 60=11 30=6 NONE=2 EXPIRED=1`, 8 flagged rows, empty log, zeroed metrics, and 4
 residents pointing at the real demo inbox. The other 36 use `@example.com`, which is
 IANA-reserved and cannot reach a person.
 
-From here nothing else is typed. Approvals are buttons, replies are detected automatically
-within a minute, and the metrics table refreshes itself after every state change.
+From here nothing is typed. Approvals are buttons, replies are detected automatically within
+a minute, and the metrics table refreshes itself after every state change.
+
+If a button ever stops responding mid-session the tunnel has dropped. Run
+`node scripts/v2/demo-start.js --no-reset` to repair it without losing state, then re-trigger
+for fresh cards.
 
 ## The Demo
 
@@ -247,7 +240,7 @@ Run these during rehearsal, not on a prospect call.
 
 | Symptom | First check |
 |---|---|
-| Buttons do nothing | The tunnel. Re-run `start-tunnel.js`, re-import WF6 |
+| Buttons do nothing | The tunnel. Run `node scripts/v2/demo-start.js --no-reset` |
 | Old card behaves oddly | It is a stale card. Re-trigger for fresh buttons |
 | No cards after demo-start | WF7 execution, then the OpenAI credential |
 | Reply not found | Subject kept `Re:` and the token; message not already logged |

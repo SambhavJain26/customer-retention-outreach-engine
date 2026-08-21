@@ -3,12 +3,14 @@
  *
  *   node scripts/v2/demo-start.js
  *
- * It checks the stack is healthy, resets Airtable to the clean 40-resident
- * state, kicks off the 90-day check-in generation, and reports what landed.
+ * It checks the stack is healthy, repairs the tunnel if it has dropped, resets
+ * Airtable to the clean 40-resident state, kicks off the 90-day check-in
+ * generation, and reports what landed.
  * From that point the demo is hands-free: every other step is a Telegram button,
  * and resident replies are picked up automatically by WF10.
  *
  * Use --no-reset to generate without wiping current state.
+ * Use --no-repair to fail on a dead tunnel instead of fixing it.
  */
 
 const path = require("path");
@@ -51,6 +53,15 @@ function activeWorkflows() {
   }
 }
 
+async function waitFor(check, timeoutMs) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (await check()) return true;
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+  return false;
+}
+
 function run(command, args) {
   execFileSync(command, args, { cwd: REPO_ROOT, stdio: "inherit" });
 }
@@ -65,9 +76,34 @@ async function main() {
   console.log(`  n8n local     : ${localOk ? "ok" : "UNREACHABLE"}`);
   if (!localOk) problems.push("n8n is not running. Run: docker compose up -d n8n");
 
-  const tunnelUrl = process.env.TUNNEL_URL || "";
-  const tunnelOk = tunnelUrl ? await reachable(`${tunnelUrl}/healthz`) : false;
+  let tunnelUrl = process.env.TUNNEL_URL || "";
+  let tunnelOk = tunnelUrl ? await reachable(`${tunnelUrl}/healthz`) : false;
   console.log(`  public tunnel : ${tunnelOk ? "ok" : "DEAD"}`);
+
+  // The tunnel is the most common failure and the fix is always the same, so it
+  // is repaired here rather than left as an instruction. A quick tunnel gets a
+  // new hostname every run, n8n only reads WEBHOOK_URL at container start, and
+  // the bot webhook has to be re-registered afterwards.
+  if (!tunnelOk && localOk && !process.argv.includes("--no-repair")) {
+    console.log("");
+    console.log("  Repairing the tunnel. This takes about a minute...");
+    console.log("");
+    try {
+      run("node", [path.join(__dirname, "start-tunnel.js")]);
+      run("node", [path.join(__dirname, "import-v2-workflows.js"), "wf6-telegram-router"]);
+      await waitFor(() => reachable(`${N8N}/healthz`), 120000);
+      loadDotEnv.cache = null;
+      delete process.env.TUNNEL_URL;
+      loadDotEnv();
+      tunnelUrl = process.env.TUNNEL_URL || "";
+      tunnelOk = tunnelUrl ? await reachable(`${tunnelUrl}/healthz`) : false;
+      console.log("");
+      console.log(`  public tunnel : ${tunnelOk ? "repaired" : "STILL DEAD"}`);
+    } catch (error) {
+      console.log(`  tunnel repair failed: ${error.message}`);
+    }
+  }
+
   if (!tunnelOk) {
     problems.push("The tunnel is down, so Telegram buttons will not work. Run: node scripts/v2/start-tunnel.js");
   }

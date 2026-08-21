@@ -6,52 +6,47 @@ Run this immediately before you hit record. It takes about five minutes.
 
 ## Pre-flight
 
-**1. Start the stack**
+**1. Start Docker Desktop, then the stack**
 
 ```bash
 docker compose up -d n8n
 ```
 
-**2. Re-establish the tunnel — every single time**
-
-```bash
-node scripts/v2/start-tunnel.js
-node scripts/v2/import-v2-workflows.js wf6-telegram-router
-```
-
-This is the single most likely thing to break on camera. cloudflared quick tunnels get a new
-hostname on every run, n8n only reads `WEBHOOK_URL` at container start, and the bot's webhook
-has to be re-registered afterwards. If a button ever does nothing, this is the cause.
-
-**3. Clear the Telegram chat**
+**2. Clear the Telegram chat**
 
 Telegram bakes buttons into a message when it is sent, so an old card keeps old behaviour
 forever. Clear the chat or scroll to a clean point — tapping a stale card on camera will
 produce something that does not match what you are saying.
 
-**4. Run the one command**
+**3. Run the one command**
 
 ```bash
 node scripts/v2/demo-start.js
 ```
 
-It verifies n8n, the tunnel, and that all five workflows are active; refuses to continue if
-anything is wrong; resets the data; and kicks off generation. Within about thirty seconds
-Telegram shows:
+It does everything else:
+
+- checks n8n, the public tunnel, and that all five workflows are active
+- **repairs the tunnel automatically** if it has dropped, including re-registering the bot
+  webhook, which takes about a minute
+- refuses to continue if anything is still wrong, so you find out now rather than on camera
+- resets to 40 clean residents
+- generates the 90-day check-ins
+
+Within about thirty seconds Telegram shows:
 
 > **90-day check-ins drafted**
 > 14 ready for review
 > Turnover exposure in this window: **$54,600**
 > Nothing sends until you approve it.
 
-**That is the last command you run.** Everything after it is a Telegram button, and resident
-replies are picked up on their own within a minute.
+**That is the only command.** Everything after it is a Telegram button or an email reply.
 
-You do not need to clear old demo email. The reply check ignores anything that arrived before
-this demo's first send, and the reset clears every send time, so leftover mail from an earlier
-rehearsal cannot be mistaken for a new reply.
+You do not need to archive old demo email. The reply check ignores anything that arrived
+before this demo's first send, and the reset clears every send time, so leftover mail from an
+earlier rehearsal cannot be mistaken for a new reply.
 
-**5. Windows to have open**
+**4. Windows to have open**
 
 - Airtable `Leases` table
 - Telegram, the Harborview Demo Alerts chat
@@ -79,7 +74,7 @@ sweep to trigger.
 
 | Symptom | Do this |
 |---|---|
-| Buttons do nothing | Tunnel died. Stop, re-run step 2, re-trigger for fresh cards |
+| Buttons do nothing | Tunnel died mid-take. Run `node scripts/v2/demo-start.js --no-reset` to repair it, then re-trigger for fresh cards |
 | No cards after demo-start | Check the tunnel first, then WF7's last execution in n8n |
 | Reply not found | Confirm the subject kept `Re:` and the `[R-xxxx]` code |
 | A card behaves oddly | It is a stale card from before a change. Re-trigger |
