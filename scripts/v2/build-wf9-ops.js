@@ -83,6 +83,9 @@ const logRows = flattenAirtable($('Airtable Read Log For Sweep').all());
 const metricsRows = flattenAirtable($('Airtable Read Metrics For Sweep').all());
 
 const digestOnly = Boolean(body.digest_only);
+// A silent sweep refreshes the scoreboard without putting anything on the
+// manager's phone. Used by the automatic refresh after every state change.
+const silent = Boolean(body.silent);
 const nowIso = new Date().toISOString();
 
 // Recompute timing and cohorts, and escalate long silences.
@@ -166,6 +169,7 @@ return [{
     record_id: '',
     text: digest.text,
     digest_only: digestOnly,
+    post_digest: !silent,
     changed_count: updates.length,
     escalated_count: summary.escalated_count || 0,
     metrics,
@@ -188,6 +192,7 @@ return [{
   json: {
     chat_id: payload.chat_id,
     text: payload.text,
+    post_digest: payload.post_digest,
     record_id: '',
     ok: true,
     action: 'sweep',
@@ -246,7 +251,8 @@ const nodes = [
   codeNode("Emit Sweep Writes", emitSweepWritesCode, [1180, 260]),
   airtableWriteNode("Airtable Write Sweep", [1380, 260]),
   codeNode("Build Sweep Digest", buildDigestCode, [1580, 380]),
-  telegramCardNode("Telegram Sweep Digest", [1780, 380], null),
+  ifNode("If Should Post Digest", booleanCondition("={{ $json.post_digest }}"), [1780, 380]),
+  telegramCardNode("Telegram Sweep Digest", [1980, 300], null),
 
   // Error alerting
   {
@@ -274,7 +280,8 @@ const connections = {
   "If Has Sweep Writes": branchConnection(["Emit Sweep Writes"], ["Build Sweep Digest"]),
   "Emit Sweep Writes": mainConnection("Airtable Write Sweep"),
   "Airtable Write Sweep": mainConnection("Build Sweep Digest"),
-  "Build Sweep Digest": mainConnection("Telegram Sweep Digest"),
+  "Build Sweep Digest": mainConnection("If Should Post Digest"),
+  "If Should Post Digest": branchConnection(["Telegram Sweep Digest"], []),
 
   "Workflow Error Trigger": mainConnection("Build Error Alert"),
   "Build Error Alert": mainConnection("Airtable Read Config For Error"),

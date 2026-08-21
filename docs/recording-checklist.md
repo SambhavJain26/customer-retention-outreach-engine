@@ -23,34 +23,35 @@ This is the single most likely thing to break on camera. cloudflared quick tunne
 hostname on every run, n8n only reads `WEBHOOK_URL` at container start, and the bot's webhook
 has to be re-registered afterwards. If a button ever does nothing, this is the cause.
 
-**3. Archive old demo email**
-
-In Gmail, archive or delete every previous check-in and reply. The reply check treats any
-message from the demo address as a candidate, so a leftover reply from an earlier rehearsal
-will be picked up and processed as if it were new.
-
-**4. Reset the data**
-
-```bash
-node scripts/v2/seed-airtable-demo.js
-```
-
-Expect 40 residents, all `PENDING`, 14 in the 90-day window, 8 flagged, empty log, zeroed
-metrics, and 4 residents pointing at your real inbox.
-
-**5. Clear the Telegram chat**
+**3. Clear the Telegram chat**
 
 Telegram bakes buttons into a message when it is sent, so an old card keeps old behaviour
 forever. Clear the chat or scroll to a clean point — tapping a stale card on camera will
 produce something that does not match what you are saying.
 
-**6. Decide on automatic polling**
+**4. Run the one command**
 
-WF10 off means you type `/check` and control the timing. WF10 on means the reply lands by
-itself within a minute, which is the better story but gives you less control. Set it before
-you start, not during.
+```bash
+node scripts/v2/demo-start.js
+```
 
-**7. Windows to have open**
+It verifies n8n, the tunnel, and that all five workflows are active; refuses to continue if
+anything is wrong; resets the data; and kicks off generation. Within about thirty seconds
+Telegram shows:
+
+> **90-day check-ins drafted**
+> 14 ready for review
+> Turnover exposure in this window: **$54,600**
+> Nothing sends until you approve it.
+
+**That is the last command you run.** Everything after it is a Telegram button, and resident
+replies are picked up on their own within a minute.
+
+You do not need to clear old demo email. The reply check ignores anything that arrived before
+this demo's first send, and the reset clears every send time, so leftover mail from an earlier
+rehearsal cannot be mistaken for a new reply.
+
+**5. Windows to have open**
 
 - Airtable `Leases` table
 - Telegram, the Harborview Demo Alerts chat
@@ -59,23 +60,27 @@ you start, not during.
 
 ## Recording order
 
+Nothing here needs a terminal. Every step is a tap or an email.
+
 1. Airtable — the messy roster, the flagged rows, the cohorts
-2. `/generate` in Telegram — summary card and Avery's approval card
-3. Show the queue with **Next draft**, then optionally try an unsafe **Edit wording**
-4. **Approve & Send** on Avery, then tap it again to show the duplicate refusal
-5. Reply from Gmail with the broken-fan message
-6. `/check` (or wait, if WF10 is on) — the at-risk alert
-7. **Draft my reply**, then **Send reply**
-8. **Mark resolved**, then **Send confirmation**
-9. Airtable `Metrics` — exposure recovered
-10. `/sweep` to refresh live
+2. Telegram — the summary card that `demo-start.js` produced
+3. Show the queue with **➡️ Next draft**, then optionally try an unsafe **✏️ Edit wording**
+4. **✅ Approve & Send** on Avery, then tap it again to show the duplicate refusal
+5. Reply from Gmail with the broken-fan message, then **wait** — the alert arrives by itself
+   within a minute
+6. **✍️ Draft my reply**, then **✅ Send reply**
+7. **✅ Mark resolved**, then **✅ Send confirmation**
+8. Airtable `Metrics` — exposure recovered, already up to date
+
+The metrics table refreshes itself after every approval, reply, and resolution. There is no
+sweep to trigger.
 
 ## If something breaks mid-recording
 
 | Symptom | Do this |
 |---|---|
 | Buttons do nothing | Tunnel died. Stop, re-run step 2, re-trigger for fresh cards |
-| No cards after `/generate` | Check the tunnel first, then WF7's last execution in n8n |
+| No cards after demo-start | Check the tunnel first, then WF7's last execution in n8n |
 | Reply not found | Confirm the subject kept `Re:` and the `[R-xxxx]` code |
 | A card behaves oddly | It is a stale card from before a change. Re-trigger |
 | Email did not arrive | Give it a minute; Gmail is occasionally slow. Then check the Gmail node |

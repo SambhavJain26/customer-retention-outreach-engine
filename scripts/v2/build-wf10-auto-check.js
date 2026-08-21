@@ -1,16 +1,14 @@
 /**
  * Builds n8n-workflows/wf10-auto-check.json.
  *
- * Optional. Polls Gmail every minute and runs the same reply check that the
- * /check command runs, so a resident reply reaches the manager's phone without
- * anyone triggering anything.
+ * Polls Gmail every minute and runs the same reply check that /check runs, so a
+ * resident reply reaches the manager's phone with nobody triggering anything.
+ * This is what makes the demo hands-free after the initial kickoff.
  *
- * Keep this workflow DEACTIVATED while setting up or rehearsing: it will consume
- * a reply the moment it arrives, which spoils a live walkthrough where you want
- * to press the button on camera. Activate it only when you want the hands-off
- * behaviour.
+ * Polls are silent: an empty check posts nothing. Only a real reply produces a
+ * message. It adds no new logic and no new sending path - it just calls WF8.
  *
- * It adds no new logic and no new sending path - it just calls WF8.
+ * Deactivate it only if you specifically want to press /check on camera.
  */
 
 const fs = require("fs");
@@ -65,9 +63,7 @@ const connections = {
 
 // Imported inactive on purpose. Turn it on in the n8n UI when you want
 // hands-free reply detection.
-const wf = workflow("wf10-auto-check", "WF10 Automatic Reply Polling (optional)", nodes, connections, {
-  active: false,
-});
+const wf = workflow("wf10-auto-check", "WF10 Automatic Reply Polling", nodes, connections);
 
 const outputPath = path.join(__dirname, "..", "..", "n8n-workflows", "wf10-auto-check.json");
 fs.writeFileSync(outputPath, `${JSON.stringify(wf, null, 2)}\n`, "utf8");

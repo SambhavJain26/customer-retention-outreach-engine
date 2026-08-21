@@ -28,7 +28,7 @@ part of the story.
 
 ## Before You Record
 
-Allow 15 minutes. Steps 1-3 are mandatory every single time.
+Allow five minutes.
 
 ### 1. Start the stack
 
@@ -36,66 +36,39 @@ Allow 15 minutes. Steps 1-3 are mandatory every single time.
 docker compose up -d n8n
 ```
 
-Wait for `http://localhost:5678/healthz` to return `200`.
-
-### 2. Re-establish the tunnel (the most common failure)
+### 2. Re-establish the tunnel
 
 ```bash
 node scripts/v2/start-tunnel.js
-```
-
-cloudflared quick tunnels get a **new hostname every run**, and n8n only reads
-`WEBHOOK_URL` at container start. If the tunnel dropped — or Docker restarted — every
-Telegram button is dead until this runs. The script re-tunnels, rewrites `.env`,
-recreates the container, and verifies both routes.
-
-Then re-register the bot webhook:
-
-```bash
 node scripts/v2/import-v2-workflows.js wf6-telegram-router
 ```
 
+cloudflared quick tunnels get a **new hostname every run**, and n8n only reads `WEBHOOK_URL`
+at container start. If the tunnel dropped, every Telegram button is dead until this runs.
+
 Failure signal: tapping a button does nothing. That is almost always the tunnel.
 
-### 3. Archive old demo email
+### 3. Clear the Telegram chat
 
-In Gmail, archive or delete previous check-ins and replies. The reply check treats any message
-from the demo address as a candidate, so a leftover reply from an earlier rehearsal is picked
-up and processed as if it were new.
+Telegram bakes buttons into a message when it is sent, so old cards keep old behaviour.
 
-### 4. Reset the demo
+### 4. Run the only command
 
 ```bash
-node scripts/v2/seed-airtable-demo.js
+node scripts/v2/demo-start.js
 ```
 
-Expected:
+It checks the stack, refuses to continue if anything is wrong, resets to 40 clean residents,
+and generates the 90-day check-ins. Telegram receives the summary card and the first approval
+card about thirty seconds later.
 
-- 40 residents, all `PENDING`
-- cohorts `120=6 90=14 60=11 30=6 NONE=2 EXPIRED=1`
-- 8 rows flagged in `needs_attention`
-- `Outreach Log` empty, `Metrics` zeroed
-- 4 residents point at the real demo inbox; the other 36 use `@example.com`,
-  which is IANA-reserved and cannot reach a person
+Expected in Airtable after the reset: 40 residents all `PENDING`, cohorts
+`120=6 90=14 60=11 30=6 NONE=2 EXPIRED=1`, 8 flagged rows, empty log, zeroed metrics, and 4
+residents pointing at the real demo inbox. The other 36 use `@example.com`, which is
+IANA-reserved and cannot reach a person.
 
-### 5. Confirm the workflows
-
-```bash
-docker compose exec -T n8n n8n list:workflow --active=true
-```
-
-WF6, WF7, WF8, WF9 active. WF10 (automatic polling) is your choice:
-
-- **Off** — you type `/check` on camera. Predictable, you control the timing.
-- **On** — the reply arrives on its own within a minute. Better story, less control.
-
-### 6. Clear the Telegram chat
-
-Telegram bakes buttons into a message when it is sent. Old cards keep old behaviour
-forever. Scroll to a clean point or clear the chat so you cannot tap a stale card
-mid-recording.
-
----
+From here nothing else is typed. Approvals are buttons, replies are detected automatically
+within a minute, and the metrics table refreshes itself after every state change.
 
 ## The Demo
 
@@ -120,13 +93,7 @@ Then point at `cohort`.
 
 ### Step 2 — Generate the check-ins
 
-In Telegram, send:
-
-```
-/generate
-```
-
-Expect within ~30 seconds:
+`demo-start.js` has already produced this. Switch to Telegram and read it out:
 
 > **90-day check-ins drafted**
 > 14 ready for review
@@ -178,7 +145,7 @@ Reply to that email, leaving the subject alone:
 > We're happy here but the extractor fan in the bathroom has been broken since summer and
 > I've reported it twice.
 
-If WF10 is off, send `/check` in Telegram.
+Then wait. The alert arrives on its own within a minute — nobody triggers it.
 
 Expect `GRIEVANCE / MAINTENANCE / HIGH`, Avery at `AT_RISK`, `$3,900` exposure, and:
 
@@ -223,7 +190,8 @@ Open the `Metrics` table.
 > average resolution time, exposure open, exposure recovered. That is the report a
 > regional manager actually wants.
 
-Send `/sweep` to refresh it live.
+It is already current. The scoreboard refreshes itself after every approval, reply, and
+resolution.
 
 ### Step 9 — Close
 
@@ -251,10 +219,11 @@ Run these during rehearsal, not on a prospect call.
 | Opt-out | Reply "stop emailing me" | `opted_out` set, excluded from later generation |
 | Out of office | Reply "I am out of the office until 14 August." | `NO_SIGNAL`, no alert, resident not moved |
 | Unmatched | POST a manual payload with an unknown sender and no token | Unmatched alert, **no resident assigned** |
-| Duplicate reply | Send `/check` twice without a new reply | No second log row, no second alert |
+| Stale mail | Leave an old reply in the inbox, then reset | Ignored: nothing older than the demo's first send counts as a reply |
+| Duplicate reply | Let the automatic poll run twice over the same reply | No second log row, no second alert |
 | Skip after send | Tap Skip on a `SENT` resident | Refused, state untouched |
 | Unsafe edit | Edit wording to include rent or a deadline | Refused with the violations listed |
-| Sweep | Send `/sweep` | Cohorts recomputed, metrics refreshed, digest posted, no resident email |
+| Sweep | `POST /webhook/v2-sweep` or wait for 08:00 | Cohorts recomputed, metrics refreshed, digest posted, no resident email |
 | Error alert | Inspect WF9's error trigger history | Failures report workflow, node, message, time |
 
 ---
@@ -280,7 +249,7 @@ Run these during rehearsal, not on a prospect call.
 |---|---|
 | Buttons do nothing | The tunnel. Re-run `start-tunnel.js`, re-import WF6 |
 | Old card behaves oddly | It is a stale card. Re-trigger for fresh buttons |
-| No cards after `/generate` | WF7 execution, then the OpenAI credential |
+| No cards after demo-start | WF7 execution, then the OpenAI credential |
 | Reply not found | Subject kept `Re:` and the token; message not already logged |
 | Email did not arrive | WF3 Gmail node and the Gmail credential |
 | Telegram silent but Airtable updated | Telegram credential or chat id in `Config` |

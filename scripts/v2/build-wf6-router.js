@@ -704,6 +704,22 @@ const nodes = [
   codeNode("Emit Action Writes", emitWritesCode, [2500, 80]),
   airtableWriteNode("Airtable Write Action", [2700, 80]),
   codeNode("Build Telegram Reply", buildReplyCode, [2500, 300]),
+  {
+    parameters: {
+      method: "POST",
+      url: "http://localhost:5678/webhook/v2-sweep",
+      sendBody: true,
+      specifyBody: "json",
+      jsonBody: '={{ JSON.stringify({ silent: true }) }}',
+      options: { timeout: 120000 },
+    },
+    id: "wf6-refresh-metrics",
+    name: "Refresh Metrics",
+    type: "n8n-nodes-base.httpRequest",
+    typeVersion: 4.2,
+    position: [2700, 760],
+    onError: "continueRegularOutput",
+  },
   switchNode("Route Card Type", [2700, 300], ["draft", "assist", "resolution"]),
   telegramCardNode("Telegram Reply Draft Card", [2920, 120], KEYBOARDS.draft),
   telegramCardNode("Telegram Reply Assist Card", [2920, 280], KEYBOARDS.assist),
@@ -731,7 +747,9 @@ const connections = {
   "If Has Writes": branchConnection(["Emit Action Writes"], ["Build Telegram Reply"]),
   "Emit Action Writes": mainConnection("Airtable Write Action"),
   "Airtable Write Action": mainConnection("Build Telegram Reply"),
-  "Build Telegram Reply": mainConnection("Route Card Type"),
+  // Keeps the Metrics scoreboard current after every approval, send, and
+  // resolution without a manual sweep.
+  "Build Telegram Reply": mainConnection("Route Card Type", "Refresh Metrics"),
   "Route Card Type": {
     main: [
       [{ node: "Telegram Reply Draft Card", type: "main", index: 0 }],

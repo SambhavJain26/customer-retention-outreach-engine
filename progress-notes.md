@@ -77,6 +77,21 @@ Current proposed direction:
 
 ## Deviations From Original Plan
 
+2026-08-21: Demo operation is now hands-free after a single kickoff command. The user records
+without running scripts or typing commands mid-take, so:
+
+- `scripts/v2/demo-start.js` is the only command. It health-checks n8n, the tunnel, and all
+  five active workflows, refuses to continue if anything is wrong, resets the data, and
+  triggers generation.
+- WF10 automatic reply polling now ships and imports ACTIVE. Polls stay silent, so only a real
+  reply produces a message.
+- The Metrics scoreboard refreshes itself. WF6 and WF8 fire a silent sweep in parallel with
+  their Telegram reply after every approval, send, reply, and resolution, so no manual sweep is
+  needed. WF9 gained a `silent` flag that writes metrics without posting a digest.
+- WF8 now ignores any mailbox message that arrived before the demo's first send. Since a reset
+  clears every `sent_at`, leftover replies from an earlier rehearsal can no longer be picked up
+  as new. This removes the "archive old demo email" pre-flight step entirely.
+
 2026-08-21: Adopted a single drafting policy after live testing. OpenAI drafts a suggested
 reply and a fix-confirmation for every grievance category, including compliance-flagged ones.
 An earlier build withheld drafting for accommodation, habitability, legal-threat, and

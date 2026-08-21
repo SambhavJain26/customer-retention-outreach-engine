@@ -1,7 +1,7 @@
 {
   "id": "wf10-auto-check",
-  "name": "WF10 Automatic Reply Polling (optional)",
-  "active": false,
+  "name": "WF10 Automatic Reply Polling",
+  "active": true,
   "nodes": [
     {
       "parameters": {

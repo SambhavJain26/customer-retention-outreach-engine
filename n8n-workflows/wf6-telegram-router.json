@@ -52,7 +52,7 @@
           },
           "conditions": [
             {
-              "id": "cond-4uas5d",
+              "id": "cond-4kpbad",
               "leftValue": "={{ $json.needs_lease_lookup }}",
               "rightValue": "",
               "operator": {
@@ -86,7 +86,7 @@
           },
           "conditions": [
             {
-              "id": "cond-gc4wy3",
+              "id": "cond-iw25qu",
               "leftValue": "={{ $json.is_command }}",
               "rightValue": "",
               "operator": {
@@ -219,7 +219,7 @@
           },
           "conditions": [
             {
-              "id": "cond-b6wgr4",
+              "id": "cond-xckqdi",
               "leftValue": "={{ $json.needs_openai }}",
               "rightValue": "",
               "operator": {
@@ -335,7 +335,7 @@
           },
           "conditions": [
             {
-              "id": "cond-vs08li",
+              "id": "cond-axrrm7",
               "leftValue": "={{ $json.needs_gmail }}",
               "rightValue": "",
               "operator": {
@@ -409,7 +409,7 @@
           },
           "conditions": [
             {
-              "id": "cond-q59jw4",
+              "id": "cond-rrkwsm",
               "leftValue": "={{ $json.has_writes }}",
               "rightValue": "",
               "operator": {
@@ -486,6 +486,27 @@
         2500,
         300
       ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/v2-sweep",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ silent: true }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "wf6-refresh-metrics",
+      "name": "Refresh Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        760
+      ],
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -998,6 +1019,11 @@
         [
           {
             "node": "Route Card Type",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Refresh Metrics",
             "type": "main",
             "index": 0
           }

@@ -168,6 +168,14 @@ const alreadyLogged = new Set(
     .filter(Boolean)
 );
 
+// Nothing in the mailbox can be a reply to a message this demo has not sent yet.
+// After a reset every sent_at is cleared, so leftover mail from an earlier
+// rehearsal is ignored instead of being processed as new.
+const sentTimes = (prepared.leases || [])
+  .map((lease) => Date.parse(lease.sent_at || ''))
+  .filter((value) => Number.isFinite(value));
+const earliestSend = sentTimes.length ? Math.min.apply(null, sentTimes) : null;
+
 const candidates = [];
 for (const message of messages) {
   const reply = normalizeGmailMessage(message);
@@ -184,6 +192,11 @@ for (const message of messages) {
   if (!isReplySubject) continue;
 
   if (alreadyLogged.has(reply.message_id)) continue;
+
+  if (earliestSend === null) continue;
+  const receivedAt = Number(message.internalDate || 0);
+  if (receivedAt && receivedAt < earliestSend) continue;
+
   candidates.push(reply);
 }
 
@@ -445,6 +458,22 @@ const nodes = [
   codeNode("Emit Reply Writes", emitWritesCode, [2260, 180]),
   airtableWriteNode("Airtable Write Reply", [2460, 180]),
   codeNode("Build Reply Card", buildCardCode, [2660, 300]),
+  {
+    parameters: {
+      method: "POST",
+      url: "http://localhost:5678/webhook/v2-sweep",
+      sendBody: true,
+      specifyBody: "json",
+      jsonBody: '={{ JSON.stringify({ silent: true }) }}',
+      options: { timeout: 120000 },
+    },
+    id: "wf8-refresh-metrics",
+    name: "Refresh Metrics",
+    type: "n8n-nodes-base.httpRequest",
+    typeVersion: 4.2,
+    position: [2860, 560],
+    onError: "continueRegularOutput",
+  },
   switchNode("Route Reply Card", [2860, 300], ["atrisk", "atriskCompliance", "none"]),
   telegramCardNode("Telegram At Risk Alert", [3080, 180], KEYBOARDS.atRisk),
   telegramCardNode("Telegram Compliance Alert", [3080, 340], KEYBOARDS.atRiskCompliance),
@@ -467,7 +496,9 @@ const connections = {
   "If Has Reply Writes": branchConnection(["Emit Reply Writes"], ["Build Reply Card"]),
   "Emit Reply Writes": mainConnection("Airtable Write Reply"),
   "Airtable Write Reply": mainConnection("Build Reply Card"),
-  "Build Reply Card": mainConnection("Route Reply Card"),
+  // The card and the scoreboard refresh run in parallel so the metrics table is
+  // current without anyone triggering a sweep.
+  "Build Reply Card": mainConnection("Route Reply Card", "Refresh Metrics"),
   "Route Reply Card": {
     main: [
       [{ node: "Telegram At Risk Alert", type: "main", index: 0 }],
