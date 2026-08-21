@@ -279,6 +279,16 @@ function replySubject() {
 }
 
 if (action === ACTIONS.APPROVE_SEND) {
+  // Guardrails re-run here, not just at drafting time, because a manager may have
+  // edited draft_body in Airtable since. Whatever is about to be sent is what gets
+  // checked.
+  const guard = guardDraft(lease, lease.draft_subject, lease.draft_body);
+  if (!guard.ok) {
+    out.outcome = 'guard_failed';
+    out.text = 'This message was not sent. The edited wording failed the safety checks: '
+      + guard.violations.join('; ') + '. Fix it in Airtable and approve again.';
+    return [{ json: out }];
+  }
   out.needs_gmail = true;
   out.to_email = lease.email;
   out.subject = lease.draft_subject;
@@ -310,7 +320,9 @@ if (action === ACTIONS.APPROVE_SEND) {
       out.outcome = 'guard_failed';
       out.text = 'The drafted reply failed the safety checks (' + guard.violations.join('; ') + '). Nothing was sent.';
     } else {
-      const draftText = modelDraft.body + footer;
+      // Stored without the footer: the footer mentions renewal and lease wording
+      // that the reply guardrail would reject on the re-check at send time.
+      const draftText = modelDraft.body;
       out.airtable_fields = { assist_draft: draftText };
       const card = assistApprovalCard(Object.assign({}, lease, { assist_draft: draftText }));
       out.text = card.text;
@@ -318,10 +330,17 @@ if (action === ACTIONS.APPROVE_SEND) {
     }
   }
 } else if (action === ACTIONS.SEND_ASSIST) {
+  const guard = guardReply(lease, replySubject(), lease.assist_draft);
+  if (!guard.ok) {
+    out.outcome = 'guard_failed';
+    out.text = 'This reply was not sent. The wording failed the safety checks: '
+      + guard.violations.join('; ') + '. Fix it in Airtable and send again.';
+    return [{ json: out }];
+  }
   out.needs_gmail = true;
   out.to_email = lease.email;
   out.subject = replySubject();
-  out.body = String(lease.assist_draft || '');
+  out.body = String(lease.assist_draft || '') + footer;
   out.airtable_fields = { assist_draft: '' };
   out.log_row = {
     event_type: 'ASSIST_SENT',
@@ -350,7 +369,7 @@ if (action === ACTIONS.APPROVE_SEND) {
 
   if (modelDraft) {
     const guard = guardReply(lease, modelDraft.subject, modelDraft.body);
-    fields.assist_draft = guard.ok ? modelDraft.body + footer : '';
+    fields.assist_draft = guard.ok ? modelDraft.body : '';
   }
 
   out.airtable_fields = fields;
@@ -369,10 +388,17 @@ if (action === ACTIONS.APPROVE_SEND) {
   out.text = card.text;
   out.card_type = fields.assist_draft ? 'resolution' : 'plain';
 } else if (action === ACTIONS.SEND_CONFIRMATION) {
+  const guard = guardReply(lease, replySubject(), lease.assist_draft);
+  if (!guard.ok) {
+    out.outcome = 'guard_failed';
+    out.text = 'The confirmation was not sent. The wording failed the safety checks: '
+      + guard.violations.join('; ') + '. Fix it in Airtable and send again.';
+    return [{ json: out }];
+  }
   out.needs_gmail = true;
   out.to_email = lease.email;
   out.subject = replySubject();
-  out.body = String(lease.assist_draft || '');
+  out.body = String(lease.assist_draft || '') + footer;
   out.airtable_fields = { confirmation_sent_at: nowIso, assist_draft: '' };
   out.log_row = {
     event_type: 'CONFIRMATION_SENT',

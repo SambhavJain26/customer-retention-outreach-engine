@@ -99,10 +99,13 @@ function importWorkflow(name, baseId, credentialIds) {
     stdio: "pipe",
   });
 
-  docker(["compose", "exec", "-T", "n8n", "n8n", "update:workflow", `--id=${parsed.id}`, "--active=true"], {
-    cwd: REPO_ROOT,
-    stdio: "pipe",
-  });
+  // Respect the exported active flag. Optional workflows (WF10) ship inactive so
+  // importing them never silently starts polling.
+  const shouldActivate = parsed.active !== false;
+  docker([
+    "compose", "exec", "-T", "n8n", "n8n", "update:workflow",
+    `--id=${parsed.id}`, `--active=${shouldActivate ? "true" : "false"}`,
+  ], { cwd: REPO_ROOT, stdio: "pipe" });
 
   try {
     docker(["compose", "exec", "-T", "n8n", "n8n", "publish:workflow", `--id=${parsed.id}`], {
@@ -113,7 +116,7 @@ function importWorkflow(name, baseId, credentialIds) {
     // publish:workflow is not present on every n8n build; activation is what matters.
   }
 
-  return { id: parsed.id, name: parsed.name, nodes: parsed.nodes.length };
+  return { id: parsed.id, name: parsed.name, nodes: parsed.nodes.length, active: shouldActivate };
 }
 
 function main() {
@@ -127,7 +130,7 @@ function main() {
     ? requested
     : fs
         .readdirSync(WORKFLOW_DIR)
-        .filter((file) => /^wf[6-9]-.*\.json$/.test(file))
+        .filter((file) => /^wf(?:[6-9]|1\d)-.*\.json$/.test(file))
         .map((file) => file.replace(/\.json$/, ""));
 
   if (!names.length) {
@@ -140,7 +143,8 @@ function main() {
 
   for (const name of names) {
     const result = importWorkflow(name, baseId, credentialIds);
-    console.log(`imported and activated ${result.id} - ${result.name} (${result.nodes} nodes)`);
+    const state = result.active ? "activated" : "imported INACTIVE";
+    console.log(`${state}: ${result.id} - ${result.name} (${result.nodes} nodes)`);
   }
 
   console.log("\nRestarting n8n so active webhooks register...");
