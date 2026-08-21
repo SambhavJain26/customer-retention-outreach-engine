@@ -170,10 +170,27 @@ const targetRecordId = action === 'edt_apply' ? pendingRecordId : routed.record_
 const lease = leases.find((row) => row.record_id === targetRecordId) || null;
 const status = lease ? String(lease.status || '').toUpperCase() : '';
 
+// The approval queue, ordered the same way WF7 orders it, so Next walks the
+// remaining drafts in a predictable sequence.
+const queue = leases
+  .filter((row) => String(row.status || '').toUpperCase() === 'AWAITING_APPROVAL')
+  .sort((a, b) => {
+    const priority = (b.is_demo_priority ? 1 : 0) - (a.is_demo_priority ? 1 : 0);
+    if (priority !== 0) return priority;
+    return Number(a.days_to_expiry || 9999) - Number(b.days_to_expiry || 9999);
+  });
+const queueIndex = queue.findIndex((row) => row.record_id === targetRecordId);
+const nextRecordId = queueIndex >= 0 && queue[queueIndex + 1]
+  ? queue[queueIndex + 1].record_id
+  : (queue[0] && queue[0].record_id !== targetRecordId ? queue[0].record_id : '');
+
 const result = {
   action,
   record_id: targetRecordId,
   edit_text: routed.edit_text || '',
+  queue_total: queue.length,
+  queue_position: queueIndex >= 0 ? queueIndex + 1 : 0,
+  next_record_id: nextRecordId,
   edit_field: pendingField,
   pending_config_record_id: pendingRow ? pendingRow.record_id : '',
   chat_id: routed.chat_id,
@@ -282,6 +299,7 @@ const out = {
   airtable_fields: null,
   log_row: null,
   config_write: null,
+  next_record_id: decided.next_record_id || '',
   pending_config_record_id: decided.pending_config_record_id || '',
   text: decided.text || '',
   card_type: 'plain',
@@ -384,9 +402,19 @@ if (action === ACTIONS.APPROVE_SEND) {
     }
   }
 } else if (action === ACTIONS.NEXT_DRAFT) {
-  const card = draftApprovalCard(lease, {});
-  out.text = card.text;
-  out.card_type = String(lease.status || '').toUpperCase() === 'AWAITING_APPROVAL' ? 'draft' : 'plain';
+  const stillPending = String(lease.status || '').toUpperCase() === 'AWAITING_APPROVAL';
+  if (!stillPending) {
+    out.text = lease.tenant_name + ' is no longer awaiting approval (status '
+      + String(lease.status || '').toUpperCase() + ').';
+  } else {
+    const card = draftApprovalCard(lease, {
+      position: decided.queue_position,
+      total: decided.queue_total,
+    });
+    out.text = card.text;
+    out.card_type = 'draft';
+    out.next_record_id = decided.next_record_id || '';
+  }
 } else if (action === ACTIONS.DRAFT_ASSIST) {
   if (!modelDraft) {
     out.outcome = 'openai_failed';
@@ -433,7 +461,8 @@ if (action === ACTIONS.APPROVE_SEND) {
   out.text = 'Discarded. Nothing was sent to the resident.';
 } else if (action === ACTIONS.MARK_RESOLVED) {
   const openedAt = lease.issue_opened_at || lease.sent_at || nowIso;
-  const elapsedDays = Math.max(0, Math.round(((new Date(nowIso) - new Date(openedAt)) / 86400000) * 10) / 10);
+  const elapsedMs = Math.max(0, new Date(nowIso) - new Date(openedAt));
+  const elapsedDays = Math.round((elapsedMs / 86400000) * 10) / 10;
   const turnoverCost = Number(config.avg_turnover_cost || 3900);
 
   const fields = {
@@ -594,6 +623,7 @@ return [{
     text,
     card_type: gmailFailed ? 'plain' : (applied.card_type || 'plain'),
     record_id: applied.record_id,
+    next_record_id: applied.next_record_id || applied.record_id,
     callback_query_id: applied.callback_query_id,
     action: applied.action,
     outcome: gmailFailed ? 'send_failed' : applied.outcome,
@@ -615,6 +645,7 @@ return [{
     text: payload.text,
     card_type: payload.card_type || 'plain',
     record_id: payload.record_id || '',
+    next_record_id: payload.next_record_id || payload.record_id || '',
     callback_query_id: payload.callback_query_id,
     action: payload.action,
     outcome: payload.outcome,

@@ -243,7 +243,9 @@ function telegramCardNode(name, position, keyboard, options = {}) {
           buttons: row.map((button) => ({
             text: button.label,
             additionalFields: {
-              callback_data: `={{ '${button.action}:' + $json.record_id }}`,
+              // Most buttons act on the card's own record; navigation buttons
+              // point at a different one via their own field.
+              callback_data: `={{ '${button.action}:' + $json.${button.field || "record_id"} }}`,
             },
           })),
         },
@@ -273,7 +275,10 @@ const KEYBOARDS = {
       { label: "✅ Approve & Send", action: "apv" },
       { label: "⏭ Skip", action: "skp" },
     ],
-    [{ label: "✏️ Edit wording", action: "edt" }],
+    [
+      { label: "✏️ Edit wording", action: "edt" },
+      { label: "➡️ Next draft", action: "nxt", field: "next_record_id" },
+    ],
   ],
   atRisk: [
     [{ label: "✍️ Draft my reply", action: "ast" }],

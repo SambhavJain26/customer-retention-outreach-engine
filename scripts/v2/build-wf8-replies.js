@@ -292,7 +292,11 @@ if (isUnmatched) {
   } else if (requiresHuman) {
     fields.status = 'AT_RISK';
     fields.issue_status = 'OPEN';
-    fields.issue_opened_at = lease.issue_opened_at || nowIso;
+    // A new grievance after a resolved one starts a fresh clock, otherwise
+    // days_to_resolve would be measured from the previous, closed issue.
+    const reopening = String(lease.issue_status || '') !== 'OPEN';
+    fields.issue_opened_at = reopening ? nowIso : (lease.issue_opened_at || nowIso);
+    if (reopening) fields.issue_resolved_at = null;
     fields.turnover_exposure = Number(selected.config && selected.config.avg_turnover_cost ? selected.config.avg_turnover_cost : 3900);
   } else {
     fields.status = 'STAYING';

@@ -252,6 +252,7 @@ return [{
     chat_id: prepared.chat_id,
     first_record_id: first ? first.record_id : '',
     first_lease: first || null,
+    next_record_id: approvable[1] ? approvable[1].record_id : '',
     approvable_count: approvable.length,
     writes: writes.concat(logWrites),
     model: result.model,
@@ -299,6 +300,7 @@ return [{
     chat_id: summary.chat_id,
     text: card.text,
     record_id: summary.first_lease.record_id,
+    next_record_id: summary.next_record_id || summary.first_lease.record_id,
   },
 }];
 `;
