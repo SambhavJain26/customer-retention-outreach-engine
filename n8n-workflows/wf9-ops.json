@@ -1,0 +1,544 @@
+{
+  "id": "wf9-ops",
+  "name": "WF9 Daily Sweep, Metrics, and Error Alerts",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "v2-sweep",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {
+          "responseContentType": "application/json"
+        }
+      },
+      "id": "wf9-sweep-webhook",
+      "name": "Sweep Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -260,
+        300
+      ],
+      "webhookId": "wf9-sweep-webhook"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "wf9-daily-0800",
+      "name": "Scheduled Daily Sweep 0800",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.airtable.com/v0/__AIRTABLE_BASE_ID__/Leases?pageSize=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "options": {}
+      },
+      "id": "airtable-read-leases-for-sweep",
+      "name": "Airtable Read Leases For Sweep",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        380
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "__AIRTABLE_CREDENTIAL_ID__",
+          "name": "Airtable account"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.airtable.com/v0/__AIRTABLE_BASE_ID__/Config?pageSize=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "options": {}
+      },
+      "id": "airtable-read-config-for-sweep",
+      "name": "Airtable Read Config For Sweep",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        380
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "__AIRTABLE_CREDENTIAL_ID__",
+          "name": "Airtable account"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.airtable.com/v0/__AIRTABLE_BASE_ID__/Outreach%20Log?pageSize=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "options": {}
+      },
+      "id": "airtable-read-log-for-sweep",
+      "name": "Airtable Read Log For Sweep",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        360,
+        380
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "__AIRTABLE_CREDENTIAL_ID__",
+          "name": "Airtable account"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.airtable.com/v0/__AIRTABLE_BASE_ID__/Metrics?pageSize=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "options": {}
+      },
+      "id": "airtable-read-metrics-for-sweep",
+      "name": "Airtable Read Metrics For Sweep",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        380
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "__AIRTABLE_CREDENTIAL_ID__",
+          "name": "Airtable account"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nfunction flattenAirtable(items) {\n  const out = [];\n  for (const item of items || []) {\n    const records = item && item.json && Array.isArray(item.json.records) ? item.json.records : [];\n    for (const record of records) {\n      out.push(Object.assign({ record_id: record.id }, record.fields || {}));\n    }\n  }\n  return out;\n}\n\nfunction configMap(rows) {\n  const map = {};\n  for (const row of rows || []) {\n    if (row.key) map[row.key] = row.value;\n  }\n  return map;\n}\n\nfunction chunkRecords(list, size) {\n  const out = [];\n  for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));\n  return out;\n}\n\nfunction opsToArray(value) {\n  if (!value) return [];\n  return Array.isArray(value) ? value : [value];\n}\n\nfunction opsText(value) {\n  return value === null || value === undefined ? \"\" : String(value).trim();\n}\n\nfunction opsBool(value) {\n  if (value === true) return true;\n  if (value === false || value === null || value === undefined) return false;\n  return [\"true\", \"1\", \"yes\", \"y\"].includes(opsText(value).toLowerCase());\n}\n\nfunction opsConfig(configRows) {\n  const config = {};\n  for (const row of opsToArray(configRows)) {\n    const key = opsText(row.key);\n    if (key) config[key] = opsText(row.value);\n  }\n  return config;\n}\n\nfunction opsDatePartsInTimezone(date, timeZone) {\n  const parts = new Intl.DateTimeFormat(\"en-CA\", {\n    timeZone,\n    year: \"numeric\",\n    month: \"2-digit\",\n    day: \"2-digit\",\n  }).formatToParts(date);\n  const out = {};\n  for (const part of parts) out[part.type] = part.value;\n  return { year: Number(out.year), month: Number(out.month), day: Number(out.day) };\n}\n\nfunction opsTodayIso(timeZone) {\n  const p = opsDatePartsInTimezone(new Date(), timeZone || \"America/New_York\");\n  return `${p.year}-${String(p.month).padStart(2, \"0\")}-${String(p.day).padStart(2, \"0\")}`;\n}\n\nfunction opsIsoDate(value, timeZone) {\n  const text = opsText(value);\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(text)) return text;\n  const date = new Date(text);\n  if (Number.isNaN(date.getTime())) return \"\";\n  const p = opsDatePartsInTimezone(date, timeZone || \"America/New_York\");\n  return `${p.year}-${String(p.month).padStart(2, \"0\")}-${String(p.day).padStart(2, \"0\")}`;\n}\n\nfunction opsDaysBetween(startIso, endIso) {\n  if (!startIso || !endIso) return null;\n  const [sy, sm, sd] = String(startIso).split(\"-\").map(Number);\n  const [ey, em, ed] = String(endIso).split(\"-\").map(Number);\n  if (![sy, sm, sd, ey, em, ed].every(Number.isFinite)) return null;\n  const start = Date.UTC(sy, sm - 1, sd, 12);\n  const end = Date.UTC(ey, em - 1, ed, 12);\n  return Math.round((end - start) / 86400000);\n}\n\nfunction opsCohortFor(days, hasLeaseEnd) {\n  if (!hasLeaseEnd) return \"NONE\";\n  if (days === null || days === undefined) return \"NONE\";\n  if (days < 0) return \"EXPIRED\";\n  if (days >= 105 && days <= 135) return \"120\";\n  if (days >= 75 && days <= 104) return \"90\";\n  if (days >= 45 && days <= 74) return \"60\";\n  if (days >= 20 && days <= 44) return \"30\";\n  return \"NONE\";\n}\n\nfunction isMeaningfulReplyLog(log) {\n  const eventType = opsText(log.event_type).toUpperCase();\n  const intent = opsText(log.intent).toUpperCase();\n  if (!opsText(log.lease_id)) return false;\n  if (intent === \"NO_SIGNAL\" || eventType === \"NO_SIGNAL\") return false;\n  if ([\"REPLY_CLASSIFIED\", \"CLASSIFY_FAILED\", \"UNMATCHED_REPLY\"].includes(eventType)) return true;\n  if (opsBool(log.requires_human) && opsText(log.reply_text)) return true;\n  return false;\n}\n\nfunction shouldEscalateNonResponse(lease, meaningfulReplyLeaseIds, baseDate, thresholdDays, timeZone) {\n  const status = opsText(lease.status).toUpperCase();\n  if (status !== \"SENT\") return false;\n  if (meaningfulReplyLeaseIds.has(opsText(lease.lease_id))) return false;\n  const sentDate = opsIsoDate(lease.sent_at, timeZone);\n  if (!sentDate) return false;\n  const daysSinceSent = opsDaysBetween(sentDate, baseDate);\n  return daysSinceSent !== null && daysSinceSent > thresholdDays;\n}\n\nfunction cleanLeaseForTable(row) {\n  return {\n    lease_id: opsText(row.lease_id),\n    tenant_name: opsText(row.tenant_name),\n    tenant_first_name: opsText(row.tenant_first_name),\n    unit: opsText(row.unit),\n    email: opsText(row.email),\n    email_valid: opsBool(row.email_valid),\n    move_in_date: row.move_in_date || null,\n    lease_end_date: row.lease_end_date || null,\n    days_to_expiry: row.days_to_expiry === null || row.days_to_expiry === undefined || row.days_to_expiry === \"\" ? null : Number(row.days_to_expiry),\n    cohort: opsText(row.cohort),\n    tenure_months: row.tenure_months === null || row.tenure_months === undefined || row.tenure_months === \"\" ? null : Number(row.tenure_months),\n    status: opsText(row.status) || \"PENDING\",\n    draft_subject: opsText(row.draft_subject),\n    draft_body: opsText(row.draft_body),\n    ref_token: opsText(row.ref_token),\n    sent_at: row.sent_at || null,\n    opted_out: opsBool(row.opted_out),\n    ingest_notes: opsText(row.ingest_notes),\n  };\n}\n\nfunction prepareSweepUpdates(leases, outreachLog, config, requestBody = {}) {\n  const timeZone = opsText(config.timezone) || \"America/New_York\";\n  const baseDate = opsText(requestBody.base_date) || opsTodayIso(timeZone);\n  const thresholdDays = Number(requestBody.escalate_after_days || config.escalate_after_days || 15);\n  const meaningfulReplyLeaseIds = new Set(opsToArray(outreachLog).filter(isMeaningfulReplyLog).map((log) => opsText(log.lease_id)));\n  const updates = [];\n  const seenLeaseIds = new Set();\n  let escalatedCount = 0;\n  let currentAtRiskCount = 0;\n  let currentStayingCount = 0;\n  let currentEscalateCount = 0;\n\n  for (const rawLease of opsToArray(leases)) {\n    const lease = cleanLeaseForTable(rawLease);\n    if (!lease.lease_id || seenLeaseIds.has(lease.lease_id)) continue;\n    seenLeaseIds.add(lease.lease_id);\n\n    const leaseEnd = opsIsoDate(lease.lease_end_date, timeZone);\n    const days = leaseEnd ? opsDaysBetween(baseDate, leaseEnd) : null;\n    const cohort = opsCohortFor(days, Boolean(leaseEnd));\n    let status = lease.status || \"PENDING\";\n    const wasStatus = status;\n\n    if (shouldEscalateNonResponse(lease, meaningfulReplyLeaseIds, baseDate, thresholdDays, timeZone)) {\n      status = \"ESCALATE\";\n      escalatedCount += 1;\n    }\n\n    if (status === \"AT_RISK\") currentAtRiskCount += 1;\n    if (status === \"STAYING\") currentStayingCount += 1;\n    if (status === \"ESCALATE\") currentEscalateCount += 1;\n\n    if (lease.days_to_expiry !== days || lease.cohort !== cohort || wasStatus !== status) {\n      updates.push({\n        ...lease,\n        lease_end_date: leaseEnd || null,\n        days_to_expiry: days,\n        cohort,\n        status,\n      });\n    }\n  }\n\n  const summary = {\n    ok: true,\n    action: \"daily_sweep\",\n    base_date: baseDate,\n    total_rows: seenLeaseIds.size,\n    updated_count: updates.length,\n    recomputed_count: seenLeaseIds.size,\n    escalated_count: escalatedCount,\n    current_escalate_count: currentEscalateCount,\n    at_risk_count: currentAtRiskCount,\n    staying_count: currentStayingCount,\n    threshold_days: thresholdDays,\n    digest_suppressed: opsBool(requestBody.suppress_digest),\n    board_url: \"http://localhost:5678/webhook/board\",\n  };\n\n  return { updates, summary };\n}\n\nfunction buildSweepDigest(summary, config) {\n  const company = opsText(config.company_name) || \"Renewal retention demo\";\n  return `${company} sweep ${summary.base_date}: ${summary.recomputed_count} rows checked, ${summary.escalated_count} new escalations, ${summary.at_risk_count} at risk, ${summary.staying_count} staying.`;\n}\n\nfunction resetLeaseState(row) {\n  return cleanLeaseForTable({\n    ...row,\n    status: \"PENDING\",\n    draft_subject: \"\",\n    draft_body: \"\",\n    ref_token: \"\",\n    sent_at: null,\n    opted_out: false,\n  });\n}\n\nfunction buildResetRows(rosterCsv, config) {\n  if (typeof normalizeRoster !== \"function\") {\n    throw new Error(\"Stage 3 normalizeRoster helper is required for reset.\");\n  }\n  const timeZone = opsText(config.timezone) || \"America/New_York\";\n  const normalized = normalizeRoster(rosterCsv, {\n    timezone: timeZone,\n    baseDate: opsText(config.demo_base_date) || \"2026-08-04\",\n    demoRecipientEmail: opsText(config.demo_recipient_email),\n    boardUrl: \"http://localhost:5678/webhook/board\",\n    uploadedAt: new Date().toISOString(),\n    existingRows: [],\n  });\n  const rows = normalized.rows.map(resetLeaseState);\n  return {\n    rows,\n    summary: {\n      ok: true,\n      action: \"reset_demo\",\n      loaded_count: rows.length,\n      flagged_count: normalized.summary.flagged_count,\n      cohort_counts: normalized.summary.cohort_counts,\n      cleared_outreach_log: true,\n      cleared_leases: true,\n      gmail_processed_clear_requested: false,\n      gmail_processed_clear_count: 0,\n      board_url: \"http://localhost:5678/webhook/board\",\n    },\n  };\n}\n\nfunction buildErrorAlertText(input) {\n  const execution = input.execution || {};\n  const workflow = input.workflow || {};\n  const error = execution.error || input.error || {};\n  const workflowName = opsText(workflow.name || input.workflow_name) || \"Unknown workflow\";\n  const nodeName = opsText(execution.lastNodeExecuted || input.node_name) || \"Unknown node\";\n  const message = opsText(error.message || input.message) || \"Unknown error\";\n  const executionUrl = opsText(execution.url || input.execution_url);\n  return [\n    `n8n workflow error - ${workflowName}`,\n    `Node: ${nodeName}`,\n    `Error: ${message}`,\n    `Time: ${new Date().toISOString()}`,\n    executionUrl ? `Execution: ${executionUrl}` : \"\",\n  ].filter(Boolean).join(\"\\n\");\n}\n/**\n * Demo scoreboard maths for the v2 Metrics table and the Telegram digest.\n *\n * The headline number is turnover exposure: the money at risk in the residents\n * currently flagged AT_RISK or ESCALATE, valued at config.avg_turnover_cost.\n * Exposure recovered is the same figure for issues a manager has closed.\n *\n * These are demo-grade proxies, not a financial model. The POC does not claim a\n * resolved issue guarantees a renewal - only that the exposure was surfaced and\n * acted on. Say that out loud when presenting the number.\n *\n * This file is inlined into n8n Code nodes at import time.\n */\n\nconst AT_RISK_STATUSES = new Set([\"AT_RISK\", \"ESCALATE\"]);\n\nfunction txt(value) {\n  return value == null ? \"\" : String(value).trim();\n}\n\nfunction num(value, fallback = 0) {\n  const parsed = Number(value);\n  return Number.isFinite(parsed) ? parsed : fallback;\n}\n\nfunction round1(value) {\n  return Math.round(value * 10) / 10;\n}\n\n/**\n * @param {Array} leases  every lease row\n * @param {Array} logRows every outreach log row\n * @param {object} config config key/value map\n */\nfunction computeMetrics(leases, logRows, config = {}) {\n  const rows = leases || [];\n  const log = logRows || [];\n  const turnoverCost = num(config.avg_turnover_cost, 3900);\n\n  const residentsInWindow = rows.filter((lease) => txt(lease.cohort) === \"90\").length;\n\n  const checkInsSent = log.filter((row) => txt(row.event_type) === \"SENT\").length;\n  const repliesReceived = log.filter((row) => txt(row.event_type) === \"REPLY_RECEIVED\").length;\n\n  const issuesOpen = rows.filter((lease) => txt(lease.issue_status) === \"OPEN\");\n  const issuesResolved = rows.filter((lease) => txt(lease.issue_status) === \"RESOLVED\");\n  const issuesFound = issuesOpen.length + issuesResolved.length;\n\n  const atRisk = rows.filter((lease) => AT_RISK_STATUSES.has(txt(lease.status).toUpperCase()));\n  const staying = rows.filter((lease) => txt(lease.status).toUpperCase() === \"STAYING\");\n\n  const resolutionDays = issuesResolved\n    .map((lease) => num(lease.days_to_resolve, null))\n    .filter((value) => value != null && Number.isFinite(value));\n\n  const avgResolutionDays = resolutionDays.length\n    ? round1(resolutionDays.reduce((sum, value) => sum + value, 0) / resolutionDays.length)\n    : 0;\n\n  return {\n    snapshot: \"current\",\n    residents_in_window: residentsInWindow,\n    check_ins_sent: checkInsSent,\n    replies_received: repliesReceived,\n    issues_found: issuesFound,\n    issues_resolved: issuesResolved.length,\n    avg_resolution_days: avgResolutionDays,\n    at_risk_count: atRisk.length,\n    staying_count: staying.length,\n    turnover_exposure: atRisk.length * turnoverCost,\n    exposure_recovered: issuesResolved.length * turnoverCost,\n    updated_at: new Date().toISOString(),\n  };\n}\n\n/**\n * Exposure for a cohort before anything has been sent - used in the generation\n * summary card so the prospect sees a number at the very start of the demo.\n */\nfunction windowExposure(leases, cohort, config = {}) {\n  const turnoverCost = num(config.avg_turnover_cost, 3900);\n  const count = (leases || []).filter((lease) => txt(lease.cohort) === txt(cohort)).length;\n  return count * turnoverCost;\n}\n\n/** Fields written to the Metrics table (strips the digest-only keys). */\nfunction toMetricsRecord(metrics) {\n  return {\n    snapshot: metrics.snapshot || \"current\",\n    residents_in_window: metrics.residents_in_window,\n    check_ins_sent: metrics.check_ins_sent,\n    replies_received: metrics.replies_received,\n    issues_found: metrics.issues_found,\n    issues_resolved: metrics.issues_resolved,\n    avg_resolution_days: metrics.avg_resolution_days,\n    at_risk_count: metrics.at_risk_count,\n    turnover_exposure: metrics.turnover_exposure,\n    exposure_recovered: metrics.exposure_recovered,\n    updated_at: metrics.updated_at,\n  };\n}\n/**\n * Telegram card and inline-keyboard builders for the v2 demo.\n *\n * This file is inlined into n8n Code nodes at import time, the same way the v1\n * stage libraries are, so it must stay dependency-free and browser-safe.\n *\n * Telegram constraints enforced here:\n *  - callback_data must be 64 bytes or fewer. Actions use 3-character prefixes\n *    plus an Airtable record id (17 chars), so the longest payload is ~21 bytes.\n *  - message text must be 4096 characters or fewer. Long drafts are truncated\n *    for display only; the stored draft is never shortened.\n *  - only one Telegram Trigger may be active per bot, so every button in this\n *    file is routed through WF6.\n */\n\nconst CALLBACK_MAX_BYTES = 64;\nconst MESSAGE_MAX_CHARS = 4096;\n\nconst ACTIONS = {\n  APPROVE_SEND: \"apv\",\n  SKIP_DRAFT: \"skp\",\n  NEXT_DRAFT: \"nxt\",\n  DRAFT_ASSIST: \"ast\",\n  SEND_ASSIST: \"snd\",\n  DISCARD_ASSIST: \"dis\",\n  MARK_RESOLVED: \"res\",\n  SEND_CONFIRMATION: \"cnf\",\n  ACK_HANDOFF: \"hnd\",\n  EDIT_DRAFT: \"edt\",\n};\n\nfunction textOf(value) {\n  return value == null ? \"\" : String(value).trim();\n}\n\nfunction escapeHtml(value) {\n  return textOf(value)\n    .replace(/&/g, \"&amp;\")\n    .replace(/</g, \"&lt;\")\n    .replace(/>/g, \"&gt;\");\n}\n\nfunction truncate(value, limit) {\n  const text = textOf(value);\n  if (text.length <= limit) return text;\n  return `${text.slice(0, Math.max(0, limit - 1))}…`;\n}\n\n/** Encodes a button payload and fails loudly rather than letting Telegram reject it. */\nfunction encodeCallback(action, recordId) {\n  const payload = `${action}:${textOf(recordId)}`;\n  const size = Buffer.byteLength(payload, \"utf8\");\n  if (size > CALLBACK_MAX_BYTES) {\n    throw new Error(`callback_data is ${size} bytes, over Telegram's ${CALLBACK_MAX_BYTES}-byte cap: ${payload}`);\n  }\n  return payload;\n}\n\nfunction decodeCallback(callbackData) {\n  const raw = textOf(callbackData);\n  const separator = raw.indexOf(\":\");\n  if (separator === -1) return { action: raw, record_id: \"\" };\n  return {\n    action: raw.slice(0, separator),\n    record_id: raw.slice(separator + 1),\n  };\n}\n\nfunction keyboard(rows) {\n  return { inline_keyboard: rows.filter((row) => row && row.length) };\n}\n\nfunction button(label, action, recordId) {\n  return { text: label, callback_data: encodeCallback(action, recordId) };\n}\n\nfunction formatDate(value) {\n  const text = textOf(value);\n  if (!text) return \"unknown\";\n  const parsed = new Date(text);\n  if (Number.isNaN(parsed.getTime())) return text;\n  return parsed.toISOString().slice(0, 10);\n}\n\nfunction formatMoney(value) {\n  const amount = Number(value || 0);\n  if (!Number.isFinite(amount)) return \"$0\";\n  return `$${Math.round(amount).toLocaleString(\"en-US\")}`;\n}\n\nfunction badgeLine(lease) {\n  return [\n    textOf(lease.intent),\n    textOf(lease.grievance_category) && textOf(lease.grievance_category) !== \"NONE\"\n      ? textOf(lease.grievance_category)\n      : \"\",\n    textOf(lease.compliance_flag) && textOf(lease.compliance_flag) !== \"NONE\"\n      ? textOf(lease.compliance_flag)\n      : \"\",\n    textOf(lease.urgency),\n  ]\n    .filter(Boolean)\n    .join(\" / \");\n}\n\nfunction residentHeader(lease) {\n  const days = textOf(lease.days_to_expiry);\n  const leaseEnd = formatDate(lease.lease_end_date);\n  const tenure = textOf(lease.tenure_months);\n  const parts = [`Lease ends ${leaseEnd}`];\n  if (days) parts.push(`${days} days out`);\n  if (tenure) parts.push(`${tenure} months resident`);\n  return parts.join(\" · \");\n}\n\n/* ------------------------------------------------------------------ cards */\n\n/**\n * Summary posted once per generation run, before the individual draft cards.\n */\nfunction generationSummaryCard(summary) {\n  const lines = [\n    `<b>${escapeHtml(summary.touch_label || \"Check-ins\")} drafted</b>`,\n    \"\",\n    `${summary.drafted_count} ready for review`,\n  ];\n\n  if (summary.review_failed_count) {\n    lines.push(`${summary.review_failed_count} need wording (checks failed twice)`);\n  }\n  if (summary.handoff_count) {\n    lines.push(`${summary.handoff_count} flagged for leasing handoff (no resident email)`);\n  }\n  if (summary.exposure != null) {\n    lines.push(\"\", `Turnover exposure in this window: <b>${formatMoney(summary.exposure)}</b>`);\n  }\n\n  lines.push(\"\", \"Nothing sends until you approve it.\");\n\n  return {\n    text: lines.join(\"\\n\"),\n    reply_markup: summary.first_record_id\n      ? keyboard([[button(\"▶️ Review first draft\", ACTIONS.NEXT_DRAFT, summary.first_record_id)]])\n      : undefined,\n  };\n}\n\n/**\n * A single draft awaiting approval. This is the core approval moment.\n */\nfunction draftApprovalCard(lease, options = {}) {\n  const lines = [\n    `<b>${escapeHtml(lease.tenant_name)} · ${escapeHtml(lease.unit)}</b>`,\n    residentHeader(lease),\n    \"\",\n    `<b>Subject:</b> ${escapeHtml(lease.draft_subject)}`,\n    \"\",\n    escapeHtml(truncate(lease.draft_body, 2400)),\n  ];\n\n  if (options.position && options.total) {\n    lines.push(\"\", `Draft ${options.position} of ${options.total}`);\n  }\n\n  const rows = [\n    [\n      button(\"✅ Approve & Send\", ACTIONS.APPROVE_SEND, lease.record_id),\n      button(\"⏭ Skip\", ACTIONS.SKIP_DRAFT, lease.record_id),\n    ],\n  ];\n\n  if (options.next_record_id) {\n    rows.push([button(\"➡️ Next draft\", ACTIONS.NEXT_DRAFT, options.next_record_id)]);\n  }\n\n  return { text: truncate(lines.join(\"\\n\"), MESSAGE_MAX_CHARS), reply_markup: keyboard(rows) };\n}\n\n/**\n * A draft that failed guardrails twice. Deliberately has no approve button.\n */\nfunction reviewFailedCard(lease) {\n  return {\n    text: [\n      `<b>Needs wording · ${escapeHtml(lease.tenant_name)}, ${escapeHtml(lease.unit)}</b>`,\n      \"\",\n      `The draft failed the safety checks twice: ${escapeHtml(lease.data_quality || \"see workflow log\")}`,\n      \"\",\n      \"No approve button is offered. Write this one yourself.\",\n    ].join(\"\\n\"),\n  };\n}\n\n/**\n * 30-day cohort handoff. Internal only - never emails the resident.\n */\nfunction leasingHandoffCard(leases) {\n  const lines = [\n    `<b>Leasing handoff · ${leases.length} residents at 30 days</b>`,\n    \"\",\n    \"These are inside the renewal-offer window. No resident email is sent from here — this is a handoff to your leasing team.\",\n    \"\",\n  ];\n\n  leases.slice(0, 15).forEach((lease) => {\n    lines.push(`• ${escapeHtml(lease.tenant_name)}, ${escapeHtml(lease.unit)} — ends ${formatDate(lease.lease_end_date)}`);\n  });\n\n  return { text: truncate(lines.join(\"\\n\"), MESSAGE_MAX_CHARS) };\n}\n\n/**\n * A reply that needs a person. Mirrors the v1 alert content and adds actions.\n */\nfunction atRiskAlertCard(lease, options = {}) {\n  const complianceFlag = textOf(lease.compliance_flag);\n  const isCompliance = complianceFlag && complianceFlag !== \"NONE\";\n\n  const lines = [\n    `<b>AT RISK · ${escapeHtml(lease.tenant_name)}, ${escapeHtml(lease.unit)}</b>`,\n    residentHeader(lease),\n    \"\",\n    badgeLine(lease),\n    \"\",\n    `<i>\"${escapeHtml(truncate(lease.reply_text, 1200))}\"</i>`,\n    \"\",\n    `<b>Action:</b> ${escapeHtml(lease.suggested_action)}`,\n    `Confidence: ${escapeHtml(lease.confidence)}`,\n  ];\n\n  if (isCompliance) {\n    lines.push(\"\", \"<b>No response was drafted.</b>\");\n  }\n\n  const rows = [];\n\n  // Compliance-sensitive replies get no one-tap assist. A person decides first.\n  if (!isCompliance) {\n    rows.push([button(\"✍️ Draft my reply\", ACTIONS.DRAFT_ASSIST, lease.record_id)]);\n  }\n  if (options.allow_resolve !== false) {\n    rows.push([button(\"✅ Mark resolved\", ACTIONS.MARK_RESOLVED, lease.record_id)]);\n  }\n\n  return {\n    text: truncate(lines.join(\"\\n\"), MESSAGE_MAX_CHARS),\n    reply_markup: rows.length ? keyboard(rows) : undefined,\n  };\n}\n\n/**\n * A drafted reply to the resident, awaiting explicit approval before it sends.\n */\nfunction assistApprovalCard(lease) {\n  return {\n    text: truncate(\n      [\n        `<b>Suggested reply · ${escapeHtml(lease.tenant_name)}, ${escapeHtml(lease.unit)}</b>`,\n        \"\",\n        escapeHtml(truncate(lease.assist_draft, 2800)),\n        \"\",\n        \"This has not been sent. Approve it and it goes to the resident as written.\",\n      ].join(\"\\n\"),\n      MESSAGE_MAX_CHARS\n    ),\n    reply_markup: keyboard([\n      [\n        button(\"✅ Send reply\", ACTIONS.SEND_ASSIST, lease.record_id),\n        button(\"⏭ Discard\", ACTIONS.DISCARD_ASSIST, lease.record_id),\n      ],\n    ]),\n  };\n}\n\n/**\n * Confirmation that the issue is closed, plus the optional resident follow-up.\n */\nfunction resolutionCard(lease, options = {}) {\n  const lines = [\n    `<b>Issue resolved · ${escapeHtml(lease.tenant_name)}, ${escapeHtml(lease.unit)}</b>`,\n    \"\",\n  ];\n\n  if (lease.days_to_resolve != null && lease.days_to_resolve !== \"\") {\n    lines.push(`Closed in ${lease.days_to_resolve} days.`);\n  }\n  if (options.exposure_recovered != null) {\n    lines.push(`Turnover exposure recovered: <b>${formatMoney(options.exposure_recovered)}</b>`);\n  }\n\n  if (textOf(lease.assist_draft)) {\n    lines.push(\"\", \"<b>Follow-up ready for the resident:</b>\", \"\", escapeHtml(truncate(lease.assist_draft, 2000)));\n    return {\n      text: truncate(lines.join(\"\\n\"), MESSAGE_MAX_CHARS),\n      reply_markup: keyboard([\n        [\n          button(\"✅ Send confirmation\", ACTIONS.SEND_CONFIRMATION, lease.record_id),\n          button(\"⏭ Skip\", ACTIONS.DISCARD_ASSIST, lease.record_id),\n        ],\n      ]),\n    };\n  }\n\n  return { text: truncate(lines.join(\"\\n\"), MESSAGE_MAX_CHARS) };\n}\n\n/**\n * A reply that could not be matched to a resident. Never guesses an owner.\n */\nfunction unmatchedReplyCard(reply) {\n  return {\n    text: truncate(\n      [\n        \"<b>Unmatched reply</b>\",\n        \"\",\n        `From: ${escapeHtml(reply.from_email || \"unknown sender\")}`,\n        `Subject: ${escapeHtml(reply.subject || \"(none)\")}`,\n        \"\",\n        `<i>\"${escapeHtml(truncate(reply.reply_text, 1000))}\"</i>`,\n        \"\",\n        \"No reference code matched and the sender is not in the roster. No resident was assigned. Find the resident manually before replying.\",\n      ].join(\"\\n\"),\n      MESSAGE_MAX_CHARS\n    ),\n  };\n}\n\n/** Daily sweep digest. */\nfunction sweepDigestCard(summary) {\n  return {\n    text: [\n      `<b>${escapeHtml(summary.company_name || \"Portfolio\")} daily sweep</b>`,\n      \"\",\n      `${summary.recomputed_count} residents checked`,\n      `${summary.at_risk_count} at risk · ${summary.staying_count} staying · ${summary.escalated_count} newly escalated`,\n      `${summary.issues_resolved || 0} issues resolved`,\n      \"\",\n      `Exposure open: <b>${formatMoney(summary.turnover_exposure)}</b>`,\n      `Exposure recovered: <b>${formatMoney(summary.exposure_recovered)}</b>`,\n    ].join(\"\\n\"),\n  };\n}\n\n/** Short acknowledgement text shown in Telegram's toast after a button press. */\nfunction acknowledgement(action, outcome) {\n  const map = {\n    [ACTIONS.APPROVE_SEND]: outcome === \"already_sent\" ? \"Already sent\" : \"Approved and sent\",\n    [ACTIONS.SKIP_DRAFT]: \"Skipped\",\n    [ACTIONS.NEXT_DRAFT]: \"Loading next draft\",\n    [ACTIONS.DRAFT_ASSIST]: \"Drafting a reply\",\n    [ACTIONS.SEND_ASSIST]: outcome === \"already_sent\" ? \"Already sent\" : \"Reply sent\",\n    [ACTIONS.DISCARD_ASSIST]: \"Discarded\",\n    [ACTIONS.MARK_RESOLVED]: \"Marked resolved\",\n    [ACTIONS.SEND_CONFIRMATION]: outcome === \"already_sent\" ? \"Already sent\" : \"Confirmation sent\",\n    [ACTIONS.ACK_HANDOFF]: \"Acknowledged\",\n    [ACTIONS.EDIT_DRAFT]: \"Waiting for your wording\",\n  };\n  return map[action] || \"Done\";\n}\n\nlet body = {};\ntry {\n  body = $('Sweep Webhook').first().json.body || {};\n} catch (error) {\n  body = {}; // scheduled run has no webhook payload\n}\n\nconst leases = flattenAirtable($('Airtable Read Leases For Sweep').all());\nconst configRows = flattenAirtable($('Airtable Read Config For Sweep').all());\nconst config = configMap(configRows);\nconst logRows = flattenAirtable($('Airtable Read Log For Sweep').all());\nconst metricsRows = flattenAirtable($('Airtable Read Metrics For Sweep').all());\n\nconst digestOnly = Boolean(body.digest_only);\nconst nowIso = new Date().toISOString();\n\n// Recompute timing and cohorts, and escalate long silences.\nconst sweep = prepareSweepUpdates(leases, logRows, config, body);\nconst updates = sweep.updates || [];\nconst summary = sweep.summary || {};\n\n// Map the recomputed rows back onto their Airtable record ids.\nconst recordIdByLeaseId = new Map(leases.map((row) => [String(row.lease_id), row.record_id]));\n\nconst leaseWrites = digestOnly ? [] : chunkRecords(\n  updates\n    .map((row) => {\n      const recordId = recordIdByLeaseId.get(String(row.lease_id));\n      if (!recordId) return null;\n      const fields = {\n        days_to_expiry: row.days_to_expiry == null ? null : Number(row.days_to_expiry),\n        cohort: row.cohort || 'NONE',\n        status: row.status || 'PENDING',\n      };\n      // A resident escalated for silence carries turnover exposure again.\n      if (String(row.status) === 'ESCALATE') {\n        fields.turnover_exposure = Number(config.avg_turnover_cost || 3900);\n      }\n      return { id: recordId, fields };\n    })\n    .filter(Boolean),\n  10\n).map((batch) => ({\n  method: 'PATCH',\n  table: 'Leases',\n  body: { records: batch, typecast: true },\n}));\n\n// Recompute the scoreboard from the post-sweep view of the roster.\nconst sweptLeases = leases.map((row) => {\n  const updated = updates.find((entry) => String(entry.lease_id) === String(row.lease_id));\n  return updated ? Object.assign({}, row, {\n    status: updated.status,\n    cohort: updated.cohort,\n    days_to_expiry: updated.days_to_expiry,\n  }) : row;\n});\n\nconst metrics = computeMetrics(sweptLeases, logRows, config);\nconst metricsRecord = toMetricsRecord(metrics);\nconst existingMetrics = metricsRows[0] || null;\n\nconst metricsWrites = digestOnly ? [] : [\n  existingMetrics\n    ? {\n        method: 'PATCH',\n        table: 'Metrics',\n        body: { records: [{ id: existingMetrics.record_id, fields: metricsRecord }], typecast: true },\n      }\n    : {\n        method: 'POST',\n        table: 'Metrics',\n        body: { records: [{ fields: metricsRecord }], typecast: true },\n      },\n];\n\nconst writes = leaseWrites.concat(metricsWrites);\n\nconst digest = sweepDigestCard({\n  company_name: config.company_name,\n  recomputed_count: leases.length,\n  at_risk_count: metrics.at_risk_count,\n  staying_count: metrics.staying_count,\n  escalated_count: summary.escalated_count || 0,\n  issues_resolved: metrics.issues_resolved,\n  turnover_exposure: metrics.turnover_exposure,\n  exposure_recovered: metrics.exposure_recovered,\n});\n\nreturn [{\n  json: {\n    writes,\n    has_writes: writes.length > 0,\n    chat_id: config.telegram_chat_id || '',\n    record_id: '',\n    text: digest.text,\n    digest_only: digestOnly,\n    changed_count: updates.length,\n    escalated_count: summary.escalated_count || 0,\n    metrics,\n    ok: true,\n    action: 'sweep',\n    swept_at: nowIso,\n  },\n}];\n"
+      },
+      "id": "prepare-sweep",
+      "name": "Prepare Sweep",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-psukan",
+              "leftValue": "={{ $json.has_writes }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-sweep-writes",
+      "name": "If Has Sweep Writes",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nconst payload = $('Prepare Sweep').first().json;\nif (!payload.has_writes) return [];\nreturn (payload.writes || []).map((write) => ({ json: write }));\n"
+      },
+      "id": "emit-sweep-writes",
+      "name": "Emit Sweep Writes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.method }}",
+        "url": "=https://api.airtable.com/v0/__AIRTABLE_BASE_ID__/{{ encodeURIComponent($json.table) }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "id": "airtable-write-sweep",
+      "name": "Airtable Write Sweep",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1380,
+        260
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "__AIRTABLE_CREDENTIAL_ID__",
+          "name": "Airtable account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nconst payload = $('Prepare Sweep').first().json;\nreturn [{\n  json: {\n    chat_id: payload.chat_id,\n    text: payload.text,\n    record_id: '',\n    ok: true,\n    action: 'sweep',\n    changed_count: payload.changed_count,\n    escalated_count: payload.escalated_count,\n    metrics: payload.metrics,\n  },\n}];\n"
+      },
+      "id": "build-sweep-digest",
+      "name": "Build Sweep Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1580,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "parse_mode": "HTML",
+          "appendAttribution": false
+        }
+      },
+      "id": "telegram-sweep-digest",
+      "name": "Telegram Sweep Digest",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1780,
+        380
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "__TELEGRAM_CREDENTIAL_ID__",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "wf9-error-trigger",
+      "name": "Workflow Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "function opsToArray(value) {\n  if (!value) return [];\n  return Array.isArray(value) ? value : [value];\n}\n\nfunction opsText(value) {\n  return value === null || value === undefined ? \"\" : String(value).trim();\n}\n\nfunction opsBool(value) {\n  if (value === true) return true;\n  if (value === false || value === null || value === undefined) return false;\n  return [\"true\", \"1\", \"yes\", \"y\"].includes(opsText(value).toLowerCase());\n}\n\nfunction opsConfig(configRows) {\n  const config = {};\n  for (const row of opsToArray(configRows)) {\n    const key = opsText(row.key);\n    if (key) config[key] = opsText(row.value);\n  }\n  return config;\n}\n\nfunction opsDatePartsInTimezone(date, timeZone) {\n  const parts = new Intl.DateTimeFormat(\"en-CA\", {\n    timeZone,\n    year: \"numeric\",\n    month: \"2-digit\",\n    day: \"2-digit\",\n  }).formatToParts(date);\n  const out = {};\n  for (const part of parts) out[part.type] = part.value;\n  return { year: Number(out.year), month: Number(out.month), day: Number(out.day) };\n}\n\nfunction opsTodayIso(timeZone) {\n  const p = opsDatePartsInTimezone(new Date(), timeZone || \"America/New_York\");\n  return `${p.year}-${String(p.month).padStart(2, \"0\")}-${String(p.day).padStart(2, \"0\")}`;\n}\n\nfunction opsIsoDate(value, timeZone) {\n  const text = opsText(value);\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(text)) return text;\n  const date = new Date(text);\n  if (Number.isNaN(date.getTime())) return \"\";\n  const p = opsDatePartsInTimezone(date, timeZone || \"America/New_York\");\n  return `${p.year}-${String(p.month).padStart(2, \"0\")}-${String(p.day).padStart(2, \"0\")}`;\n}\n\nfunction opsDaysBetween(startIso, endIso) {\n  if (!startIso || !endIso) return null;\n  const [sy, sm, sd] = String(startIso).split(\"-\").map(Number);\n  const [ey, em, ed] = String(endIso).split(\"-\").map(Number);\n  if (![sy, sm, sd, ey, em, ed].every(Number.isFinite)) return null;\n  const start = Date.UTC(sy, sm - 1, sd, 12);\n  const end = Date.UTC(ey, em - 1, ed, 12);\n  return Math.round((end - start) / 86400000);\n}\n\nfunction opsCohortFor(days, hasLeaseEnd) {\n  if (!hasLeaseEnd) return \"NONE\";\n  if (days === null || days === undefined) return \"NONE\";\n  if (days < 0) return \"EXPIRED\";\n  if (days >= 105 && days <= 135) return \"120\";\n  if (days >= 75 && days <= 104) return \"90\";\n  if (days >= 45 && days <= 74) return \"60\";\n  if (days >= 20 && days <= 44) return \"30\";\n  return \"NONE\";\n}\n\nfunction isMeaningfulReplyLog(log) {\n  const eventType = opsText(log.event_type).toUpperCase();\n  const intent = opsText(log.intent).toUpperCase();\n  if (!opsText(log.lease_id)) return false;\n  if (intent === \"NO_SIGNAL\" || eventType === \"NO_SIGNAL\") return false;\n  if ([\"REPLY_CLASSIFIED\", \"CLASSIFY_FAILED\", \"UNMATCHED_REPLY\"].includes(eventType)) return true;\n  if (opsBool(log.requires_human) && opsText(log.reply_text)) return true;\n  return false;\n}\n\nfunction shouldEscalateNonResponse(lease, meaningfulReplyLeaseIds, baseDate, thresholdDays, timeZone) {\n  const status = opsText(lease.status).toUpperCase();\n  if (status !== \"SENT\") return false;\n  if (meaningfulReplyLeaseIds.has(opsText(lease.lease_id))) return false;\n  const sentDate = opsIsoDate(lease.sent_at, timeZone);\n  if (!sentDate) return false;\n  const daysSinceSent = opsDaysBetween(sentDate, baseDate);\n  return daysSinceSent !== null && daysSinceSent > thresholdDays;\n}\n\nfunction cleanLeaseForTable(row) {\n  return {\n    lease_id: opsText(row.lease_id),\n    tenant_name: opsText(row.tenant_name),\n    tenant_first_name: opsText(row.tenant_first_name),\n    unit: opsText(row.unit),\n    email: opsText(row.email),\n    email_valid: opsBool(row.email_valid),\n    move_in_date: row.move_in_date || null,\n    lease_end_date: row.lease_end_date || null,\n    days_to_expiry: row.days_to_expiry === null || row.days_to_expiry === undefined || row.days_to_expiry === \"\" ? null : Number(row.days_to_expiry),\n    cohort: opsText(row.cohort),\n    tenure_months: row.tenure_months === null || row.tenure_months === undefined || row.tenure_months === \"\" ? null : Number(row.tenure_months),\n    status: opsText(row.status) || \"PENDING\",\n    draft_subject: opsText(row.draft_subject),\n    draft_body: opsText(row.draft_body),\n    ref_token: opsText(row.ref_token),\n    sent_at: row.sent_at || null,\n    opted_out: opsBool(row.opted_out),\n    ingest_notes: opsText(row.ingest_notes),\n  };\n}\n\nfunction prepareSweepUpdates(leases, outreachLog, config, requestBody = {}) {\n  const timeZone = opsText(config.timezone) || \"America/New_York\";\n  const baseDate = opsText(requestBody.base_date) || opsTodayIso(timeZone);\n  const thresholdDays = Number(requestBody.escalate_after_days || config.escalate_after_days || 15);\n  const meaningfulReplyLeaseIds = new Set(opsToArray(outreachLog).filter(isMeaningfulReplyLog).map((log) => opsText(log.lease_id)));\n  const updates = [];\n  const seenLeaseIds = new Set();\n  let escalatedCount = 0;\n  let currentAtRiskCount = 0;\n  let currentStayingCount = 0;\n  let currentEscalateCount = 0;\n\n  for (const rawLease of opsToArray(leases)) {\n    const lease = cleanLeaseForTable(rawLease);\n    if (!lease.lease_id || seenLeaseIds.has(lease.lease_id)) continue;\n    seenLeaseIds.add(lease.lease_id);\n\n    const leaseEnd = opsIsoDate(lease.lease_end_date, timeZone);\n    const days = leaseEnd ? opsDaysBetween(baseDate, leaseEnd) : null;\n    const cohort = opsCohortFor(days, Boolean(leaseEnd));\n    let status = lease.status || \"PENDING\";\n    const wasStatus = status;\n\n    if (shouldEscalateNonResponse(lease, meaningfulReplyLeaseIds, baseDate, thresholdDays, timeZone)) {\n      status = \"ESCALATE\";\n      escalatedCount += 1;\n    }\n\n    if (status === \"AT_RISK\") currentAtRiskCount += 1;\n    if (status === \"STAYING\") currentStayingCount += 1;\n    if (status === \"ESCALATE\") currentEscalateCount += 1;\n\n    if (lease.days_to_expiry !== days || lease.cohort !== cohort || wasStatus !== status) {\n      updates.push({\n        ...lease,\n        lease_end_date: leaseEnd || null,\n        days_to_expiry: days,\n        cohort,\n        status,\n      });\n    }\n  }\n\n  const summary = {\n    ok: true,\n    action: \"daily_sweep\",\n    base_date: baseDate,\n    total_rows: seenLeaseIds.size,\n    updated_count: updates.length,\n    recomputed_count: seenLeaseIds.size,\n    escalated_count: escalatedCount,\n    current_escalate_count: currentEscalateCount,\n    at_risk_count: currentAtRiskCount,\n    staying_count: currentStayingCount,\n    threshold_days: thresholdDays,\n    digest_suppressed: opsBool(requestBody.suppress_digest),\n    board_url: \"http://localhost:5678/webhook/board\",\n  };\n\n  return { updates, summary };\n}\n\nfunction buildSweepDigest(summary, config) {\n  const company = opsText(config.company_name) || \"Renewal retention demo\";\n  return `${company} sweep ${summary.base_date}: ${summary.recomputed_count} rows checked, ${summary.escalated_count} new escalations, ${summary.at_risk_count} at risk, ${summary.staying_count} staying.`;\n}\n\nfunction resetLeaseState(row) {\n  return cleanLeaseForTable({\n    ...row,\n    status: \"PENDING\",\n    draft_subject: \"\",\n    draft_body: \"\",\n    ref_token: \"\",\n    sent_at: null,\n    opted_out: false,\n  });\n}\n\nfunction buildResetRows(rosterCsv, config) {\n  if (typeof normalizeRoster !== \"function\") {\n    throw new Error(\"Stage 3 normalizeRoster helper is required for reset.\");\n  }\n  const timeZone = opsText(config.timezone) || \"America/New_York\";\n  const normalized = normalizeRoster(rosterCsv, {\n    timezone: timeZone,\n    baseDate: opsText(config.demo_base_date) || \"2026-08-04\",\n    demoRecipientEmail: opsText(config.demo_recipient_email),\n    boardUrl: \"http://localhost:5678/webhook/board\",\n    uploadedAt: new Date().toISOString(),\n    existingRows: [],\n  });\n  const rows = normalized.rows.map(resetLeaseState);\n  return {\n    rows,\n    summary: {\n      ok: true,\n      action: \"reset_demo\",\n      loaded_count: rows.length,\n      flagged_count: normalized.summary.flagged_count,\n      cohort_counts: normalized.summary.cohort_counts,\n      cleared_outreach_log: true,\n      cleared_leases: true,\n      gmail_processed_clear_requested: false,\n      gmail_processed_clear_count: 0,\n      board_url: \"http://localhost:5678/webhook/board\",\n    },\n  };\n}\n\nfunction buildErrorAlertText(input) {\n  const execution = input.execution || {};\n  const workflow = input.workflow || {};\n  const error = execution.error || input.error || {};\n  const workflowName = opsText(workflow.name || input.workflow_name) || \"Unknown workflow\";\n  const nodeName = opsText(execution.lastNodeExecuted || input.node_name) || \"Unknown node\";\n  const message = opsText(error.message || input.message) || \"Unknown error\";\n  const executionUrl = opsText(execution.url || input.execution_url);\n  return [\n    `n8n workflow error - ${workflowName}`,\n    `Node: ${nodeName}`,\n    `Error: ${message}`,\n    `Time: ${new Date().toISOString()}`,\n    executionUrl ? `Execution: ${executionUrl}` : \"\",\n  ].filter(Boolean).join(\"\\n\");\n}\n\n// Fired by n8n whenever any workflow in this project fails. A silent failure is\n// the one outcome the demo must never have.\nconst input = $json || {};\nreturn [{\n  json: {\n    chat_id: '',\n    record_id: '',\n    text: buildErrorAlertText(input),\n  },\n}];\n"
+      },
+      "id": "build-error-alert",
+      "name": "Build Error Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.airtable.com/v0/__AIRTABLE_BASE_ID__/Config?pageSize=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "options": {}
+      },
+      "id": "airtable-read-config-for-error",
+      "name": "Airtable Read Config For Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        700
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "__AIRTABLE_CREDENTIAL_ID__",
+          "name": "Airtable account"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "\nfunction flattenAirtable(items) {\n  const out = [];\n  for (const item of items || []) {\n    const records = item && item.json && Array.isArray(item.json.records) ? item.json.records : [];\n    for (const record of records) {\n      out.push(Object.assign({ record_id: record.id }, record.fields || {}));\n    }\n  }\n  return out;\n}\n\nfunction configMap(rows) {\n  const map = {};\n  for (const row of rows || []) {\n    if (row.key) map[row.key] = row.value;\n  }\n  return map;\n}\n\nfunction chunkRecords(list, size) {\n  const out = [];\n  for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));\n  return out;\n}\n\n\nconst config = configMap(flattenAirtable($('Airtable Read Config For Error').all()));\nconst alert = $('Build Error Alert').first().json;\nreturn [{\n  json: {\n    chat_id: config.telegram_chat_id || '',\n    record_id: '',\n    text: alert.text,\n  },\n}];\n"
+      },
+      "id": "attach-error-chat",
+      "name": "Attach Error Chat",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "replyMarkup": "none",
+        "additionalFields": {
+          "parse_mode": "HTML",
+          "appendAttribution": false
+        }
+      },
+      "id": "telegram-error-alert",
+      "name": "Telegram Error Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        700
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "__TELEGRAM_CREDENTIAL_ID__",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Sweep Webhook": {
+      "main": [
+        [
+          {
+            "node": "Airtable Read Leases For Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduled Daily Sweep 0800": {
+      "main": [
+        [
+          {
+            "node": "Airtable Read Leases For Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Read Leases For Sweep": {
+      "main": [
+        [
+          {
+            "node": "Airtable Read Config For Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Read Config For Sweep": {
+      "main": [
+        [
+          {
+            "node": "Airtable Read Log For Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Read Log For Sweep": {
+      "main": [
+        [
+          {
+            "node": "Airtable Read Metrics For Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Read Metrics For Sweep": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sweep": {
+      "main": [
+        [
+          {
+            "node": "If Has Sweep Writes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Has Sweep Writes": {
+      "main": [
+        [
+          {
+            "node": "Emit Sweep Writes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Sweep Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Emit Sweep Writes": {
+      "main": [
+        [
+          {
+            "node": "Airtable Write Sweep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Write Sweep": {
+      "main": [
+        [
+          {
+            "node": "Build Sweep Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Sweep Digest": {
+      "main": [
+        [
+          {
+            "node": "Telegram Sweep Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Error Alert": {
+      "main": [
+        [
+          {
+            "node": "Airtable Read Config For Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Read Config For Error": {
+      "main": [
+        [
+          {
+            "node": "Attach Error Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Error Chat": {
+      "main": [
+        [
+          {
+            "node": "Telegram Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
