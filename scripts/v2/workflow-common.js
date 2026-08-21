@@ -284,7 +284,13 @@ const KEYBOARDS = {
     [{ label: "✍️ Draft my reply", action: "ast" }],
     [{ label: "✅ Mark resolved", action: "res" }],
   ],
-  atRiskCompliance: [[{ label: "✅ Mark resolved", action: "res" }]],
+  // Policy choice: the AI drafts for every category, including compliance-flagged
+  // replies. The human approval gate is what keeps a message from reaching a
+  // resident, not a refusal to compose one.
+  atRiskCompliance: [
+    [{ label: "✍️ Draft my reply", action: "ast" }],
+    [{ label: "✅ Mark resolved", action: "res" }],
+  ],
   assist: [
     [
       { label: "✅ Send reply", action: "snd" },

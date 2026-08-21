@@ -229,7 +229,7 @@ function atRiskAlertCard(lease, options = {}) {
   ];
 
   if (isCompliance) {
-    lines.push("", "<b>No response was drafted.</b>");
+    lines.push("", "<b>Nothing has been sent to the resident.</b> Compliance-sensitive: read it yourself before replying.");
   }
 
   const rows = [];

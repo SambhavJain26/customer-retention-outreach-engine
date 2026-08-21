@@ -261,16 +261,9 @@ if (action === ACTIONS.APPROVE_SEND) {
   result.instructions = 'Return only JSON with keys subject and body.';
   result.prompt = buildAssistPrompt(lease, config);
 } else if (action === ACTIONS.MARK_RESOLVED) {
-  // A compliance-flagged issue gets no drafted resident message on the way out
-  // either. The draft button was withheld when the reply arrived, so composing a
-  // confirmation here would reopen the same exposure from the other side.
-  const complianceFlag = String(lease.compliance_flag || 'NONE');
-  const isCompliance = complianceFlag && complianceFlag !== 'NONE';
-  if (!isCompliance) {
-    result.needs_openai = true;
-    result.instructions = 'Return only JSON with keys subject and body.';
-    result.prompt = buildConfirmationPrompt(lease, config);
-  }
+  result.needs_openai = true;
+  result.instructions = 'Return only JSON with keys subject and body.';
+  result.prompt = buildConfirmationPrompt(lease, config);
 } else if (action === ACTIONS.SEND_CONFIRMATION) {
   result.needs_gmail = Boolean(String(lease.assist_draft || '').trim());
   if (!result.needs_gmail) {
@@ -499,18 +492,7 @@ if (action === ACTIONS.APPROVE_SEND) {
     { exposure_recovered: turnoverCost }
   );
 
-  const complianceFlag = String(lease.compliance_flag || 'NONE');
-  if (complianceFlag && complianceFlag !== 'NONE') {
-    out.text = [
-      card.text,
-      '',
-      '<b>No follow-up was drafted.</b> This was a '
-        + complianceFlag.toLowerCase().split('_').join(' ')
-        + ', so any message to the resident is written by you.',
-    ].join(String.fromCharCode(10));
-  } else {
-    out.text = card.text;
-  }
+  out.text = card.text;
   out.card_type = fields.assist_draft ? 'resolution' : 'plain';
 } else if (action === ACTIONS.SEND_CONFIRMATION) {
   const guard = guardReply(lease, replySubject(), lease.assist_draft);
