@@ -26,7 +26,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "\n// WF8 owns all reply logic. This workflow only pokes it on a timer.\nreturn [{\n  json: {\n    method: 'POST',\n    url: 'http://localhost:5678/webhook/v2-check-replies',\n    body: {},\n  },\n}];\n"
+        "jsCode": "\n// WF8 owns all reply logic. This workflow only pokes it on a timer.\nreturn [{\n  json: {\n    method: 'POST',\n    url: 'http://localhost:5678/webhook/v2-check-replies',\n    body: { silent: true },\n  },\n}];\n"
       },
       "id": "build-check-request",
       "name": "Build Check Request",

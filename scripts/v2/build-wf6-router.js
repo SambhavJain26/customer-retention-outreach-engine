@@ -88,7 +88,10 @@ if (callback) {
       record_id: decoded.record_id,
       chat_id: String(callback.message && callback.message.chat ? callback.message.chat.id : ''),
       callback_query_id: String(callback.id || ''),
+      edit_text: '',
       is_callback: true,
+      is_edit_text: false,
+      needs_lease_lookup: true,
       is_command: false,
     },
   }];
@@ -107,15 +110,26 @@ const COMMANDS = {
 };
 
 const mapped = COMMANDS[command] || null;
+const isSlashCommand = text.charAt(0) === '/';
+
+// Any plain message that is not a slash command is treated as replacement
+// wording for whichever draft the manager last tapped Edit on.
+const isEditText = !mapped && !isSlashCommand && Boolean(text);
 
 return [{
   json: {
-    kind: mapped ? 'command' : 'ignore',
+    kind: mapped ? 'command' : (isEditText ? 'edit_text' : 'ignore'),
     command,
+    action: isEditText ? 'edt_apply' : '',
+    edit_text: isEditText ? text : '',
+    record_id: '',
+    callback_query_id: '',
     target_path: mapped ? mapped.path : '',
     target_body: mapped ? mapped.body : {},
     chat_id: String(message && message.chat ? message.chat.id : ''),
     is_callback: false,
+    is_edit_text: isEditText,
+    needs_lease_lookup: isEditText,
     is_command: Boolean(mapped),
   },
 }];
@@ -141,15 +155,27 @@ ${outboundLib}
 
 const routed = $('Route Telegram Update').first().json;
 const leases = flattenAirtable($('Airtable Read Leases For Action').all());
-const config = configMap(flattenAirtable($('Airtable Read Config For Action').all()));
+const configRows = flattenAirtable($('Airtable Read Config For Action').all());
+const config = configMap(configRows);
 
-const lease = leases.find((row) => row.record_id === routed.record_id) || null;
+// A pending edit remembers which draft the manager tapped Edit on, so the next
+// plain message they send can be applied to the right resident and field.
+const pendingRow = configRows.find((row) => row.key === 'pending_edit') || null;
+const pendingParts = String((pendingRow && pendingRow.value) || '').split('|');
+const pendingRecordId = pendingParts[0] || '';
+const pendingField = pendingParts[1] || 'draft_body';
+
 const action = routed.action;
+const targetRecordId = action === 'edt_apply' ? pendingRecordId : routed.record_id;
+const lease = leases.find((row) => row.record_id === targetRecordId) || null;
 const status = lease ? String(lease.status || '').toUpperCase() : '';
 
 const result = {
   action,
-  record_id: routed.record_id,
+  record_id: targetRecordId,
+  edit_text: routed.edit_text || '',
+  edit_field: pendingField,
+  pending_config_record_id: pendingRow ? pendingRow.record_id : '',
   chat_id: routed.chat_id,
   callback_query_id: routed.callback_query_id,
   config,
@@ -161,6 +187,12 @@ const result = {
   instructions: '',
   model: config.model_draft || 'gpt-5.6-luna',
 };
+
+if (action === 'edt_apply' && !pendingRecordId) {
+  result.outcome = 'no_pending_edit';
+  result.text = 'Nothing is waiting to be edited. Tap "Edit wording" on a draft first, then send the new text.';
+  return [{ json: result }];
+}
 
 if (!lease) {
   result.outcome = 'missing_record';
@@ -249,6 +281,8 @@ const out = {
   config,
   airtable_fields: null,
   log_row: null,
+  config_write: null,
+  pending_config_record_id: decided.pending_config_record_id || '',
   text: decided.text || '',
   card_type: 'plain',
 };
@@ -306,6 +340,49 @@ if (action === ACTIONS.APPROVE_SEND) {
   out.airtable_fields = { status: 'PENDING', touch_stage: 'NONE', draft_subject: '', draft_body: '' };
   out.log_row = { event_type: 'SKIPPED', channel: 'SYSTEM', direction: 'INTERNAL', message_text: 'Draft skipped by manager' };
   out.text = 'Skipped ' + lease.tenant_name + '. Nothing was sent.';
+} else if (action === ACTIONS.EDIT_DRAFT) {
+  // Arm an edit. The field chosen depends on what the card was showing.
+  const field = String(lease.assist_draft || '').trim() ? 'assist_draft' : 'draft_body';
+  out.config_write = { key: 'pending_edit', value: lease.record_id + '|' + field };
+  out.text = 'Send me the new wording for ' + lease.tenant_name
+    + ' as a plain message. It replaces the current text and still has to pass the safety checks.';
+} else if (action === 'edt_apply') {
+  const field = decided.edit_field === 'assist_draft' ? 'assist_draft' : 'draft_body';
+  const newText = String(decided.edit_text || '').trim();
+
+  // The manager's own wording is checked exactly like the model's.
+  const guard = field === 'assist_draft'
+    ? guardReply(lease, replySubject(), newText)
+    : guardDraft(lease, lease.draft_subject, newText);
+
+  if (!guard.ok) {
+    out.outcome = 'guard_failed';
+    out.text = 'That wording was not saved. It failed the safety checks: '
+      + guard.violations.join('; ') + '. Send a revised version.';
+  } else {
+    const fields = {};
+    fields[field] = newText;
+    out.airtable_fields = fields;
+    out.config_write = { key: 'pending_edit', value: '' };
+    out.log_row = {
+      event_type: 'DRAFTED',
+      channel: 'SYSTEM',
+      direction: 'INTERNAL',
+      message_text: 'Manager edited the ' + field.replace('_', ' '),
+      approved_by: config.manager_name || 'manager',
+    };
+
+    const updated = Object.assign({}, lease, fields);
+    if (field === 'assist_draft') {
+      const card = assistApprovalCard(updated);
+      out.text = card.text;
+      out.card_type = 'assist';
+    } else {
+      const card = draftApprovalCard(updated, {});
+      out.text = card.text;
+      out.card_type = 'draft';
+    }
+  }
 } else if (action === ACTIONS.NEXT_DRAFT) {
   const card = draftApprovalCard(lease, {});
   out.text = card.text;
@@ -452,6 +529,40 @@ if (fields && applied.record_id) {
   });
 }
 
+// Pending-edit state lives in the Config table so it survives restarts.
+if (applied.config_write && !gmailFailed) {
+  if (applied.pending_config_record_id) {
+    writes.push({
+      method: 'PATCH',
+      table: 'Config',
+      body: {
+        records: [{
+          id: applied.pending_config_record_id,
+          fields: { value: applied.config_write.value, updated_at: nowIso },
+        }],
+        typecast: true,
+      },
+    });
+  } else if (applied.config_write.value) {
+    writes.push({
+      method: 'POST',
+      table: 'Config',
+      body: {
+        records: [{
+          fields: {
+            key: applied.config_write.key,
+            value: applied.config_write.value,
+            value_type: 'string',
+            description: 'Draft currently awaiting edited wording from Telegram.',
+            updated_at: nowIso,
+          },
+        }],
+        typecast: true,
+      },
+    });
+  }
+}
+
 if (applied.log_row && !gmailFailed) {
   const lease = applied.lease || {};
   writes.push({
@@ -525,7 +636,7 @@ const nodes = [
     },
   },
   codeNode("Route Telegram Update", routeUpdateCode, [-40, 300]),
-  ifNode("If Is Callback", booleanCondition("={{ $json.is_callback }}"), [180, 300]),
+  ifNode("If Needs Lease Lookup", booleanCondition("={{ $json.needs_lease_lookup }}"), [180, 300]),
 
   // Command path
   ifNode("If Is Command", booleanCondition("={{ $json.is_command }}"), [400, 520]),
@@ -570,8 +681,8 @@ const nodes = [
 
 const connections = {
   "Telegram Trigger": mainConnection("Route Telegram Update"),
-  "Route Telegram Update": mainConnection("If Is Callback"),
-  "If Is Callback": branchConnection(["Airtable Read Leases For Action"], ["If Is Command"]),
+  "Route Telegram Update": mainConnection("If Needs Lease Lookup"),
+  "If Needs Lease Lookup": branchConnection(["Airtable Read Leases For Action"], ["If Is Command"]),
 
   "If Is Command": branchConnection(["Build Command Request"], []),
   "Build Command Request": mainConnection("Run Command Workflow"),

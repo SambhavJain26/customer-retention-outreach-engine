@@ -99,6 +99,9 @@ return [{
   json: {
     use_gmail: !useManual,
     use_manual: useManual,
+    // Automatic polling passes silent:true so an empty check stays off the
+    // manager's phone. A manual /check always answers, even with nothing to say.
+    silent: Boolean(body.silent),
     manual_body: body,
     leases,
     config,
@@ -191,6 +194,7 @@ if (!candidates.length) {
       is_terminal: true,
       needs_ai: false,
       chat_id: prepared.chat_id,
+      silent: prepared.silent,
       processed_count: 0,
       alerted_count: 0,
       message: 'No new replies found.',
@@ -223,7 +227,7 @@ if (!selected.has_reply) {
   return [{
     json: {
       has_writes: false,
-      card_type: 'plain',
+      card_type: selected.silent ? 'none' : 'plain',
       chat_id: selected.chat_id,
       record_id: '',
       text: 'No new replies were found.',
@@ -437,7 +441,7 @@ const nodes = [
   codeNode("Emit Reply Writes", emitWritesCode, [2260, 180]),
   airtableWriteNode("Airtable Write Reply", [2460, 180]),
   codeNode("Build Reply Card", buildCardCode, [2660, 300]),
-  switchNode("Route Reply Card", [2860, 300], ["atrisk", "atriskCompliance"]),
+  switchNode("Route Reply Card", [2860, 300], ["atrisk", "atriskCompliance", "none"]),
   telegramCardNode("Telegram At Risk Alert", [3080, 180], KEYBOARDS.atRisk),
   telegramCardNode("Telegram Compliance Alert", [3080, 340], KEYBOARDS.atRiskCompliance),
   telegramCardNode("Telegram Reply Notice", [3080, 500], null),
@@ -464,6 +468,8 @@ const connections = {
     main: [
       [{ node: "Telegram At Risk Alert", type: "main", index: 0 }],
       [{ node: "Telegram Compliance Alert", type: "main", index: 0 }],
+      // "none" is deliberately a dead end: silent polls post nothing.
+      [],
       [{ node: "Telegram Reply Notice", type: "main", index: 0 }],
     ],
   },

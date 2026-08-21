@@ -23,7 +23,7 @@ return [{
   json: {
     method: 'POST',
     url: 'http://localhost:5678/webhook/v2-check-replies',
-    body: {},
+    body: { silent: true },
   },
 }];
 `;

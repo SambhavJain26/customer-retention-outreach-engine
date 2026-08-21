@@ -26,6 +26,7 @@ const ACTIONS = {
   MARK_RESOLVED: "res",
   SEND_CONFIRMATION: "cnf",
   ACK_HANDOFF: "hnd",
+  EDIT_DRAFT: "edt",
 };
 
 function textOf(value) {
@@ -352,6 +353,7 @@ function acknowledgement(action, outcome) {
     [ACTIONS.MARK_RESOLVED]: "Marked resolved",
     [ACTIONS.SEND_CONFIRMATION]: outcome === "already_sent" ? "Already sent" : "Confirmation sent",
     [ACTIONS.ACK_HANDOFF]: "Acknowledged",
+    [ACTIONS.EDIT_DRAFT]: "Waiting for your wording",
   };
   return map[action] || "Done";
 }

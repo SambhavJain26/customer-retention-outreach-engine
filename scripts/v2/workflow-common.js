@@ -268,19 +268,25 @@ function telegramCardNode(name, position, keyboard, options = {}) {
 /** Keyboard layouts, kept together so every card uses the same action codes. */
 const KEYBOARDS = {
   summary: [[{ label: "▶️ Review first draft", action: "nxt" }]],
-  draft: [[
-    { label: "✅ Approve & Send", action: "apv" },
-    { label: "⏭ Skip", action: "skp" },
-  ]],
+  draft: [
+    [
+      { label: "✅ Approve & Send", action: "apv" },
+      { label: "⏭ Skip", action: "skp" },
+    ],
+    [{ label: "✏️ Edit wording", action: "edt" }],
+  ],
   atRisk: [
     [{ label: "✍️ Draft my reply", action: "ast" }],
     [{ label: "✅ Mark resolved", action: "res" }],
   ],
   atRiskCompliance: [[{ label: "✅ Mark resolved", action: "res" }]],
-  assist: [[
-    { label: "✅ Send reply", action: "snd" },
-    { label: "⏭ Discard", action: "dis" },
-  ]],
+  assist: [
+    [
+      { label: "✅ Send reply", action: "snd" },
+      { label: "⏭ Discard", action: "dis" },
+    ],
+    [{ label: "✏️ Edit wording", action: "edt" }],
+  ],
   resolution: [[
     { label: "✅ Send confirmation", action: "cnf" },
     { label: "⏭ Skip", action: "dis" },

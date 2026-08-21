@@ -107,13 +107,17 @@ function importWorkflow(name, baseId, credentialIds) {
     `--id=${parsed.id}`, `--active=${shouldActivate ? "true" : "false"}`,
   ], { cwd: REPO_ROOT, stdio: "pipe" });
 
-  try {
-    docker(["compose", "exec", "-T", "n8n", "n8n", "publish:workflow", `--id=${parsed.id}`], {
-      cwd: REPO_ROOT,
-      stdio: "pipe",
-    });
-  } catch (error) {
-    // publish:workflow is not present on every n8n build; activation is what matters.
+  // publish:workflow re-activates a workflow, so it is skipped for anything that
+  // is meant to stay inactive.
+  if (shouldActivate) {
+    try {
+      docker(["compose", "exec", "-T", "n8n", "n8n", "publish:workflow", `--id=${parsed.id}`], {
+        cwd: REPO_ROOT,
+        stdio: "pipe",
+      });
+    } catch (error) {
+      // publish:workflow is not present on every n8n build; activation is what matters.
+    }
   }
 
   return { id: parsed.id, name: parsed.name, nodes: parsed.nodes.length, active: shouldActivate };
