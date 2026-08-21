@@ -187,6 +187,17 @@ if (action === ACTIONS.SEND_CONFIRMATION && lease.confirmation_sent_at) {
   return [{ json: result }];
 }
 
+// Skip may only retire a draft that is still awaiting a decision. Skipping an
+// already-sent resident would clear the sent record and make them eligible for
+// a second check-in, so it is refused outright.
+if (action === ACTIONS.SKIP_DRAFT && status !== 'AWAITING_APPROVAL' && status !== 'REVIEW_FAILED') {
+  result.outcome = 'not_skippable';
+  result.text = status === 'SENT'
+    ? 'Already sent to ' + lease.tenant_name + '. Skip does nothing once a message has gone out.'
+    : 'There is no pending draft to skip (status ' + status + ').';
+  return [{ json: result }];
+}
+
 if (action === ACTIONS.APPROVE_SEND) {
   result.needs_gmail = true;
 } else if (action === ACTIONS.SEND_ASSIST) {
