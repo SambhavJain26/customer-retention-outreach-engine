@@ -52,7 +52,7 @@
           },
           "conditions": [
             {
-              "id": "cond-g8jdki",
+              "id": "cond-4uas5d",
               "leftValue": "={{ $json.needs_lease_lookup }}",
               "rightValue": "",
               "operator": {
@@ -86,7 +86,7 @@
           },
           "conditions": [
             {
-              "id": "cond-kv4dww",
+              "id": "cond-gc4wy3",
               "leftValue": "={{ $json.is_command }}",
               "rightValue": "",
               "operator": {
@@ -219,7 +219,7 @@
           },
           "conditions": [
             {
-              "id": "cond-mkxbxl",
+              "id": "cond-b6wgr4",
               "leftValue": "={{ $json.needs_openai }}",
               "rightValue": "",
               "operator": {
@@ -335,7 +335,7 @@
           },
           "conditions": [
             {
-              "id": "cond-rkjlf2",
+              "id": "cond-vs08li",
               "leftValue": "={{ $json.needs_gmail }}",
               "rightValue": "",
               "operator": {
@@ -409,7 +409,7 @@
           },
           "conditions": [
             {
-              "id": "cond-h62mof",
+              "id": "cond-q59jw4",
               "leftValue": "={{ $json.has_writes }}",
               "rightValue": "",
               "operator": {

@@ -168,7 +168,7 @@
           },
           "conditions": [
             {
-              "id": "cond-fgs1ot",
+              "id": "cond-735sfc",
               "leftValue": "={{ $json.has_writes }}",
               "rightValue": "",
               "operator": {

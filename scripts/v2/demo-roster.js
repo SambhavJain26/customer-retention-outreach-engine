@@ -69,7 +69,12 @@ function shiftCsvDates(csvText, deltaDays) {
 /**
  * @param {object} options
  * @param {string} [options.baseDate] seed run date, ISO. Defaults to today.
- * @param {string} [options.demoRecipientEmail] substituted for the demo-priority row only.
+ * @param {string} [options.demoRecipientEmail] used for the demo-priority row and
+ *   for `extraDemoRecipients` further residents in the 90-day cohort.
+ * @param {number} [options.extraDemoRecipients] how many additional 90-day residents
+ *   should point at the demo inbox, so approving a second and third draft on camera
+ *   actually delivers. Defaults to 3. Every other resident keeps an @example.com
+ *   address, which is IANA-reserved and cannot reach a real person.
  * @param {string} [options.timezone]
  */
 function buildDemoRoster(options = {}) {
@@ -86,11 +91,33 @@ function buildDemoRoster(options = {}) {
     demoRecipientEmail: options.demoRecipientEmail || "",
   });
 
+  const demoEmail = String(options.demoRecipientEmail || "").trim();
+  const extraCount = options.extraDemoRecipients == null ? 3 : Number(options.extraDemoRecipients);
+  const demoInboxLeaseIds = [];
+
+  if (demoEmail && extraCount > 0) {
+    // Only residents in the 90-day cohort that already hold a usable address are
+    // redirected, so the data-quality rows keep demonstrating their own problems.
+    const eligible = normalized.rows
+      .filter((row) => row.cohort === "90" && !row._is_demo_priority && row.email_valid)
+      .sort((a, b) => Number(a.days_to_expiry || 9999) - Number(b.days_to_expiry || 9999))
+      .slice(0, extraCount);
+
+    for (const row of eligible) {
+      row.email = demoEmail;
+      demoInboxLeaseIds.push(row.lease_id);
+    }
+  }
+
+  const priority = normalized.rows.find((row) => row._is_demo_priority);
+  if (priority) demoInboxLeaseIds.unshift(priority.lease_id);
+
   return {
     baseDate,
     deltaDays,
     rows: normalized.rows,
     summary: normalized.summary,
+    demo_inbox_lease_ids: demoInboxLeaseIds,
   };
 }
 

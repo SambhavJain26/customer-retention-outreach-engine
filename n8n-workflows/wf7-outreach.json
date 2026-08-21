@@ -123,7 +123,7 @@
           },
           "conditions": [
             {
-              "id": "cond-hoe2w4",
+              "id": "cond-73mjuj",
               "leftValue": "={{ $json.has_candidates }}",
               "rightValue": "",
               "operator": {
@@ -255,7 +255,7 @@
           },
           "conditions": [
             {
-              "id": "cond-mxt274",
+              "id": "cond-7e7oxs",
               "leftValue": "={{ $json.has_failures }}",
               "rightValue": "",
               "operator": {

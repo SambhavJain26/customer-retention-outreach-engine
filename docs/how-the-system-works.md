@@ -1,6 +1,6 @@
 # How The Renewal Retention System Works
 
-Last updated: 2026-08-19
+Last updated: 2026-08-21
 
 ## The Problem
 
@@ -72,17 +72,17 @@ The system brings those signals to the property manager. It does not make the de
 
 The property manager supplies a CSV export containing resident name, unit, email, move-in date, and lease end date.
 
-**WF1: Roster Ingestion** checks and organizes that roster. It keeps questionable rows visible instead of quietly dropping them. Missing emails, unclear dates, duplicate units, expired leases, and other data problems appear on the board for correction.
+The roster is loaded into Airtable and checked. Questionable rows stay visible instead of being quietly dropped: missing emails, unclear dates, duplicate units, and expired leases are each flagged with the reason, ready for a person to correct.
 
 For this proof of concept, the roster contains synthetic data. A production version would receive approved data from the client's property-management system or reporting process.
 
 ### 2. Upcoming Leases Become Visible
 
-**WF2: Dashboard** presents leases in four windows: 120, 90, 60, and 30 days before lease end.
+Residents are grouped into four windows — 120, 90, 60, and 30 days before lease end — derived from the lease end date alone.
 
 The timing comes only from the lease end date. OpenAI does not choose who enters a group, and the system does not use payment history, screening information, protected characteristics, or a prediction score.
 
-The dashboard gives the manager three working views:
+Airtable gives the manager everything in one table:
 
 - The lease-expiry pipeline
 - The draft approval queue
@@ -96,11 +96,11 @@ The message is deliberately limited. It asks how things are going. It is not a r
 
 Before the manager sees the draft, the workflow checks it for unsafe or unsuitable language. It blocks rent or money language, renewal or legal wording, deadlines, generic greetings, missing resident names, excessive questions, and messages outside the allowed length.
 
-If a draft fails twice, the board marks it as needing the manager's wording. It does not quietly pass.
+If a draft fails the checks twice it is marked as needing the manager's wording. It is never quietly passed through.
 
 ### 4. A Manager Decides What Sends
 
-The manager reviews each draft on the dashboard. They can edit the wording, approve it, skip it, or approve a safe batch.
+Each draft arrives in Telegram as a card. The manager can approve it, skip it, edit the wording from the chat, or page to the next one. Wording can also be edited directly in Airtable, and whatever the table holds at the moment of approval is what sends.
 
 Nothing sends until a manager approves it and then chooses `Send approved`.
 
@@ -147,7 +147,7 @@ Obvious automatic replies are recorded without creating a false risk alert.
 
 ### 8. The Property Manager Takes Over
 
-The dashboard shows the reply and why it was routed.
+Airtable records the reply and why it was routed, and the Telegram alert carries the resident's own words, the reason, and the suggested next step.
 
 For sensitive messages, it displays:
 
@@ -167,33 +167,39 @@ The proof of concept includes a hidden reset for rehearsals. Clients and residen
 
 ## What Each Tool Does
 
-| Tool or service | Role in the system |
+| Tool | Role |
 |---|---|
-| **n8n** | Runs and connects all five workflows |
-| **n8n Data Tables** | Hold the demo lease roster, current status, drafts, and activity history |
-| **OpenAI** | Writes check-in drafts and classifies the meaning of replies |
-| **Gmail** | Sends manager-approved check-ins and receives resident replies |
-| **Telegram** | Alerts the manager about risk, sensitive replies, opt-outs, unmatched messages, daily counts, and workflow failures |
-| **Renewal Retention Board** | Gives the manager one place to view the pipeline, approve drafts, send messages, and review routed replies |
-| **CSV roster** | Supplies lease data in the proof of concept |
+| **Airtable** | The manager's screen and the system of record. Every resident, status, draft, reply, issue, and metric lives here. Drafts can be edited directly in the table. |
+| **Telegram** | The action surface. Approvals, edits, alerts, and resolutions all happen through buttons in a private chat with the property bot. |
+| **n8n** | Runs the workflows that connect everything. Invisible during normal use. |
+| **OpenAI** | Writes the first draft of every outbound message and reads the meaning of every reply. It never decides who a reply belongs to and never sends anything. |
+| **Gmail** | The only channel that reaches a resident. |
+
+There is no separate web application to log into, and nothing to install.
 
 ## The Human Boundaries
 
-This system is designed to support property managers, not replace their judgment.
+These are enforced in code, not by prompting:
 
-It never:
-
-- Sends a check-in without manager approval
-- Creates a renewal offer
-- Recommends or decides rent
-- Sends a legal notice
-- Promises a repair or outcome
-- Automatically replies to a resident
-- Lets OpenAI decide which resident owns a reply
-- Uses protected characteristics to choose outreach
-- Treats an unclear reply as safe
-
-These limits are central to the design.
+- **No resident-facing message is ever sent automatically.** OpenAI drafts; a manager
+  approves each individual message before it leaves. Check-ins, replies, and
+  fix-confirmations all require a separate, explicit approval.
+- **Guardrails run twice** — when a message is drafted and again at the moment it is
+  sent. Wording a manager typed themselves is checked exactly like wording the model
+  produced. Rent, renewal terms, lease changes, legal language, deadlines, monetary
+  amounts, and promised outcomes are all refused.
+- **Resident selection uses the lease end date and nothing else.** No behavioural data,
+  no payment history, no personal characteristics.
+- **Replies are matched deterministically** by a reference code carried in the subject
+  line, then by exact sender address. If neither matches, the system says it cannot
+  identify the sender rather than attaching the reply to a guessed resident.
+- **Compliance-sensitive replies are flagged before the model is consulted.**
+  Accommodation requests, habitability complaints, legal threats, and discrimination
+  concerns are caught by fixed rules and marked for the manager to read personally.
+- **Opting out is permanent** and removes the resident from all future outreach.
+- **A double tap cannot send twice.** Every send checks the resident's current state first.
+- **Failures are loud.** A failed send is recorded and reported; a failed workflow alerts
+  the manager with the workflow, step, and error.
 
 ## What The Proof Of Concept Proves Today
 
@@ -206,7 +212,7 @@ The working demo proves that the full information loop can operate:
 5. Send an approved message through Gmail once.
 6. Match a resident reply to the lease.
 7. Identify maintenance, risk, opt-out, questions, and sensitive content.
-8. Update the board and notify the manager in Telegram.
+8. Update Airtable and alert the manager in Telegram, then close the issue once it is fixed and confirm that with the resident.
 9. Avoid automated resident responses.
 10. Escalate old sends that receive no meaningful reply.
 

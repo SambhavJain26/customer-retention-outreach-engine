@@ -123,7 +123,7 @@
           },
           "conditions": [
             {
-              "id": "cond-t6ooe8",
+              "id": "cond-ndok2p",
               "leftValue": "={{ $json.use_gmail }}",
               "rightValue": "",
               "operator": {
@@ -216,7 +216,7 @@
           },
           "conditions": [
             {
-              "id": "cond-dda19l",
+              "id": "cond-1p18lf",
               "leftValue": "={{ $json.needs_ai }}",
               "rightValue": "",
               "operator": {
@@ -392,7 +392,7 @@
           },
           "conditions": [
             {
-              "id": "cond-g0bhsq",
+              "id": "cond-oi7b57",
               "leftValue": "={{ $json.has_writes }}",
               "rightValue": "",
               "operator": {

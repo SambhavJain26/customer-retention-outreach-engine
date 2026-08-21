@@ -1,14 +1,24 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-08-20
+Last updated: 2026-08-21
 
 ## Current Status
 
-Stage 9 (Airtable + Telegram demo rebuild, v2) is in progress. Steps 1 and 2 are complete and
-verified against a live Airtable base. The v1 board build remains intact and runnable as a
-fallback, tagged `poc-v1-board`.
+Stage 9 is complete at POC depth. The demo now runs entirely on Airtable and Telegram:
+WF6 (Telegram router and actions), WF7 (cadence generation and approval cards), WF8 (reply
+matching, classification, routing), WF9 (daily sweep, metrics, error alerts), and optional
+WF10 (automatic reply polling, shipped inactive).
 
-Stage 8 is complete at POC depth. The local demo has a runbook, package helper, step-by-step demo operating guide, research-backed prospect explainer, one-purpose reset helper, and three clean cold-start rehearsals verified through reset, board load, draft generation, approval, priority Gmail send, duplicate-send idempotency, reply routing, Telegram alerts, and final clean reset.
+The v1 board build has been removed from the working tree after v2 passed live testing. It
+remains recoverable at tag `poc-v1-board`.
+
+Verified live end to end: clean seed, 14 of 14 drafts passing guardrails, Telegram approval,
+single Gmail send, duplicate-send refusal, skip refusal on a sent resident, Gmail reply
+matched by reference token, maintenance grievance classified `GRIEVANCE / MAINTENANCE / HIGH`,
+accommodation request flagged `ACCOMMODATION_REQUEST`, reply assist drafted and sent on
+approval, issue resolved with confirmation sent, unmatched reply alerting with no resident
+assigned, sweep recomputing cohorts and refreshing metrics, and turnover exposure moving from
+open to recovered.
 
 ## Source Context Read
 
@@ -62,10 +72,43 @@ Current proposed direction:
 | 5 | WF3 Draft, Approval, and Send | Complete | POC-complete: generated 13 usable 90-day drafts plus 1 visible needs-wording row, approval gate works, priority Gmail send works, duplicate send prevented. |
 | 6 | WF4 Reply Matching, Classification, and Routing | Complete | POC-complete: manual reply webhook, optional Gmail unread read path, deterministic matching, classifier fallback, Telegram routing, duplicate protection, and board feed verified. |
 | 7 | WF5 Daily Sweep, Error Alerts, and Reset | Complete | POC-complete: fixture reset, deterministic cohort recompute, non-response `ESCALATE`, Telegram digest/error alerts, and hidden reset endpoint verified. |
-| 9 | Airtable + Telegram Demo Rebuild (v2) | In progress | Steps 1-2 complete: Airtable schema, roster re-anchoring, seed/reset, and the Telegram/cadence/metrics libraries. Workflows WF6-WF9 not yet built. |
+| 9 | Airtable + Telegram Demo Rebuild (v2) | Complete | WF6-WF10 built, imported, and verified live. v1 removed from the tree, recoverable at tag `poc-v1-board`. |
 | 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, operator guide, prospect-facing explainer, package helper, and three cold-start rehearsals passed. |
 
 ## Deviations From Original Plan
+
+2026-08-21: Adopted a single drafting policy after live testing. OpenAI drafts a suggested
+reply and a fix-confirmation for every grievance category, including compliance-flagged ones.
+An earlier build withheld drafting for accommodation, habitability, legal-threat, and
+discrimination replies; the user chose the simpler, uniform rule so the demo reads the same
+for any property. The human approval gate remains the only thing that lets a message reach a
+resident.
+
+2026-08-21: Guardrails now run again at send time against whatever Airtable holds, because a
+manager can edit `draft_body` or `assist_draft` in the table or from Telegram after the draft
+was produced. Edited wording is checked exactly like generated wording.
+
+2026-08-21: Added Telegram-side editing. Tapping Edit wording stores a pending edit in the
+Config table; the manager's next plain message replaces that draft and is re-posted with its
+buttons.
+
+2026-08-21: Added approval-queue navigation. Only the first draft card was reachable from
+Telegram, so the remaining thirteen could only be actioned in Airtable.
+
+2026-08-21: Bugs found and fixed during live testing: Telegram cards posted with no buttons
+because `reply_markup` was passed as a JSON string instead of the node's `replyMarkup` enum;
+Skip had no status guard and would rewind a `SENT` resident to `PENDING`, making them eligible
+for a second check-in; `publish:workflow` re-activated workflows imported as inactive; the
+reopen clock measured from a previously closed issue.
+
+2026-08-21: Seed now points four residents at the live demo inbox (the demo-priority row plus
+three more in the 90-day cohort) so approving a second and third draft on camera actually
+delivers. Every other resident keeps an `@example.com` address, which cannot reach a person.
+
+2026-08-21: Removed the v1 build from the working tree: WF1-WF5 exports, the dashboard
+library, the board, and the Stage 2-8 import/verify/package scripts. The Stage 3, 5, 6, and 7
+libraries are retained because v2 inlines their verified logic for cohort banding, draft
+guardrails, reply routing, and sweep rules.
 
 2026-08-20: Stage 9 approved as an explicit plan revision. Two committed rules changed by user
 decision. First, Airtable is now permitted and replaces n8n Data Tables as demo state; the HTML
@@ -347,38 +390,41 @@ Completed:
 
 ## Stage 9 Verification Status
 
-Step 1 - Airtable data layer (complete, verified against live base):
+Airtable data layer:
 
-- Created `Leases` (34 fields), `Outreach Log` (16 fields + link to Leases), `Config`, and
-  `Metrics` via the Airtable Meta API. No field-type rejections.
-- Seeded and read back from the live base: exactly 40 residents, all `PENDING`, none opted out.
-- Cohorts verified from the base: `120=6 90=14 60=11 30=6 NONE=2 EXPIRED=1`.
-- 8 rows flagged with the expected reasons: `NO_END_DATE`, `TENURE_UNDER_6M`, `DUPLICATE_UNIT`
-  (x2), `EXPIRED_LEASE`, `MISSING_EMAIL`, `INVALID_EMAIL_DOMAIN`, `AMBIGUOUS_DATE`.
-- Demo priority resident is Avery Brooks, Cedar Row 9, cohort 90, 80 days out, using the local
-  `DEMO_RECIPIENT_EMAIL` from ignored `.env`.
-- All 12 config keys seeded with non-empty values; `Metrics` snapshot written zeroed.
+- Four tables created via the Meta API with typed, colour-coded fields. No field-type rejections.
+- Seed verified by reading back from the live base: 40 residents, cohorts
+  `120=6 90=14 60=11 30=6 NONE=2 EXPIRED=1`, 8 flagged rows with the expected reasons.
+- Lease dates re-anchor to the seed run date, so counts hold whenever the demo is recorded.
 
-Step 2 - shared libraries (complete, unit-exercised):
+Workflows, verified live against real Gmail, Telegram, OpenAI, and Airtable:
 
-- `telegram-ui-lib.js`: callback payloads measured at 22 bytes against Telegram's 64-byte cap;
-  compliance-flagged alerts verified to omit the reply-assist button and retain
-  `No response was drafted.`
-- `cadence-lib.js`: selection against the seeded roster returns 6 watchlist, 14 check-ins,
-  0 nudges (correct before any send), 6 handoffs, 11 skipped. `guardReply()` rejects
-  outcome promises, dates, and rent wording.
-- `metrics-lib.js`: exposure and recovered-exposure maths exercised.
+- Generation produced 14 of 14 usable drafts with zero guardrail failures, in 22-33 seconds.
+- Telegram approval sent exactly one Gmail message; a second tap returned "already sent" and
+  sent nothing.
+- Skip on a sent resident is refused and leaves state untouched.
+- A real Gmail reply was matched by `[R-xxxx]` token on the first attempt and classified
+  `GRIEVANCE / MAINTENANCE / HIGH` with a specific human action.
+- An accommodation request was flagged `ACCOMMODATION_REQUEST` and routed to a human.
+- Reply assist drafted a compliant response; sending required a separate tap.
+- Mark resolved sent nothing on its own; the confirmation required its own approval.
+- An unmatched reply alerted with full sender, subject, and quote, and was attached to no
+  resident. Airtable showed zero residents with a reply after that test.
+- Audit of the Outreach Log confirmed every outbound email corresponded to an explicit tap.
+- Sweep recomputed cohorts, refreshed the Metrics scoreboard, and posted a digest with
+  exposure open and exposure recovered. WF9 contains no Gmail node.
 
-Outstanding for Stage 9:
+Known limits accepted at POC depth:
 
-- Manual Airtable steps: delete default `Table 1`, create the six demo views, add the
-  `Airtable account` credential in n8n.
-- Build and verify WF6 (Telegram router), WF7 (outreach), WF8 (replies), WF9 (ops).
-- Establish the cloudflared tunnel and confirm Telegram button callbacks reach n8n.
-- Full v2 rehearsal, doc updates, then the v1 cleanup commit.
+- One reply is processed per check run; the response reports how many remain.
+- Airtable reads take a single 100-record page, which is ample for the 40-row demo.
+- Telegram bakes buttons into a message at send time, so old cards keep old behaviour.
+- cloudflared quick tunnels change hostname on every run, making the tunnel the most likely
+  live failure. `scripts/v2/start-tunnel.js` automates recovery.
 
 ## Next Step
 
-Continue Stage 9. Immediate blockers are the manual Airtable view setup, the `Airtable account`
-credential in n8n, a running n8n container, and a cloudflared tunnel for the Telegram Trigger.
-Once those exist, build WF6-WF9 and rehearse the v2 path end to end.
+Record the demo. The build and its documentation are complete; remaining work is rehearsal and
+recording. Before each session run `node scripts/v2/start-tunnel.js`, re-import WF6, reset with
+`node scripts/v2/seed-airtable-demo.js`, and clear the Telegram chat so no stale card can be
+tapped on camera.

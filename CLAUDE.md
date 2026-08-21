@@ -19,7 +19,9 @@ If documents conflict, prefer the newest decision in `progress-notes.md`, then u
 
 Current files are planning docs only. When implementation begins, use:
 
-- `n8n-workflows/`: importable workflow JSON exports, named `wf1-ingest.json`, `wf2-dashboard.json`, etc.
+- `n8n-workflows/`: importable workflow JSON exports. v2 is `wf6-telegram-router.json` (the only Telegram Trigger), `wf7-outreach.json`, `wf8-replies.json`, `wf9-ops.json`, and optional `wf10-auto-check.json`.
+- `scripts/v2/`: the v2 build. Libraries are inlined into Code nodes by the `build-wf*.js` scripts; committed workflow JSON keeps placeholder ids only.
+- `scripts/stage-3/5/6/7-*-lib.js`: verified v1 logic still reused by v2 for cohorts, guardrails, reply routing, and sweep rules. Do not delete.
 - `fixtures/`: demo roster CSVs, reply fixtures, expected outcomes.
 - `prompts/`: drafting and classification prompts/schemas if kept outside workflow JSON.
 - `scripts/`: setup, import/export, reset, and verification helpers.
@@ -44,21 +46,28 @@ Useful commands:
 - `docker compose ps`: inspect services.
 - `docker compose logs n8n`: inspect n8n failures.
 - `docker compose up -d --force-recreate n8n`: recreate n8n after environment, webhook, or tunnel URL changes.
-- `.\scripts\reset-demo.ps1`: restore the 40-row synthetic demo fixture through WF5 before or after a rehearsal.
-- `.\scripts\verify-stage-1.ps1`: verify Docker, Compose config, n8n container status, local HTTP reachability, and n8n version for Stage 1.
-- `Get-Content -Raw .\n8n-workflows\<file>.json | ConvertFrom-Json | Out-Null`: validate workflow JSON.
+- `node scripts/v2/seed-airtable-demo.js`: reset Airtable to the clean 40-resident demo state.
+- `node scripts/v2/start-tunnel.js`: re-establish the public tunnel, repoint n8n, and recreate the container.
+- `node scripts/v2/setup-airtable-schema.js`: create the demo tables and fields in an empty base.
+- `node scripts/v2/build-wf<n>-*.js`: regenerate a workflow export after changing a shared library.
+- `node scripts/v2/import-v2-workflows.js [name ...]`: substitute local ids and import/activate in n8n.
+- `.\scripts\verify-stage-1.ps1`: verify Docker, Compose config, and local n8n reachability.
 
 Do not assume package managers, Docker images, API keys, Gmail OAuth credentials, Telegram bots, OpenAI credentials, tunnels, or n8n credentials already exist.
 
 ## Architecture Rules
 
-- n8n orchestrates workflows; n8n Data Tables are demo state.
-- Do not use Google Sheets, Airtable, Supabase, external Postgres, PMS APIs, SMS, or community nodes for the demo unless the plan is explicitly revised.
+- n8n orchestrates workflows; **Airtable** holds demo state and is the manager's visible surface.
+- Airtable replaced n8n Data Tables in Stage 9 by explicit plan revision. Do not use Google Sheets, Supabase, external Postgres, PMS APIs, SMS, or community nodes unless the plan is revised again.
+- There is no HTML board. Telegram is the action surface: every approval, edit, reply, and resolution happens through inline buttons or a slash command.
+- Airtable access uses HTTP Request nodes with the predefined `airtableTokenApi` credential so writes batch ten records per request. OpenAI still uses the built-in node.
 - Use the n8n OpenAI credential and built-in OpenAI/OpenAI Chat Model nodes with JSON Schema / structured output. Do not use HTTP Request for normal OpenAI calls unless a required built-in feature is missing or debugging needs raw errors.
 - Test `gpt-5.6-luna` first for drafting and classification; fall back to `gpt-5.4-nano`, then `gpt-5.4-mini` for drafting only if quality requires it.
 - Gmail OAuth2 is the email path. One non-professional Gmail account is acceptable for local testing.
 - Telegram is for manager alerts. Send-message alerts do not require a tunnel; Telegram Trigger/inbound webhooks do.
-- Never generate legal notices, renewal offers, rent-increase notices, or auto-replies to tenants.
+- Never generate legal notices, renewal offers, or rent-increase notices.
+- **No resident-facing message is ever sent automatically.** OpenAI may draft a check-in, a reply, or a fix-confirmation for any category, but a manager must approve each individual message before it leaves. The guarantee is "never without a human", not "never replies".
+- Guardrails run again at send time against whatever Airtable currently holds, because a manager may have edited the wording after it was drafted.
 - Cohort membership must be deterministic from `lease_end_date` only.
 - The model must never emit or decide `tenant_id`; match replies deterministically by `[R-xxxx]` token, then sender email.
 
@@ -69,6 +78,19 @@ Prefer editable workflow JSON exports over undocumented manual UI-only changes. 
 Use credentials by name only. Never hardcode OpenAI keys, Gmail tokens, Telegram bot tokens, tunnel URLs, or real emails in workflow JSON.
 
 Known gotchas to account for:
+
+- The n8n Telegram node takes `replyMarkup` as a top-level enum and reads buttons from a fixed collection. It ignores a JSON string in `additionalFields.reply_markup`, so a card built that way posts with no buttons. Keep one Telegram node per card layout and drive `callback_data` with an expression.
+- Telegram allows one webhook per bot, so only one Telegram Trigger may be active. Every button and command enters through WF6.
+- `callback_data` is capped at 64 bytes. Short action prefixes plus an Airtable record id stay around 22 bytes.
+- Telegram bakes the keyboard into a message at send time. Redeploying never updates an old card; re-trigger to get fresh buttons.
+- `n8n publish:workflow` re-activates a workflow, undoing `update:workflow --active=false`. Skip publish for anything meant to stay inactive.
+- CLI activation changes need an n8n restart to take effect.
+- The Airtable Meta API cannot create formula, rollup, lookup, or count fields. Derived values are plain fields written by n8n.
+- Airtable allows 5 requests/second per base and 10 records per write; batch accordingly.
+- This demo sends and receives on one Gmail mailbox, so Gmail marks the outbound check-in read immediately. Never detect replies by unread state; match on a `Re:` subject carrying the `[R-xxxx]` token and skip message ids already logged.
+- cloudflared quick tunnels get a new hostname every run and n8n only reads `WEBHOOK_URL` at container start. Run `node scripts/v2/start-tunnel.js` after any tunnel or Docker restart, then re-import WF6.
+- When generating n8n Code nodes from a builder script, avoid backticks and `
+` escapes inside template literals; they are consumed before reaching the node. Validate every generated Code node by parsing it before importing.
 
 - Active webhooks may use the active workflow snapshot, not the editor draft.
 - Imported Webhook/Form Trigger nodes may register under generated paths; verify actual URLs after import.
@@ -102,6 +124,9 @@ Core invariants:
 - Clean `STAYING` replies can log green only when high-confidence, no grievance, no compliance flag, and no question.
 - Accommodation, habitability, legal, discrimination, opt-out, unclear, and low-confidence replies route to a human.
 - OpenAI failure must fail visible, not quiet.
+- A second tap on an approve/send button must never produce a second email.
+- Skip must refuse on a resident who has already been sent to.
+- Edited wording must pass the same guardrails as generated wording.
 
 Record checks, failures, token/cost notes, and deviations in `progress-notes.md`.
 

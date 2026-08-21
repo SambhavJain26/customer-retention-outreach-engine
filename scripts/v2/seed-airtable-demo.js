@@ -101,7 +101,10 @@ async function main() {
     console.log("so the live send step will not reach a real inbox.\n");
   }
 
-  const roster = buildDemoRoster({ baseDate, demoRecipientEmail: demoRecipient });
+  const extraDemoRecipients = process.env.DEMO_EXTRA_RECIPIENTS == null
+    ? 3
+    : Number(process.env.DEMO_EXTRA_RECIPIENTS);
+  const roster = buildDemoRoster({ baseDate, demoRecipientEmail: demoRecipient, extraDemoRecipients });
 
   console.log("Clearing existing demo rows...");
   const clearedLog = await clearTable(token, baseId, TABLE_LOG);
@@ -147,6 +150,11 @@ async function main() {
   if (priority) {
     console.log(`  demo priority:    ${priority.tenant_name}, ${priority.unit} (${priority.email || "no email"})`);
   }
+
+  const liveInbox = roster.rows.filter((row) => demoRecipient && row.email === demoRecipient);
+  console.log(`  live inboxes:     ${liveInbox.length} of ${roster.rows.length} reach a real mailbox`);
+  liveInbox.forEach((row) => console.log(`                    - ${row.tenant_name}, ${row.unit}`));
+  console.log(`  everyone else uses @example.com and cannot receive mail.`);
 }
 
 main().catch((error) => {
