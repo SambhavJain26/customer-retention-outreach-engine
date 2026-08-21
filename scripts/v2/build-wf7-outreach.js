@@ -24,8 +24,9 @@ const {
   loadLib,
   loadStageLib,
   mainConnection,
+  KEYBOARDS,
   openAiNode,
-  telegramSendNode,
+  telegramCardNode,
   webhookNode,
   workflow,
 } = require("./workflow-common.js");
@@ -230,7 +231,15 @@ const logWrites = chunkRecords(logRows, 10).map((batch) => ({
   body: { records: batch.map((fields) => ({ fields })), typecast: true },
 }));
 
-const approvable = result.rows.filter((row) => row.status === 'DRAFT');
+// The demo-priority resident is reviewed first so the live send in the video
+// always targets the controlled inbox.
+const approvable = result.rows
+  .filter((row) => row.status === 'DRAFT')
+  .sort((a, b) => {
+    const priority = (b.is_demo_priority ? 1 : 0) - (a.is_demo_priority ? 1 : 0);
+    if (priority !== 0) return priority;
+    return Number(a.days_to_expiry || 9999) - Number(b.days_to_expiry || 9999);
+  });
 const first = approvable[0] || null;
 
 return [{
@@ -255,13 +264,10 @@ const payload = $json;
 return (payload.writes || []).map((write) => ({ json: write }));
 `;
 
-const buildCardsCode = `${telegramLib}
-${metricsLib}
+const buildSummaryCardCode = `${telegramLib}
 
 const summary = $('Finalize Drafts').first().json;
-const items = [];
-
-const summaryCard = generationSummaryCard({
+const card = generationSummaryCard({
   touch_label: summary.touch_label,
   drafted_count: summary.generated_count,
   review_failed_count: summary.review_failed_count,
@@ -269,29 +275,32 @@ const summaryCard = generationSummaryCard({
   first_record_id: summary.first_record_id,
 });
 
-items.push({
+return [{
   json: {
     chat_id: summary.chat_id,
-    text: summaryCard.text,
-    reply_markup_json: summaryCard.reply_markup ? JSON.stringify(summaryCard.reply_markup) : '',
+    text: card.text,
+    record_id: summary.first_record_id,
   },
+}];
+`;
+
+const buildFirstDraftCardCode = `${telegramLib}
+
+const summary = $('Finalize Drafts').first().json;
+if (!summary.first_lease) return [];
+
+const card = draftApprovalCard(summary.first_lease, {
+  position: 1,
+  total: summary.approvable_count,
 });
 
-if (summary.first_lease) {
-  const card = draftApprovalCard(summary.first_lease, {
-    position: 1,
-    total: summary.approvable_count,
-  });
-  items.push({
-    json: {
-      chat_id: summary.chat_id,
-      text: card.text,
-      reply_markup_json: card.reply_markup ? JSON.stringify(card.reply_markup) : '',
-    },
-  });
-}
-
-return items;
+return [{
+  json: {
+    chat_id: summary.chat_id,
+    text: card.text,
+    record_id: summary.first_lease.record_id,
+  },
+}];
 `;
 
 const noCandidatesCode = `${telegramLib}
@@ -307,7 +316,7 @@ if (prepared.touch === 'HANDOFF_30' && (prepared.non_emailing_rows || []).length
     json: {
       chat_id: prepared.chat_id,
       text: card.text,
-      reply_markup_json: '',
+      record_id: '',
       ok: true,
       action: 'handoff',
       touch: prepared.touch,
@@ -320,7 +329,7 @@ return [{
   json: {
     chat_id: prepared.chat_id,
     text: '<b>' + (prepared.touch_label || prepared.touch) + '</b>\\n\\nNo residents are eligible for this touch right now.',
-    reply_markup_json: '',
+    record_id: '',
     ok: true,
     action: 'none',
     touch: prepared.touch,
@@ -360,11 +369,13 @@ const nodes = [
   codeNode("Finalize Drafts", finalizeCode, [1840, 180]),
   codeNode("Emit Airtable Writes", emitWritesCode, [2040, 180]),
   airtableWriteNode("Airtable Write Drafts", [2240, 180]),
-  codeNode("Build Approval Cards", buildCardsCode, [2440, 180]),
-  telegramSendNode("Telegram Post Cards", [2640, 180]),
-  codeNode("Build Generate Response", responseCode, [2840, 180]),
+  codeNode("Build Summary Card", buildSummaryCardCode, [2440, 180]),
+  telegramCardNode("Telegram Post Summary", [2640, 180], KEYBOARDS.summary),
+  codeNode("Build First Draft Card", buildFirstDraftCardCode, [2840, 180]),
+  telegramCardNode("Telegram Post Draft Card", [3040, 180], KEYBOARDS.draft),
+  codeNode("Build Generate Response", responseCode, [3240, 180]),
   codeNode("Build No Candidate Card", noCandidatesCode, [980, 460]),
-  telegramSendNode("Telegram Post Notice", [1200, 460]),
+  telegramCardNode("Telegram Post Notice", [1200, 460], null),
 ];
 
 const connections = {
@@ -381,9 +392,11 @@ const connections = {
   "Empty Retry Draft Batch": mainConnection("Finalize Drafts"),
   "Finalize Drafts": mainConnection("Emit Airtable Writes"),
   "Emit Airtable Writes": mainConnection("Airtable Write Drafts"),
-  "Airtable Write Drafts": mainConnection("Build Approval Cards"),
-  "Build Approval Cards": mainConnection("Telegram Post Cards"),
-  "Telegram Post Cards": mainConnection("Build Generate Response"),
+  "Airtable Write Drafts": mainConnection("Build Summary Card"),
+  "Build Summary Card": mainConnection("Telegram Post Summary"),
+  "Telegram Post Summary": mainConnection("Build First Draft Card"),
+  "Build First Draft Card": mainConnection("Telegram Post Draft Card"),
+  "Telegram Post Draft Card": mainConnection("Build Generate Response"),
   "Build No Candidate Card": mainConnection("Telegram Post Notice"),
 };
 

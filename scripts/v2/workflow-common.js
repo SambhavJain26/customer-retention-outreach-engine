@@ -214,18 +214,118 @@ function gmailSearchNode(name, position, options = {}) {
 }
 
 /**
- * Telegram message. Text and keyboard come from the incoming item so one node
- * can post any card built by telegram-ui-lib.
+ * Telegram message with an optional inline keyboard.
+ *
+ * n8n's Telegram node takes `replyMarkup` as a top-level enum and reads the
+ * button grid from a fixed collection - it will not accept a JSON string of
+ * reply_markup. The grid structure therefore has to be static per node, which is
+ * fine because button labels are fixed per card type; only the Airtable record
+ * id in callback_data varies, and that comes from an expression.
+ *
+ * @param {Array<Array<{label: string, action: string}>>|null} keyboard
+ *   null posts a plain message with no buttons.
  */
+function telegramCardNode(name, position, keyboard, options = {}) {
+  const parameters = {
+    chatId: "={{ $json.chat_id }}",
+    text: "={{ $json.text }}",
+    replyMarkup: keyboard && keyboard.length ? "inlineKeyboard" : "none",
+    additionalFields: {
+      parse_mode: "HTML",
+      appendAttribution: false,
+    },
+  };
+
+  if (keyboard && keyboard.length) {
+    parameters.inlineKeyboard = {
+      rows: keyboard.map((row) => ({
+        row: {
+          buttons: row.map((button) => ({
+            text: button.label,
+            additionalFields: {
+              callback_data: `={{ '${button.action}:' + $json.record_id }}`,
+            },
+          })),
+        },
+      })),
+    };
+  }
+
+  return {
+    parameters,
+    id: options.id || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    name,
+    type: "n8n-nodes-base.telegram",
+    typeVersion: 1.2,
+    position,
+    credentials: {
+      telegramApi: { id: PLACEHOLDER.TELEGRAM_CRED, name: "Telegram account" },
+    },
+    onError: "continueRegularOutput",
+  };
+}
+
+/** Keyboard layouts, kept together so every card uses the same action codes. */
+const KEYBOARDS = {
+  summary: [[{ label: "▶️ Review first draft", action: "nxt" }]],
+  draft: [[
+    { label: "✅ Approve & Send", action: "apv" },
+    { label: "⏭ Skip", action: "skp" },
+  ]],
+  atRisk: [
+    [{ label: "✍️ Draft my reply", action: "ast" }],
+    [{ label: "✅ Mark resolved", action: "res" }],
+  ],
+  atRiskCompliance: [[{ label: "✅ Mark resolved", action: "res" }]],
+  assist: [[
+    { label: "✅ Send reply", action: "snd" },
+    { label: "⏭ Discard", action: "dis" },
+  ]],
+  resolution: [[
+    { label: "✅ Send confirmation", action: "cnf" },
+    { label: "⏭ Skip", action: "dis" },
+  ]],
+};
+
+/** Routes items to one output per card type using $json.card_type. */
+function switchNode(name, position, outputs, options = {}) {
+  return {
+    parameters: {
+      rules: {
+        values: outputs.map((value) => ({
+          conditions: {
+            options: { caseSensitive: true, leftValue: "", typeValidation: "strict", version: 2 },
+            conditions: [{
+              id: `sw-${value}`,
+              leftValue: "={{ $json.card_type }}",
+              rightValue: value,
+              operator: { type: "string", operation: "equals" },
+            }],
+            combinator: "and",
+          },
+          outputKey: value,
+        })),
+      },
+      options: { fallbackOutput: "extra" },
+    },
+    id: options.id || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    name,
+    type: "n8n-nodes-base.switch",
+    typeVersion: 3.2,
+    position,
+  };
+}
+
+/** Legacy plain-text sender kept for messages that never carry buttons. */
 function telegramSendNode(name, position, options = {}) {
   return {
     parameters: {
       chatId: "={{ $json.chat_id }}",
       text: "={{ $json.text }}",
+      replyMarkup: "none",
       additionalFields: {
         parse_mode: "HTML",
         appendAttribution: false,
-        reply_markup: "={{ $json.reply_markup_json }}",
       },
     },
     id: options.id || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
@@ -295,6 +395,7 @@ function workflow(id, name, nodes, connections, options = {}) {
 
 module.exports = {
   AIRTABLE_API,
+  KEYBOARDS,
   PLACEHOLDER,
   airtableListNode,
   airtableWriteNode,
@@ -308,6 +409,8 @@ module.exports = {
   loadStageLib,
   mainConnection,
   openAiNode,
+  switchNode,
+  telegramCardNode,
   telegramSendNode,
   webhookNode,
   workflow,

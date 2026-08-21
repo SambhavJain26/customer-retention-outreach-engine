@@ -30,8 +30,10 @@ const {
   loadLib,
   loadStageLib,
   mainConnection,
+  KEYBOARDS,
   openAiNode,
-  telegramSendNode,
+  switchNode,
+  telegramCardNode,
   workflow,
 } = require("./workflow-common.js");
 
@@ -237,7 +239,7 @@ const out = {
   airtable_fields: null,
   log_row: null,
   text: decided.text || '',
-  reply_markup_json: '',
+  card_type: 'plain',
 };
 
 if (decided.outcome !== 'ok' || !lease) {
@@ -286,7 +288,7 @@ if (action === ACTIONS.APPROVE_SEND) {
 } else if (action === ACTIONS.NEXT_DRAFT) {
   const card = draftApprovalCard(lease, {});
   out.text = card.text;
-  out.reply_markup_json = card.reply_markup ? JSON.stringify(card.reply_markup) : '';
+  out.card_type = String(lease.status || '').toUpperCase() === 'AWAITING_APPROVAL' ? 'draft' : 'plain';
 } else if (action === ACTIONS.DRAFT_ASSIST) {
   if (!modelDraft) {
     out.outcome = 'openai_failed';
@@ -301,7 +303,7 @@ if (action === ACTIONS.APPROVE_SEND) {
       out.airtable_fields = { assist_draft: draftText };
       const card = assistApprovalCard(Object.assign({}, lease, { assist_draft: draftText }));
       out.text = card.text;
-      out.reply_markup_json = card.reply_markup ? JSON.stringify(card.reply_markup) : '';
+      out.card_type = 'assist';
     }
   }
 } else if (action === ACTIONS.SEND_ASSIST) {
@@ -354,7 +356,7 @@ if (action === ACTIONS.APPROVE_SEND) {
     { exposure_recovered: turnoverCost }
   );
   out.text = card.text;
-  out.reply_markup_json = card.reply_markup ? JSON.stringify(card.reply_markup) : '';
+  out.card_type = fields.assist_draft ? 'resolution' : 'plain';
 } else if (action === ACTIONS.SEND_CONFIRMATION) {
   out.needs_gmail = true;
   out.to_email = lease.email;
@@ -442,7 +444,8 @@ return [{
     has_writes: writes.length > 0,
     chat_id: applied.chat_id,
     text,
-    reply_markup_json: applied.reply_markup_json || '',
+    card_type: gmailFailed ? 'plain' : (applied.card_type || 'plain'),
+    record_id: applied.record_id,
     callback_query_id: applied.callback_query_id,
     action: applied.action,
     outcome: gmailFailed ? 'send_failed' : applied.outcome,
@@ -462,7 +465,8 @@ return [{
   json: {
     chat_id: payload.chat_id,
     text: payload.text,
-    reply_markup_json: payload.reply_markup_json || '',
+    card_type: payload.card_type || 'plain',
+    record_id: payload.record_id || '',
     callback_query_id: payload.callback_query_id,
     action: payload.action,
     outcome: payload.outcome,
@@ -520,7 +524,11 @@ const nodes = [
   codeNode("Emit Action Writes", emitWritesCode, [2500, 80]),
   airtableWriteNode("Airtable Write Action", [2700, 80]),
   codeNode("Build Telegram Reply", buildReplyCode, [2500, 300]),
-  telegramSendNode("Telegram Action Reply", [2700, 300]),
+  switchNode("Route Card Type", [2700, 300], ["draft", "assist", "resolution"]),
+  telegramCardNode("Telegram Reply Draft Card", [2920, 120], KEYBOARDS.draft),
+  telegramCardNode("Telegram Reply Assist Card", [2920, 280], KEYBOARDS.assist),
+  telegramCardNode("Telegram Reply Resolution Card", [2920, 440], KEYBOARDS.resolution),
+  telegramCardNode("Telegram Reply Plain", [2920, 600], null),
 ];
 
 const connections = {
@@ -543,7 +551,15 @@ const connections = {
   "If Has Writes": branchConnection(["Emit Action Writes"], ["Build Telegram Reply"]),
   "Emit Action Writes": mainConnection("Airtable Write Action"),
   "Airtable Write Action": mainConnection("Build Telegram Reply"),
-  "Build Telegram Reply": mainConnection("Telegram Action Reply"),
+  "Build Telegram Reply": mainConnection("Route Card Type"),
+  "Route Card Type": {
+    main: [
+      [{ node: "Telegram Reply Draft Card", type: "main", index: 0 }],
+      [{ node: "Telegram Reply Assist Card", type: "main", index: 0 }],
+      [{ node: "Telegram Reply Resolution Card", type: "main", index: 0 }],
+      [{ node: "Telegram Reply Plain", type: "main", index: 0 }],
+    ],
+  },
 };
 
 const wf = workflow("wf6-telegram-router", "WF6 Telegram Router and Actions", nodes, connections);
