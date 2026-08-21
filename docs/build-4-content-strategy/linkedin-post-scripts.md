@@ -459,7 +459,7 @@ Three surfaces carry the claim that this is built inside tools the company alrea
 
 Ten clips, 7 minutes 18 seconds. Builds 1, 2 and 3 ran their demos at 2:40 and above, and this one has a full loop to close, so longer is correct.
 
-**793 spoken words across 7:18.** At a natural pace that is a little over five minutes of talking, leaving close to two and a half minutes where something is happening and nobody is speaking: fourteen drafts generating, an approval card arriving, a reply being typed live, and the two-second holds at every clip boundary. Those silences are the proof, and they are what makes each clip liftable.
+**792 spoken words across 7:18.** At a natural pace that is a little over five minutes of talking, leaving close to two and a half minutes where something is happening and nobody is speaking: fourteen drafts generating, an approval card arriving, a reply being typed live, and the two-second holds at every clip boundary. Those silences are the proof, and they are what makes each clip liftable.
 
 **The first draft of this script ran 873 words against a 6:25 runtime**, which is wall-to-wall narration with no room for any of the silences the shoot rules require. It was trimmed rather than the runtime stretched, because a tighter demo is a better demo. If it needs to shrink again, take it out of clip 2. **Do not shorten clip 7.** That clip is the reason the video exists.
 
