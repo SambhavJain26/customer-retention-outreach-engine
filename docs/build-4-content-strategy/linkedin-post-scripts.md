@@ -1087,3 +1087,232 @@ Run against `seo-audit/references/ai-writing-detection.md` and the voice rules a
 - Neither "I don't sell software" nor "there is no dashboard" appears anywhere in this batch.
 
 **One observation for the operator.** Posts 8 and 12 are both failure stories and both end on the same beat: it was found by accident, not by process. That repetition is honest, since both were, but publishing them within a week of each other will make the second one land softer. Space them, or lead post 12 with the fix rather than the discovery.
+
+---
+
+---
+
+# Batch 3: The video cut and the two image posts (posts 7, 5, 9)
+
+**On the design skill, recorded for the next build.** The process table in `linkedin-content-plan.md` lists `high-end-visual-design` for the carousels and image posts, inherited from build 3. Reading it properly this time: it is a **web UI code system**, React and Tailwind, motion choreography, backdrop blur, scroll interpolation. None of that applies to a static PNG for LinkedIn.
+
+What does transfer is its anti-pattern instinct, and that part is genuinely useful:
+
+- No default system fonts. Inter, Roboto, Arial and Helvetica all read as template.
+- No 1px solid gray borders and no harsh drop shadows.
+- Macro whitespace. Double whatever padding feels right.
+- The closing test: does this read as a deliberate piece of design, or as a template with nice fonts.
+
+Everything below applies those four and ignores the rest. **Future builds should either re-scope this step to a static-image skill or drop it**, rather than carrying a web-UI skill through a fifth plan.
+
+**Post 7 is a cut from the demo**, not a shoot. Same constraint as build 3: a post can only be video if that moment already exists in the demo footage, saying out loud what the post needs said. Nothing is filmed twice and nothing is narrated twice.
+
+---
+
+## Post 7. The guardrail that checked at the wrong moment
+
+**Format:** native video, roughly 45 seconds, cut from the demo · **Pillar:** failure lessons · **CTA:** none
+
+**No shoot, no new audio, no voiceover.** This post is demo clip 6 (It refuses my wording, 3:12 to 3:56) carrying its original audio exactly as recorded. Batch 2 writes that clip to stand alone, which is what makes this an edit rather than a second recording session.
+
+### Assembly
+
+| Order | Source | Runtime | On-screen text |
+|---|---|---|---|
+| 1 | Demo clip 6, whole, from its first frame | 44s | `I tried to send this. It said no.` held over the first 4 seconds |
+| 2 | Optional tail: the last block of demo clip 10 | 12s | none |
+
+Roughly 45 seconds on its own, or 58 with the optional tail. **Use the short version first.** The tail adds a limits line, which is useful in isolation but dilutes a post whose whole argument is one specific defect.
+
+### Why this clip
+
+The post makes one argument and the footage already contains all of it: unsafe wording typed live, a refusal appearing on screen, and the reason stated out loud. Nothing has to be explained over the top, which is the test for whether a clip can carry a post.
+
+The hook is the typing. A viewer watching somebody deliberately type a rent increase into their own system knows exactly where it is going and stays for the refusal.
+
+### Edit notes
+
+- **Original demo audio only.** If clip 6's audio is unusable, re-record it as part of the demo, not as a voiceover for this post.
+- Hard cuts at both ends. Clip 6 already opens and closes on still frames.
+- Subtitles burned in, mandatory. Two lines maximum, three to five words per line. The refusal text on screen is small and the subtitles are what carry it after compression.
+- Original audio only. No music bed, no trending sound.
+- For a vertical crop, crop to the Telegram message column rather than the full window. The refusal message survives 9:16; the surrounding chrome does not.
+- **If clip 6 does not exist in the footage, this post becomes text.** The plan permits that and the capture checklist in batch 2 makes it the last item for that reason.
+
+### LinkedIn post text
+
+> The checks in this thing run when the model writes a draft. They did not run when the message was sent.
+>
+> Between those two moments sits an editable field.
+>
+> A manager can rewrite any draft, in Airtable or straight from the chat, and whatever the record says at the moment of approval is what goes out. So it was checking the AI's words carefully and then sending whatever a human typed over the top of them, unchecked.
+>
+> The boundary existed. It was guarding the wrong instant.
+>
+> In the clip I type a rent increase and a signing deadline into a resident message on purpose, and it refuses, listing what is wrong with it. That refusal is the fix, not the original design.
+>
+> The general version of this is worth ten minutes on anything you have automated.
+>
+> Find the last point where your system checks something. Then ask what a person can change after that point. Everything in that gap is running on trust, and it is usually a bigger gap than anyone expects, because validation gets attached to the moment data is created rather than the moment it is used.
+>
+> Mine was about four seconds wide and a whole approval workflow long.
+>
+> The rules are the same rules either way. Rent, renewal terms, deadlines, money. What changed is that they now run twice, and the second time is the one that matters, because by then the message is whatever a human decided it should be.
+
+### Discipline check
+
+- **Build 2 post 9 owns what an automation should and should not say to a resident.** This post does not re-argue the contents of the boundary. Its lesson is about timing, and the banned wording is named once in the last paragraph without being justified.
+- The refusal shown is real and appears on screen. Nothing is described that the footage does not contain.
+- The post says plainly that the refusal is the fix rather than the original design. Presenting it as a feature would be the dishonest version.
+- No product named, and the transferable question in the middle works on any automated system.
+
+---
+
+## Post 5. What one resident leaving actually costs
+
+**Format:** single image · **Pillar:** the renewal conversation · **CTA:** none
+
+### The image
+
+One number, very large, with its components stacked underneath in a much smaller size. No headline above it.
+
+| Element | Spec |
+|---|---|
+| Dominant figure | `$3,872` set enormous, occupying roughly the top half of the frame |
+| Stack beneath | Four short lines at roughly one fifth the size: make-ready, vacancy loss, advertising, leasing cost |
+| Footer line | `per resident who does not renew` in the smallest weight on the image |
+| Attribution | `National Apartment Association` set small, bottom left |
+| Treatment | Typographic only. No icons, no chart, no photograph, no illustration of a house |
+| Format | 4:5 portrait, legible at thumbnail |
+
+**Design discipline.** No stock photography and no house icon. A single number set large enough to be uncomfortable is the whole design, and anything decorative competes with it. Avoid Inter, Roboto, Arial and Helvetica, which read as default. No 1px gray box around the figure and no drop shadow. The frame should be mostly empty.
+
+Use `$3,872` rather than the rounded `$4,000`. The precision is what makes it read as a real figure somebody measured rather than an estimate somebody chose.
+
+### The post
+
+> $3,872.
+>
+> That is what one resident deciding not to renew costs, once you count the make-ready, the weeks empty, the advertising and the leasing cost.
+>
+> It lands as one event. Somebody got a new job, or moved in with a partner, and you file it under things nobody could have changed.
+>
+> The number that matters is not that one. It is what happens when your retention rate moves three points.
+>
+> Retention across the industry has gone from 60% to 57%. On a three hundred door portfolio, three points is about nine extra residents leaving in a year. Nine times $3,872 is a little over thirty six thousand dollars, and none of it arrives as a line item. It arrives as nine separate small departures, each one with a reasonable explanation attached.
+>
+> Scale it up and the shape stays the same. A five thousand door portfolio making the same three point slip takes on roughly a hundred and fifty extra turns, which is somewhere near six hundred thousand dollars a year.
+>
+> That is arithmetic, not a benchmark. Run it with your own turnover cost, because yours will not be $3,872, and scattered site single family runs differently from apartments.
+>
+> Work out your own per turn number once. Then multiply it by the retention points you lost last year.
+>
+> That product is the budget you already have for solving it.
+
+*Word count: 228.*
+
+### Discipline check
+
+- **No daily rent arithmetic anywhere.** Build 3 post 4 owns rent divided by thirty and per-vacant-day math. This post stays in whole non-renewals and retention points, which is the unit split recorded in the plan.
+- Both worked examples are labeled as arithmetic for the reader to redo, never as benchmarks and never as results this automation produced.
+- The post says explicitly that the reader's number will differ and that scattered site runs differently from apartments. `customer-language.md` requires that caveat because $3,872 is an apartment figure.
+- No product named, no mechanism described. The post is useful to somebody who never contacts me.
+- Retention figures from Zego 2026, cost from NAA, both in `customer-language.md`.
+
+**Hashtags:** #propertymanagement #propertymanagers #multifamily #residentretention
+
+---
+
+## Post 9. Who gets contacted is decided by one field
+
+**Format:** single image · **Pillar:** the legal surface · **CTA:** none
+
+### The image
+
+One column header at the top, and a struck-through list of everything deliberately not consulted underneath.
+
+| Element | Spec |
+|---|---|
+| Top third | `lease_end_date` set large, in a monospace face so it reads as a field name rather than a phrase |
+| Divider | A single hairline, full width, nothing else |
+| Bottom two thirds | Five short lines, each struck through: payment history, maintenance tickets, tenure, communication history, renewal likelihood score |
+| Footer line | `Not consulted.` small, under the list |
+| Treatment | Typographic. The strike-throughs are the only graphic device in the frame |
+| Format | 4:5 portrait |
+
+**Design discipline.** The contrast between one live field and five dead ones is the entire image, so the strike-through weight matters more than anything else on it. Keep the top item visually loud and the list visually quiet. No red, no warning iconography, no lock or shield graphics. This is a design decision being stated, not a security claim being made.
+
+### The post
+
+> Who gets contacted is decided by one column. The date the lease ends.
+>
+> Not payment history. Not how many maintenance tickets somebody has filed. Not how long they have lived there, or how they have spoken to your team, or any score estimating how likely they are to renew.
+>
+> That constraint costs something real, and I want to be honest about what.
+>
+> A better system could rank residents by risk and contact the shakiest ones first. It would probably find more problems per message sent. I did not build that, and the reason has nothing to do with what the technology can do.
+>
+> The moment who gets contacted depends on behavior, somebody has to be able to explain that choice. Not to me, and not in a design review. Later, to somebody asking why this resident got a check-in and that one did not.
+>
+> A rule that says "ninety days before the lease ends" answers that question in one sentence, and the answer is the same every time no matter who is asking.
+>
+> A model that weighed twelve behavioral inputs does not, and the person who has to answer for it will not be the person who built it.
+>
+> If you are looking at anything that selects which of your residents get contacted, ask what goes into the selection. Then ask who would explain that choice if it were ever questioned, and whether they could.
+>
+> There are good reasons to build the smarter version. Being unable to describe it afterwards is not one of them.
+
+*Word count: 255.*
+
+### Discipline check
+
+- **No implication that any competitor is doing something unlawful.** The claim is about explainability: a date-based rule is trivially explainable and a behavioral model is not. That is a difference in property, not an accusation.
+- **No legal advice, and no legal claim at all.** Post 6 carries the fair-housing material with its own disclaimers. This post stays on the design decision and never cites a statute, a regulator or a case.
+- The cost of the constraint is stated before the justification. A post that only listed the benefits of the safer choice would be advertising.
+- No product named.
+- Build 3's competitive carousel owns portfolio-size arguments. This is a selection-input argument and does not touch segment fit.
+
+**Hashtags:** #propertymanagement #proptech #residentretention
+
+---
+
+## Batch 3 self-check
+
+| Check | Result |
+|---|---|
+| Em dashes in published copy | Zero across post 7's text, post 5 and post 9 |
+| Banned verbs, adjectives, filler | None present |
+| US spelling | Checked: behavior, labeled |
+| Resident, not tenant | No instance of "tenant" |
+| Client results implied | None |
+| Word counts | Post 7 text 245, post 5 228, post 9 255 |
+| Video posts carry no new audio | Post 7 is demo clip 6 with its original audio |
+| Image posts specify treatment, not just content | Both carry a design discipline paragraph |
+
+**Collision audit:**
+
+- Post 7 does not re-argue what an automation says to a resident. Build 2 post 9 owns that, and post 7 stays on when the check runs.
+- Post 5 contains no daily rent arithmetic. Build 3 post 4 owns that unit.
+- Post 9 makes no legal claim. Post 6 carries the fair-housing material with its disclaimers.
+- No duplicate-protection material anywhere in this batch.
+
+**Shoot dependency, restated.** Post 7 exists only if demo clip 6 does. The batch 2 capture checklist ends by confirming that clip is usable, and the plan already permits post 7 dropping to text. **Do not reshoot for it.** If the footage is not there, the argument works fine as text and loses only the moment of watching somebody try to sabotage their own system.
+
+---
+
+## Plan status
+
+All fifteen posts are written.
+
+| Batch | Posts | Format |
+|---|---|---|
+| 1 | 1, 3, 6, 13 | Document carousels |
+| 2 | 2 | The demo video, ten clips |
+| 3 | 7, 5, 9 | One video cut, two single images |
+| 4 | 4, 8, 10, 11, 12, 14, 15 | Text |
+
+**Two open items carried from the plan.**
+
+The first is that primary practitioner voice was never reached. Reddit is blocked, BiggerPockets and the multifamily groups need logins, and retention is a category where most of what ranks is vendor content marketing. Every number in these scripts traces to a named survey, but the tone is not verified against how a property manager actually talks about a resident who left quietly. That is worth a pass if a source ever opens up.
+
+The second is that there is no client. Posts 2, 14 and 15 each say so directly, in three different formats, which is deliberate rather than repetitive.
