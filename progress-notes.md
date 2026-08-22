@@ -94,6 +94,16 @@ swipes, and retained underlines only for affirmations and verdicts. The legal
 disclaimer now uses a strike because the sentence itself is a negation. Re-ran
 full-size visual checks on every circle and remaining underline before rendering.
 
+2026-08-22: Rebuilt the annotation maps across all four carousels after a visual
+review found that the second pass still overused gold marker swipes. Removed
+marker bars from parallel comparison copy, long classification lines, and payoff
+supporting text; reassigned those moments to short circles, underlines, strikes,
+or unmarked type where a second mark already carried the slide. Rejected a wide
+Zodiak circle on `defense.` and oversized close circles after full-size renders
+showed collisions, retaining the device only where the actual glyph width holds.
+All four decks still contain one Zodiak payoff word, one inverted slide, and no
+copy changes.
+
 2026-08-21: Demo operation is now hands-free after a single kickoff command. The user records
 without running scripts or typing commands mid-take, so:
 
