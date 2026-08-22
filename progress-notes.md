@@ -86,6 +86,14 @@ required side-by-side prompts, including inverted-slide colors. Post 3 deliberat
 leaves slides 1 and 2 unmarked because its deck-specific production note says marking
 may begin on slide 3.
 
+2026-08-22: Re-audited the four carousel annotation systems against the finished
+examples after the first build overused underlines and omitted circles. Restored
+circles on short words genuinely held up for scrutiny (`five`, `fine`, `two`,
+`nothing`, and `me`), converted load-bearing phrases from underlines to marker
+swipes, and retained underlines only for affirmations and verdicts. The legal
+disclaimer now uses a strike because the sentence itself is a negation. Re-ran
+full-size visual checks on every circle and remaining underline before rendering.
+
 2026-08-21: Demo operation is now hands-free after a single kickoff command. The user records
 without running scripts or typing commands mid-take, so:
 
