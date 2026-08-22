@@ -789,3 +789,301 @@ Run in order. Items 1 to 4 cannot be fixed after recording.
 - The exposure figure in clip 9 is described as surfaced and recovered, never as money earned. That distinction is in `customer-language.md` and it is the easiest thing in this build to overclaim.
 - Clip 7 uses an on-screen time card for the wait rather than a silent cut. The wait is real, the automation takes about a minute, and hiding that would be the one dishonest edit available in this recording.
 - No competitor is named or implied anywhere in the video. Post 13 does that work, in a format where the nuance survives.
+
+---
+
+---
+
+# Batch 4: The text posts (posts 4, 8, 10, 11, 12, 14, 15)
+
+Seven text posts. **Length target 250 to 300 words each**, except posts 10 and 15 which run shorter by design.
+
+LinkedIn cuts to roughly 210 characters before "more", so the first two lines carry the post. All seven open on the concrete thing, never on framing.
+
+**Post 15 took the `offers` pass.** Its guidance on when *not* to apply offer tactics is the operative half: no manufactured scarcity, no bonus stack, no guarantee, no deadline. The value equation still applies, but only through the denominator. The ask works by making the time and effort cost close to nothing, not by inflating what is on offer.
+
+---
+
+## Post 4. The renewal offer is a question, and it only has one answer
+
+**Format:** text · **Pillar:** the renewal conversation · **CTA:** none
+
+### The post
+
+> A renewal offer is a number, a date and a signature line, arriving from someone the resident has not heard from in months.
+>
+> Ask a question shaped like that and you get an answer shaped like that. The reply comes back about the rent, because rent is the only thing anyone put on the table.
+>
+> Everything that drove the actual decision stays out of it. The repair reported twice. The parking. The neighbor. None of it is being hidden. Nobody asked, and volunteering it next to a rate increase feels like haggling.
+>
+> I want to be careful about the timing, because ninety days is already standard advice. Industry guidance says start the renewal process at ninety days rather than sixty, specifically so there is room to find out whether someone is unhappy while you can still act on it. Plenty of teams already work that way. That part is not an insight and I am not claiming it.
+>
+> What sits in the window is the part worth arguing about. If the first contact of the renewal cycle is a price, price is the only feedback the cycle can produce.
+>
+> So the version I built sends something at ninety days that cannot mention money at all. Not the rate, not the term, not a deadline. Those words are blocked before a draft reaches a manager, and blocked again on the way out. It asks one open question about whether anything is unresolved.
+>
+> The offer still goes out later, on its normal schedule, into a conversation that has already happened.
+>
+> Whatever you send ninety days out, the test is short. Can it be answered with a number? If it can, that is the answer you are going to get.
+
+*Word count: 287.*
+
+### Discipline check
+
+- **The ninety day window is explicitly not claimed as an insight**, in the post itself, in its own paragraph. `customer-language.md` records that this is published best practice and that overclaiming it is the fastest way to lose this audience.
+- No competitor named. Post 13 does that work.
+- No numbers at all in this post, deliberately. It is an argument about the shape of a question, and a statistic would dilute it.
+- "Blocked before a draft reaches a manager, and blocked again on the way out" is accurate to the build and is the only mechanism claim in the post.
+
+**Hashtags:** #propertymanagement #residentretention #propertymanagers
+
+---
+
+## Post 8. The button that appeared to do nothing
+
+**Format:** text · **Pillar:** failure lessons · **CTA:** none
+
+### The post
+
+> Someone testing the build asked me what happens if you press Skip on a resident who has already been emailed.
+>
+> I did not know. So we looked.
+>
+> It reset her. Status back to where it was before anyone had contacted her, the stored message cleared, no record that anything had gone out.
+>
+> Nothing visible went wrong. No error, no warning. The damage was scheduled for about three weeks later, on the next generation run, where she would have been picked up as somebody who had never been contacted and sent a second check-in.
+>
+> Here is the part I keep coming back to. Approve was guarded carefully, because Approve visibly sends an email. Every guard I had written sat on a control with a visible consequence.
+>
+> Skip is the do-nothing button. It takes something off a list. It got no guard at all, because it did not occur to me that taking something off a list was an action worth checking.
+>
+> Attention follows apparent consequence. The controls that look harmless are the ones that get built quickly and reviewed lightly, and they are usually the ones that quietly rewind state.
+>
+> Skip now refuses on anyone already contacted, and it says why.
+>
+> If you run any approval workflow, write down the controls that appear to do nothing. Skip. Dismiss. Clear. Archive. Mark as read. Then work out, for each one, what it silently undoes and what happens the next time something reads that state.
+>
+> That is where the unguarded ones are, and they are unguarded for the same reason mine was.
+>
+> It was found by somebody asking a question before pressing a button. Not by a test.
+
+*Word count: 275.*
+
+### Discipline check
+
+- **No claim that a process caught this.** The last line says what happened, which is more useful than implying test coverage that does not exist.
+- The specific state change is described exactly: status reset, stored message cleared, resident returned to the eligible pool.
+- No product named. The lesson transfers to any approval workflow, which is the point.
+- Build 1 post 8 and build 2 post 14 own duplicate-send protection. **This post is not about duplicate sends.** It is about an unguarded control that rewinds state, and the second email is the consequence rather than the subject.
+
+**Hashtags:** #automation #propertymanagement #buildinpublic
+
+---
+
+## Post 10. "Stop emailing me" is a permanent answer
+
+**Format:** text · **Pillar:** reading the reply · **CTA:** none
+
+### The post
+
+> The shortest reply this thing has ever had to handle is four words. Stop emailing me.
+>
+> Honoring that is easy to build and easy to build badly, and the bad version looks identical to the good one for months.
+>
+> The bad version sets a flag that suppresses the current batch. Then the next campaign runs, reads the roster, and never consults it. The resident who asked you to stop hears from you again, and a mild irritation becomes a documented one.
+>
+> Nothing about that failure is visible while you are building it. It only shows up the second time.
+>
+> So the opt-out is caught by a fixed rule rather than left to a model to interpret, because "stop emailing me" is not a sentence I want anything exercising judgment about. It writes to the resident's record permanently. And every future run consults it when deciding who to contact, rather than when deciding what to send.
+>
+> The other half is that an opt-out still routes to a person. Somebody who asks you to stop emailing them is usually telling you something else at the same time, and a system that files it silently under handled has thrown that away.
+>
+> If you run any resident outreach at all, opt a test address out and then run your next campaign against it. Most people have never checked, and it takes ten minutes.
+
+*Word count: 229.*
+
+### Discipline check
+
+- Deliberately short and unglamorous. This is a small correct thing done properly, and inflating it would break register.
+- The mechanism claim is specific: fixed rule, permanent write, consulted at selection time rather than send time.
+- The closing test costs nothing and works on any system, including one I had no part in.
+- No legal framing anywhere. Opt-out compliance varies by jurisdiction and this post stays out of it.
+
+**Hashtags:** #propertymanagement #residentretention #automation
+
+---
+
+## Post 11. The last cohort gets no email at all
+
+**Format:** text · **Pillar:** what the automation is allowed to do · **CTA:** none
+
+### The post
+
+> Thirty days before a lease ends is the group you would most expect an automation to chase. It is the last chance. It is also the one group this thing will not message.
+>
+> At thirty days the resident is inside the renewal offer window. Anything arriving from the property then gets read as part of the offer, whatever it says. A soft "is everything okay" landing in the same week as a rate is not a check-in. It is a tactic, and residents can tell.
+>
+> So the thirty day group produces an internal handoff instead. Names, units, lease end dates, straight to whoever runs leasing. Nothing goes to the resident.
+>
+> The whole cadence is four windows and only two of them send anything.
+>
+> A hundred and twenty days out is a watchlist. Nobody is contacted.
+>
+> Ninety days is the check-in. One open question, and no mention of money.
+>
+> Sixty days is a nudge, and only to residents who never replied to the ninety day message. Nudging somebody who already answered is how a check-in turns into a nuisance.
+>
+> Thirty days is the handoff. Internal only.
+>
+> Every outreach sequence needs a defined point where it stops talking, and it needs to be a rule rather than a judgment somebody makes on a Friday afternoon. If yours does not have one, it will eventually contact somebody at the exact moment contact does damage. It will do it politely, and it will do it on schedule.
+
+*Word count: 243.*
+
+### Discipline check
+
+- Restraint is stated as a rule with a reason, in the same register as any other rule. It is not presented as a virtue to be admired.
+- The four windows are accurate to the build.
+- The sixty day condition (only residents who never replied) is the real rule, not a simplification.
+- No mechanism detail beyond what the argument needs. This post is about cadence design, not about how the handoff is implemented.
+
+**Hashtags:** #propertymanagement #residentretention #operations
+
+---
+
+## Post 12. My own test email came back as a resident reply
+
+**Format:** text · **Pillar:** failure lessons · **CTA:** none
+
+### The post
+
+> I was checking that the endpoints were alive. Checking them meant calling them. Calling them meant running them.
+>
+> The reply check went out to the mailbox, found a message sitting there from a rehearsal about an hour earlier, and processed it as though it had just arrived.
+>
+> Nothing was sent and no resident exists. But the state was wrong, and the same defect during a recorded walkthrough would have produced a live alert about a conversation that happened yesterday, in front of somebody, with no good way to explain it.
+>
+> The logic was fine. The assumption under it was not. I had built it as though everything in that mailbox belonged to this run.
+>
+> The fix is one condition. It ignores any message that arrived before this demo's first send, and because a reset clears every send timestamp, leftover mail from an earlier rehearsal is not so much filtered out as structurally invisible. There is nothing for it to be newer than.
+>
+> Then I left a stale reply sitting in the mailbox on purpose, turned the automatic polling on, and watched it do nothing for an hour. That is the part that counts. A fix you have not tried to defeat is a hypothesis.
+>
+> If you have anything reading a shared inbox, ask what stops it acting on a message that was already there when it started. "It only looks at new messages" is a claim about what senders do, not about what your system checks.
+>
+> Mine was found by accident, during a step I was running to prove nothing was broken.
+
+*Word count: 262.*
+
+### Discipline check
+
+- Owns that this was found by accident rather than by design. The honest version is the useful one.
+- The verification is described because it is the strongest part: the stale message was deliberately left in place and the polling left running.
+- No product named. The lesson transfers to any inbox-reading automation.
+- Build 3 post 9 covers drafting a chase for work already finished. **This is a different failure**: not stale data inside the system, but foreign data outside it being treated as belonging to this run.
+
+**Hashtags:** #automation #buildinpublic #propertymanagement
+
+---
+
+## Post 14. What this cannot tell you
+
+**Format:** text · **Pillar:** what the automation is allowed to do · **CTA:** none
+
+### The post
+
+> It does not predict who will renew.
+>
+> It does not price anything.
+>
+> And it has never improved a renewal rate, because nobody has run it on real residents. There is no client. This would be the first.
+>
+> What it does is narrower and checkable. It asks every resident one open question ninety days before their lease ends, routes what comes back to a person, and records what was found and whether it got closed.
+>
+> Whether that changes renewals needs a full cycle, a baseline, and something to compare against. Anyone claiming the outcome before running that has skipped the only part that would settle it.
+>
+> What has been tested is the mechanism, against forty made up residents. Fourteen of fourteen drafts passed the wording checks. A second approval tap was refused. A reply came back through a real mailbox, got matched to the right resident by the reference code in the subject line, and was classified as a high urgency maintenance grievance. An accommodation request was flagged before the model saw it. An issue was opened, closed and confirmed. Every outbound email in the log traced to somebody pressing a button.
+>
+> That is testing. It is not a customer result and I would not present it as one.
+>
+> The number a pilot turns on is reply rate. A check-in nobody answers produces nothing, and that is worth measuring in the first month rather than assuming.
+>
+> If you are looking at anything in this space, ask what the claimed improvement was measured against, and over what period. If the answer is a case study with no baseline, it is a story.
+
+*Word count: 270.*
+
+### Discipline check
+
+- Opens with three things it cannot do, before anyone asks. That ordering is the whole post.
+- Every item in the tested list is something that actually happened during verification and is recorded in `progress-notes.md`.
+- **"That is testing. It is not a customer result"** appears verbatim, because the sentence is the point.
+- Build 1 posts 13 and 14 own the buyer's-checklist framing. This stays in first person about its own limits, and the closing question is one line rather than a list.
+- Reply rate is named as the live variable, which `customer-language.md` requires and which neither this post nor post 15 may bury.
+
+**Hashtags:** #propertymanagement #residentretention #automation
+
+---
+
+## Post 15. Send me your next quarter of expirations
+
+**Format:** text · **Pillar:** the ask · **CTA:** the real one
+
+**On the `offers` pass.** The value equation applies here only through the denominator. Time delay and effort are pushed close to zero: five columns, no call, no system access, no preparation. The numerator is deliberately left alone, because the honest dream outcome is modest and the perceived likelihood is low by construction, given there is no client. Every constructed-offer component the skill lists is **omitted on purpose**: no bonus stack, no guarantee, no scarcity, no deadline, no name. The skill's own guidance on when not to apply offer tactics is why. A manufactured deadline on a first pilot from an unproven builder reads as exactly what it is.
+
+### The post
+
+> Five columns. Resident name, unit, lease end date, move-in date, email.
+>
+> That is everything I need to run this against your actual expirations instead of my made up ones. No financials, no screening data, no access to anything you own, and no call first.
+>
+> What comes back is the cohorts as it computes them, which residents it would skip and why, the rows where your data has a problem, and the drafted ninety day check-ins for that group. Unsent. You read them and decide whether you would have sent them.
+>
+> If the answer is no, that is a useful thing to learn in an afternoon.
+>
+> Two things I want to be straight about.
+>
+> There is no client yet. This would be the first, and you would be taking a risk on somebody with a working build and no track record. That belongs in how you price the decision, and I would rather say it than have you find it.
+>
+> And this is a demonstration with a commercial intent behind it, not free consulting. I am showing the mechanism because watching it is more persuasive than reading about it, and because if it does not fit your portfolio we both find that out early.
+>
+> No deadline on this and no limited spots. It will be the same next month.
+
+*Word count: 218.*
+
+### Discipline check
+
+- **No fabricated links, no invented handles, no scarcity, no deadline.** The last line refuses urgency explicitly, which is the strongest available signal in a category full of manufactured ones.
+- "There is no client yet" is stated as a risk to the reader rather than softened into modesty.
+- The commercial intent is named. Calling this free consulting would be the lie that costs the most later.
+- The ask is exactly the five columns from `.agents/product-marketing.md`, unchanged.
+- Nothing in the banned offer vocabulary appears: no "game-changing", no "secret", no "worth $X", no "limited time".
+
+**Hashtags:** #propertymanagement #propertymanagers #residentretention
+
+---
+
+## Batch 4 self-check
+
+Run against `seo-audit/references/ai-writing-detection.md` and the voice rules at the top of this file.
+
+| Check | Result |
+|---|---|
+| Em dashes in published copy | Zero across all seven posts |
+| Banned verbs and adjectives | None present |
+| Filler intensifiers | None. Three were cut on the verification pass: two uses of "actually" that carried no meaning, and "obviously" in post 8, replaced with "visibly" because that post's whole argument is about apparent consequence |
+| Banned openers and closers | None present |
+| "Whether you're X, Y, or Z" pattern | Not used |
+| US spelling | Checked: honoring, neighbor, behavior |
+| Resident, not tenant | No instance of "tenant" in any post |
+| Client results implied | None. Posts 14 and 15 both state there is no client |
+| Word counts | 287, 275, 229, 243, 262, 270, 218 |
+| Opens on the concrete thing | All seven. No post opens on framing |
+
+**Collision audit against builds 1 to 3:**
+
+- Post 8 is about an unguarded control that rewinds state, not about duplicate sends. Build 1 post 8 and build 2 post 14 own duplicate protection and neither is restated.
+- Post 12 is about foreign data being treated as belonging to this run. Build 3 post 9 owns stale data inside the system.
+- Post 14 stays in first person about its own limits. Build 1 posts 13 and 14 own the buyer's checklist.
+- No post computes daily rent loss. Build 3 post 4 owns that unit.
+- Neither "I don't sell software" nor "there is no dashboard" appears anywhere in this batch.
+
+**One observation for the operator.** Posts 8 and 12 are both failure stories and both end on the same beat: it was found by accident, not by process. That repetition is honest, since both were, but publishing them within a week of each other will make the second one land softer. Space them, or lead post 12 with the fix rather than the discovery.
