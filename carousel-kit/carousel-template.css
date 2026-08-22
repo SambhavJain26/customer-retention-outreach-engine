@@ -452,6 +452,29 @@ html, body {
   margin-top: 48px;
 }
 
+/* Compare cover: two parallel prompts with one shared result beneath. ----- */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 48px;
+  row-gap: 72px;
+  font-weight: 800;
+  font-size: var(--size-claim);
+  line-height: 96px;
+  letter-spacing: -0.032em;
+  color: var(--ink);
+}
+
+.compare-result {
+  grid-column: 1 / -1;
+  font-weight: 900;
+  font-size: var(--size-lead);
+  line-height: 120px;
+  letter-spacing: -0.04em;
+}
+
+.slide--invert .compare { color: var(--paper); }
+
 /* Figure: a slide whose subject is a number ------------------------------ */
 /* The numeral is the loudest thing on the page and the sentence framing it is
    deliberately quiet, so the number is read first and the sentence only

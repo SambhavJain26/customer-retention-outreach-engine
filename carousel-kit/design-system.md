@@ -101,6 +101,7 @@ Open Sans, Poppins, Montserrat — the generic-template tells.
 | Layout | Classes |
 |---|---|
 | Cover | `.display` `.kicker` |
+| Compare cover | `.compare` `.compare-result` |
 | Statement | `.lead` `.divider` `.turn` |
 | Field list | `.lead` `.tags` `.divider` `.turn` |
 | Check list | `.head` `.checks` |
@@ -109,6 +110,13 @@ Open Sans, Poppins, Montserrat — the generic-template tells.
 | Figure | `.lead-in` `.fig` `.lead-out` |
 | Payoff | `.head` `.pay` `.margin-note` |
 | Close | `.close-lead` `.divider` `.turn` `.byline` |
+
+**Compare cover is for two parallel prompts that resolve into one shared
+result.** The two upper statements occupy equal columns and the result spans
+the full measure beneath them. It keeps a contrast visible at thumbnail size
+without turning the copy into interface chrome. Its 96px and 120px leading sit
+on the 24px baseline grid, and the layout has an explicit inverted color even
+though its first use is on paper.
 
 **Grouped list is for one list split by severity across several slides.** Post 7
 runs twelve flags over six slides in two groups. The `.group` label sits under a

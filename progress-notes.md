@@ -77,6 +77,15 @@ Current proposed direction:
 
 ## Deviations From Original Plan
 
+2026-08-22: Built the four Batch 1 LinkedIn document carousels from the signed-off
+Build 4 copy. Added HTML decks for posts 1, 3, 6, and 13 plus upload-ready PDFs.
+All slides passed the carousel fit check; rendered PDFs have the expected page
+counts and dimensions, one grain image, and six embedded font subsets. Added and
+documented the reusable `.compare` / `.compare-result` cover layout for Post 1's
+required side-by-side prompts, including inverted-slide colors. Post 3 deliberately
+leaves slides 1 and 2 unmarked because its deck-specific production note says marking
+may begin on slide 3.
+
 2026-08-21: Demo operation is now hands-free after a single kickoff command. The user records
 without running scripts or typing commands mid-take, so:
 
