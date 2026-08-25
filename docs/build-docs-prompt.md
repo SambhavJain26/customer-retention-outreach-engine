@@ -4,9 +4,9 @@ Paste the fenced block below into a session opened at the root of any of the oth
 automation builds (vendor insurance paperwork, maintenance triage, make-ready sequencing, or
 a later one). It produces the same pair of documents this project has:
 
-- `docs/how-the-system-works.md` — for a property manager or owner. Explains the problem and
+- `docs/how-the-system-works.md`, for a property manager or owner. Explains the problem and
   what the build does about it. Assumes no technical knowledge at all.
-- `docs/build-technical-notes.md` — for a builder or a technically minded operator. The
+- `docs/build-technical-notes.md`, for a builder or a technically minded operator. The
   stack, the constraints, and the defects that shipped.
 
 **Why two files and not one.** The audience split is the entire point. The moment the
@@ -25,13 +25,13 @@ behaviour on some point, which is worse than saying nothing.
 
 READ THESE FIRST, IN THIS ORDER
 
-1. AGENTS.md — the architecture rules and the gotchas list. Most of what belongs in the
+1. AGENTS.md, the architecture rules and the gotchas list. Most of what belongs in the
    technical document is already here, phrased as instructions rather than explanations.
-2. progress-notes.md — the deviations and verification records. This is where the real
+2. progress-notes.md, the deviations and verification records. This is where the real
    decisions and the real bugs are, buried in a chronological log.
-3. docs/ — whatever operating guide, runbook or setup doc exists. These carry the endpoints,
+3. docs/, whatever operating guide, runbook or setup doc exists. These carry the endpoints,
    the statuses and the branch behaviour.
-4. docs/*content-strategy/customer-language.md if it exists — the vocabulary, the sourced
+4. docs/*content-strategy/customer-language.md if it exists, the vocabulary, the sourced
    numbers, the competitive facts, and the list of things that must never be claimed.
 5. The workflow exports and the build scripts. Read them, do not skim them.
 
