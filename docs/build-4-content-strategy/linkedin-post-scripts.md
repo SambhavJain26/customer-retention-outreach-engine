@@ -432,262 +432,171 @@ Run against `seo-audit/references/ai-writing-detection.md` and the voice rules a
 
 ## Post 2. The demo, a resident says they are happy and the system disagrees
 
-**Format:** native video on LinkedIn, 7 minutes 18 seconds, plus a YouTube upload · **Pillar:** proof · **CTA:** soft
+**Format:** native video on LinkedIn, plus a YouTube upload · **Pillar:** proof · **CTA:** soft
 
-**Not scripted from `short-form-video.md`.** At this length the 0 to 3 second hook rules do not apply. The structure below is scene-based, taken from `docs/operating-guide.md`.
+**Status: recorded.** This section was rewritten on 2026-08-29 to describe the recording that exists rather than the script that was planned. The two are not the same. Where they disagree the recording wins, and every line of copy that described a moment nobody filmed has been cut rather than reshot. Nothing below asks for a second shoot.
 
-**This recording is the only shoot in the plan.** Post 7 is cut from it, carrying its original audio, with no new voiceover. That constraint changed how this script is written. It is a list of clips, each built to stand alone with its own audio, rather than a continuous walkthrough that gets chopped up afterwards.
+**Not scripted from `short-form-video.md`.** At this length the 0 to 3 second hook rules do not apply.
 
-**Two surfaces, one file.** LinkedIn native video and YouTube. The footage is identical. The post text and the YouTube title and description are written separately below, because the two audiences arrive differently: LinkedIn readers are scrolling, YouTube viewers are searching.
+**Two surfaces, one file.** LinkedIn native video and YouTube. The footage is identical. The post text and the YouTube title and description are written separately, because LinkedIn readers are scrolling and YouTube viewers are searching.
 
 ---
 
-## What has to appear on screen
+## What changed against the original script
 
-Three surfaces carry the claim that this is built inside tools the company already owns. n8n appears once, briefly, and only to show the limits.
+Recorded so that nobody re-reads the old draft and reintroduces a claim the footage cannot support.
 
-| Surface | Clips | Why it has to be there |
+| Planned | What the recording does | Consequence for the copy |
 |---|---|---|
-| Airtable | 1, 2, 9 | Where the residents, the drafts and the scoreboard live, in the company's own base |
-| Manager Telegram | 3, 4, 5, 6, 7, 8, 9, 10 | Where every decision gets made |
-| Resident mailbox | 5, 7, 8 | Proof a resident installs nothing and replies normally |
-| n8n editor | 10 | Ten seconds, to show there is no autonomous path to a resident |
+| Eight roster rows flagged with real data problems | Not covered. The Leases table opens the video and the four check-in points are explained over it | The messy-data claim leaves the video. Posts 1 and 15 still carry it, in text, where it never needed footage |
+| "Cohorts come from the lease end date and nothing else", said out loud | Not stated in those words | The one-field argument belongs entirely to post 9 now, which is an image post and never depended on the recording. One short line survives in the LinkedIn text |
+| Fourteen drafts generated in about twenty five seconds | Not shown | Cut everywhere. No claim about generation speed may appear in copy attached to this video |
+| Fourteen finished messages sitting in Airtable doing nothing | Not shown as a count | Replaced by what was actually filmed, which is the queue behaving like a queue when `Next draft` is pressed |
+| A second approval tap being refused | Not shown | Cut everywhere. Duplicate protection is real in the build and it is fixture-verified, but it is not in this video and the copy may not imply it is |
+| Unsafe wording typed in, and the guardrail refusing it | Not recorded. The edit made on camera is a safe trim of a sentence | Post 7 is rebuilt on the edit loop that was recorded. See batch 3 |
+| `Mark resolved`, the confirmation message, and the exposure figures moving | Not shown. `Mark resolved` appears as a button and is never pressed | All exposure, recovery and money language leaves the video and its copy |
+| n8n as a ten second pan to carry the limits | Recorded as something stronger: the executions for outreach generation and for the approval cards, opened, with the OpenAI node showing the subject and body it produced | n8n stops being a footnote and becomes a segment |
+| The limits and the no-client disclosure spoken on camera | Not recorded | Both move into the LinkedIn post text and the YouTube description, where they are now load-bearing rather than a repeat of something already said |
+| Not planned | `Edit wording`, the redraft, the approval, and the edited version arriving in the inbox | The best new material in the recording, and the whole of post 7 |
+| Not planned | A second resident taken end to end through `Next draft` | Proof the loop repeats rather than working once |
+| Not planned | The Outreach Log table, with every message written down | The audit-trail claim now has footage behind it |
 
 ---
 
-## Runtime
+## One mailbox, and saying so
 
-Ten clips, 7 minutes 18 seconds. Builds 1, 2 and 3 ran their demos at 2:40 and above, and this one has a full loop to close, so longer is correct.
+Every email in this recording moves through a single Gmail account. The check-in goes out from it, the resident reply comes back into it, the assisted reply goes out from it again. There is no second person and no second address.
 
-**792 spoken words across 7:18.** At a natural pace that is a little over five minutes of talking, leaving close to two and a half minutes where something is happening and nobody is speaking: fourteen drafts generating, an approval card arriving, a reply being typed live, and the two-second holds at every clip boundary. Those silences are the proof, and they are what makes each clip liftable.
+That is fine, and it is only fine if it is said. **One disclosure line in the LinkedIn text and one in the YouTube description, both mandatory:** one mailbox plays both sides, and in a real install the resident is on their own address with nothing else changing.
 
-**The first draft of this script ran 873 words against a 6:25 runtime**, which is wall-to-wall narration with no room for any of the silences the shoot rules require. It was trimmed rather than the runtime stretched, because a tighter demo is a better demo. If it needs to shrink again, take it out of clip 2. **Do not shorten clip 7.** That clip is the reason the video exists.
-
----
-
-## Rules of the shoot
-
-These exist so the footage cuts cleanly afterwards. They cost nothing while recording and cannot be fixed later.
-
-1. **Run `node scripts/v2/demo-start.js` first**, and clear the Telegram chat before opening it on camera. Old cards keep their old buttons and will behave in ways your narration does not match.
-2. **Start and end every clip on a still frame.** Two seconds with nothing moving and the cursor parked in a corner, before you speak and after you stop.
-3. **Never let a sentence cross a clip boundary.** Finish the sentence, stop talking, then stop moving, then leave three full seconds of silence before starting the next clip.
-4. **No back-references.** Never say "as I showed you", "like before", "that one from earlier", "now", or "next". Each of those makes a clip unusable on its own.
-5. **Name things rather than pointing at them.** "Avery Brooks at Cedar Row 9", not "this one here". The audio has to survive a vertical crop.
-6. **Set the window sizes once and never touch them.** No resizing, no zoom changes between clips.
-7. **Move or talk, never both.** Scroll in silence, hold still, then speak.
-8. **Use Telegram Desktop, not a phone frame.** Text has to be legible after LinkedIn's compression.
-9. **Never say "tenant".** Say resident. It is the single most audible tell of an outsider and it will cost you credibility with this audience in one word.
-10. **Do not narrate anything you have not just watched happen.** If a refusal did not appear on screen, do not describe one.
+It also settles what the copy may claim about matching. Replies are matched by the reference code carried in the subject line, not by who sent them and not by whether a message is unread. That is the answer if anyone asks how a single mailbox talks to itself without confusing the system. Never write anything suggesting a resident is recognized by their email address alone.
 
 ---
 
-## Script
+## What has to appear on screen, and does
 
-Each clip gives you **what to do**, in order, then the lines to say over specific steps. The doing is the script. The talking is the smaller half.
+| Surface | Segments | What it proves |
+|---|---|---|
+| Airtable | 1, 6, 9, 11 | The residents, the classified reply and the log live in the company's own base |
+| Manager Telegram | 2, 3, 4, 7, 8, 9 | Every decision is a button somebody pressed |
+| Gmail | 4, 5, 8, 9 | A resident installs nothing and replies to an ordinary email |
+| n8n | 10 | The wiring is real and inspectable, and the model wrote the words |
 
-### CLIP 1 · 0:00 to 0:38 · Forty residents and the eight with problems
+---
 
-**Windows:** Airtable, Leases table, full frame · **Standalone:** yes
+## What the recording contains
 
-**Do this**
+Eleven segments, in the order they were filmed. Timestamps are left blank because the cut is the authority on them. Fill them in once, here and in the YouTube chapters, and keep the two identical.
 
-1. Airtable open on the Leases table, all forty rows visible, `needs_attention` column in frame.
-2. Cursor parked bottom-right. Hold two seconds. Speak the first block with nothing moving.
-3. Scroll slowly to bring the eight flagged rows into view. Silence while scrolling.
-4. Hold still. Speak the second block. Hold two seconds. End.
+### Segment 1 · `__:__` · The lease export, and the four points where it asks
 
-**Say**
+**On screen:** Airtable, Leases table.
 
-> This is a lease export from a property management company. Forty residents, and the only thing on it that decides anything is the date each lease ends.
+**Carries:** what the problem is and what the system does about it. Residents are grouped by how far they are from their lease ending, and the check-ins happen at a hundred and twenty days, ninety, sixty and thirty.
 
-> *[after scrolling]* Eight of these rows have something wrong with them. A misspelled email domain, a duplicate unit, a date nobody can parse. None were dropped. They are still here with the reason next to them, waiting for a person, because the row you quietly delete is a resident nobody contacts.
+**Liftable:** yes, as setup only. There is no payoff inside it, so it is a weak standalone.
 
-### CLIP 2 · 0:38 to 1:10 · One field decides who gets contacted
+### Segment 2 · `__:__` · The draft, and four buttons that all need a finger
 
-**Windows:** Airtable, same frame · **Standalone:** yes
+**On screen:** Telegram, the Harborview demo alerts chat, the first ninety-day draft card with `Approve & Send`, `Skip`, `Edit wording` and `Next draft`.
 
-**Do this**
+**Carries:** a finished message that has not gone anywhere. The approval gate as an object rather than as a claim.
 
-1. Two seconds still. Move the cursor to rest on the `cohort` column header. Speak.
-2. Stop speaking. Move the cursor to the `lease_end_date` column. Silence while moving.
-3. Hold still. Speak the second block. Hold two seconds. End.
+**Liftable:** yes.
 
-**Say**
+### Segment 3 · `__:__` · I rewrite what the model wrote
 
-> These groups are residents at a hundred and twenty days from their lease ending, ninety, sixty and thirty.
+**On screen:** Telegram. `Edit wording` pressed, a sentence trimmed by hand, a fresh card arriving with the edited message and the same four buttons.
 
-> *[cursor on lease_end_date]* They come from this column and nothing else. Not payment history, not maintenance tickets, not tenure. A smarter version could rank residents by risk. I did not build that, because once who gets contacted depends on behavior, somebody has to explain that choice later.
+**Carries:** the human is not rubber-stamping. The wording is editable right up to the moment of approval.
 
-### CLIP 3 · 1:10 to 1:52 · Fourteen drafts, and not one of them mentions rent
+**Liftable:** yes. **Assigned to post 7**, with segment 4.
 
-**Windows:** manager Telegram · **Standalone:** yes
+### Segment 4 · `__:__` · Approve, and my version is the one that arrives
 
-**Do this**
+**On screen:** Telegram, `Approve & Send` pressed, then Gmail with the received check-in open.
 
-1. Telegram open, the generation summary card as the last message, the Avery Brooks approval card visible under it.
-2. Two seconds still. Speak the first block with nothing moving.
-3. Scroll down so the full draft body on the approval card is readable. Silence while scrolling.
-4. Hold still. Speak the second block. Hold two seconds. End.
+**Carries:** the edit survived. What is in the inbox is the trimmed sentence, not the model's original. This is the most useful thing in the recording, because it makes the editable field visible instead of asserted.
 
-**Say**
+**Liftable:** yes. **Assigned to post 7**, with segment 3.
 
-> Fourteen residents are ninety days out. That took about twenty five seconds and it wrote a different message for each of them.
+### Segment 5 · `__:__` · The reply that reads like good news
 
-> *[on the draft body]* Read what it says to Avery Brooks. Her name, three years at Cedar Row 9, and one open question. What it does not mention is rent, renewal terms, a deadline, or a number of any kind. That is not the model being tasteful. Those words are blocked, and a draft containing them never reaches me.
+**On screen:** Gmail. The reply typed live and sent: `We're happy here but the extractor fan in the bathroom has been broken since summer and I've reported it twice.`
 
-### CLIP 4 · 1:52 to 2:24 · Fourteen finished messages, doing nothing
+**Carries:** the message the whole build exists for. A complaint wearing a compliment, written the way people actually write.
 
-**Windows:** manager Telegram, same frame · **Standalone:** yes, and the strongest spare in the bank
+**Liftable:** yes, and it is the best clip in the recording. Pairs with segment 7.
 
-**Do this**
+### Segment 6 · `__:__` · The record fills in
 
-1. Two seconds still. Speak the first block, nothing moving.
-2. Press `Next draft`. Hold on the new card for two seconds in silence.
-3. Press `Next draft` again. Hold two seconds.
-4. Hold still. Speak the second block. Hold two seconds. End.
+**On screen:** Airtable, Leases table, the Avery Brooks row updated with status, intent, urgency and grievance category.
 
-**Say**
+**Carries:** the reply became structured data in the company's own base, next to the resident it belongs to.
 
-> There are fourteen finished messages sitting in this company's Airtable right now, and every one of them is doing nothing at all, because no person has approved any of them.
+**Liftable:** yes, but only with segment 5 in front of it. Alone it is a screenshot of columns.
 
-> *[after paging through two]* I can walk the queue and approve them one at a time, or not. Ignoring this is a decision the system accepts. Nothing goes out on a timer.
+### Segment 7 · `__:__` · The alert, and what it decided
 
-### CLIP 5 · 2:24 to 3:12 · One approval, one email, and a refused second tap
+**On screen:** Telegram, the at-risk card summarizing the reply, with `Draft my reply` and `Mark resolved`.
 
-**Windows:** manager Telegram, then the resident mailbox · **Standalone:** yes
+**Carries:** the classification landing in front of the manager as a summary rather than as a raw email.
 
-**Do this**
+**Liftable:** yes, with segment 5.
 
-1. On the Avery Brooks card, press `Approve & Send`. **Wait on screen** for the confirmation rather than cutting to it. Hold two seconds.
-2. Speak the first block.
-3. Press `Approve & Send` on the same card a second time. Wait for the refusal. Hold two seconds.
-4. Speak the second block.
-5. Switch to the resident mailbox, open the received email so the body and the reference code in the subject are readable. Hold two seconds, speak the last block. Hold two seconds. End.
+### Segment 8 · `__:__` · It writes the reply, I send it
 
-**Say**
+**On screen:** Telegram, `Draft my reply` pressed, the suggested reply arriving with `Send reply`, `Discard` and `Edit wording`. `Send reply` pressed. Then Gmail with the reply received.
 
-> That is one email, to one resident, because I pressed the button on that specific message.
+**Carries:** the assist. The model drafts, a person sends, and the resident gets an email.
 
-> *[after the refusal]* Pressing it again does nothing. It checked her status before sending, she was already sent, so it stopped. A nervous double tap cannot email a resident twice.
+**Liftable:** yes.
 
-> *[in the mailbox]* And that is what she receives. Plain text, signed by the property manager, with a reference code in the subject line that matters later.
+### Segment 9 · `__:__` · The next resident, all the way through
 
-### CLIP 6 · 3:12 to 3:56 · It refuses my wording, not just the model's
+**On screen:** Telegram, `Next draft` pressed on the edited card, a new card for the next ninety-day resident with the same four buttons. Then Gmail, a reply sent as that resident. Then Airtable, that resident's row updating.
 
-**Windows:** manager Telegram · **Standalone:** yes · **Assigned to post 7**
+**Carries:** the loop repeats. It is a queue with more than one person in it, and the second pass behaves exactly like the first.
 
-Post 7 is built on this audio. Say it cleanly and do not fluff the first sentence.
+**Liftable:** yes, and it is the strongest spare in the bank.
 
-**Do this**
+### Segment 10 · `__:__` · The wiring, and the model doing the writing
 
-1. On a draft card, press `Edit wording`. Hold on the prompt for two seconds.
-2. **Type the unsafe wording live**, at readable speed. Do not paste: `Your rent goes up to $1,850 in January, sign the renewal by the deadline.`
-3. Send. Wait on screen for the refusal. Hold two seconds.
-4. Speak, with nothing moving. Hold two seconds. End.
+**On screen:** n8n, the executions for the outreach generation and for the approval cards, opened, then the OpenAI node with the generated subject and body visible.
 
-**Say**
+**Carries:** this is a real system, and the messages were written by a model rather than pulled from a template file. Anyone who suspected mail-merge gets their answer here.
 
-> I can rewrite any of these myself, either here or in Airtable, and whatever the record says at the moment I approve it is what gets sent.
->
-> *[after the refusal]* So I just tried to send a resident a rent increase and a deadline. It refused, and it listed what was wrong with it. The checks run when the model writes a draft, and they run again on the way out, against whatever the record holds by then. They are not checking the AI. They are checking the message.
+**Liftable:** yes, for a builder audience specifically.
 
-### CLIP 7 · 3:56 to 5:04 · The reply that reads like good news
+### Segment 11 · `__:__` · Everything that was sent, written down
 
-**Windows:** resident mailbox, then manager Telegram · **Standalone:** yes, and the most valuable clip in the recording
+**On screen:** Airtable, Outreach Log table.
 
-This is the whole reason the video exists. If any clip is worth a second take, it is this one.
+**Carries:** the audit trail. Every message and every email is a row, which is what makes the rest of it defensible after the fact.
 
-**Do this**
-
-1. In the resident mailbox, hit Reply on the check-in. Leave the subject untouched.
-2. **Type the reply live**, at readable speed: `We're happy here but the extractor fan in the bathroom has been broken since summer and I've reported it twice.`
-3. Send. Hold on the sent message two seconds. Speak the first block.
-4. Cut to manager Telegram with an on-screen card reading **"about a minute later"**. The wait is real and the card keeps the cut honest.
-5. The at-risk alert is on screen. Hold two seconds. Speak the second block with nothing moving.
-6. Hold two seconds. End.
-
-**Say**
-
-> Here is Avery replying, the way anyone replies to an email. She has not installed anything and she is not logged into anything.
->
-> *[on the alert, after the time card]* Read her first four words. We're happy here. Most people scanning forty of these would file that as a good reply and move on, and so would anything scoring sentiment.
->
-> What came through instead is a maintenance grievance, marked high urgency, with an instruction to check the work order history and call her today. Because the part that matters is in the back half of the sentence. It has been broken since summer, and she reported it twice. She already used the process, and the process did nothing. That is the resident who does not renew, and she is being polite about it.
-
-### CLIP 8 · 5:04 to 5:46 · It writes the reply, I send it
-
-**Windows:** manager Telegram, then the resident mailbox · **Standalone:** yes
-
-**Do this**
-
-1. Press `Draft my reply`. Wait on screen for the drafted card. Hold two seconds.
-2. Speak the first block while the draft is readable, nothing moving.
-3. Press `Send reply`. Hold two seconds.
-4. Switch to the resident mailbox, show the received reply. Hold two seconds, speak the last block. Hold two seconds. End.
-
-**Say**
-
-> It has written the reply for me. It names the fan, it acknowledges that she reported it twice, and it says what happens next.
->
-> What it does not do is promise a date, a cost, or an outcome, because those are the three things that turn a maintenance email into a commitment. Those are blocked as well.
->
-> *[after sending, in the mailbox]* That reaches her because I pressed send on that specific message. Same rule as the first one.
-
-### CLIP 9 · 5:46 to 6:30 · Closing it, and the money moving
-
-**Windows:** manager Telegram, then Airtable · **Standalone:** yes
-
-**Do this**
-
-1. Press `Mark resolved`. Wait for the card. Hold two seconds. Speak the first block.
-2. Press `Send confirmation`. Hold two seconds.
-3. Switch to Airtable, Metrics table, exposure figures in frame. Hold two seconds. Speak the second block. Hold two seconds. End.
-
-**Say**
-
-> Someone fixed the fan, so I close it. It records how long that took and writes one more message asking her to confirm it is sorted, which I approve like everything else.
->
-> *[in Airtable, on Metrics]* This is the part an owner asks for. Issues found, issues closed, how long they took, and the turnover cost attached to residents currently at risk. That is exposure surfaced and exposure recovered. It is not money earned, and I would not present it that way.
-
-### CLIP 10 · 6:30 to 7:18 · What it does not do
-
-**Windows:** n8n editor, then manager Telegram · **Standalone:** yes · **Optional close for post 7**
-
-**Do this**
-
-1. n8n open on the workflow list, five workflows visible. Hold two seconds. Speak the first block, panning slowly once.
-2. Switch to manager Telegram, the chat visible with the approved messages. Hold two seconds.
-3. Speak the second block with nothing moving. Hold three seconds. End.
-
-**Say**
-
-> Five workflows, and one of them is the only thing in here that can email a resident. It has no path that runs without a button being pressed first.
->
-> *[in Telegram]* It does not price a renewal, does not predict who will renew, does not write into a property management system, and will not send a resident anything without a person approving that exact message.
->
-> Everything here is synthetic. Made up residents, one controlled mailbox. Nobody real was contacted, and there is no client yet. This would be the first.
+**Liftable:** yes, and it is the natural close.
 
 ---
 
 ## Clip bank
 
-What each clip is worth once the recording is done, so short-form posts can be assembled without filming anything again.
+What each segment is worth for short-form posts, so nothing has to be filmed again.
 
-| Clip | Runtime | Standalone | Assigned to |
-|---|---|---|---|
-| 1 Forty residents and the eight with problems | 38s | yes | spare |
-| 2 One field decides who gets contacted | 32s | yes | spare, pairs with post 9 |
-| 3 Fourteen drafts, none mention rent | 42s | yes | spare |
-| 4 Fourteen messages doing nothing | 32s | yes, strongest spare | spare |
-| 5 One approval, one email, refused second tap | 48s | yes, trim to about 30s | spare |
-| 6 It refuses my wording | 44s | yes | **post 7, whole post** |
-| 7 The reply that reads like good news | 68s | yes, do not trim below 50s | spare, and the best one |
-| 8 It writes the reply, I send it | 42s | yes | spare |
-| 9 Closing it, and the money moving | 44s | yes | spare |
-| 10 What it does not do | 48s | yes | **post 7, optional close** |
+| Segment | Standalone | Assigned to |
+|---|---|---|
+| 1 The lease export and the four points | weak, setup only | spare |
+| 2 The draft and four buttons | yes | spare |
+| 3 I rewrite what the model wrote | yes | **post 7**, with 4 |
+| 4 Approve, and my version arrives | yes | **post 7**, with 3 |
+| 5 The reply that reads like good news | yes, the best one | spare |
+| 6 The record fills in | only behind 5 | spare |
+| 7 The alert and what it decided | yes, with 5 | spare |
+| 8 It writes the reply, I send it | yes | spare |
+| 9 The next resident, all the way through | yes, strongest spare | spare |
+| 10 The wiring and the model writing | yes, builder audience | spare |
+| 11 Everything written down | yes | spare |
 
-Post 7 is clip 6 alone, or clip 6 plus the last block of clip 10 if a limits line is wanted. Everything marked standalone is a spare, available if another short is wanted later without a reshoot.
+Post 7 is segments 3 and 4 joined. Everything else is available if another short is wanted later, and none of it needs a reshoot.
 
 ---
 
@@ -697,21 +606,23 @@ Post 7 is clip 6 alone, or clip 6 plus the last block of clip 10 if a limits lin
 >
 > Read the first four words and you file it under good news. Most people scanning forty replies would, and so would anything scoring sentiment.
 >
-> The back half is the part that costs you the renewal. It has been broken since summer, so it stopped being a repair a while ago. And she reported it twice, which means she already used your process and your process did nothing. She is telling you that as politely as it is possible to tell someone.
+> The back half is what costs you the renewal. It stopped being a repair a while ago, and she reported it twice, which means she already used your process and your process did nothing. She is telling you that about as politely as it is possible to tell anyone.
 >
-> Seven minutes of a build that asks every resident one open question ninety days before their lease ends, then reads what comes back.
+> The video is a walkthrough of a build that asks every resident one open question ninety days before their lease ends, then reads what comes back.
 >
-> Three parts I would watch for:
+> Three things worth watching for:
 >
-> The bit where I try to send a resident a rent increase and a deadline, and it refuses, because the checks run again on the way out against whatever I typed.
+> The draft arrives with four buttons and not one of them fires on its own. I rewrite the wording by hand, the system redrafts it, and the version that lands in her inbox is mine rather than the model's.
 >
-> Fourteen finished messages sitting in a company's Airtable doing nothing, because nobody approved them.
+> Her reply comes back as an ordinary email and turns into intent, urgency and a grievance category sitting next to her name in Airtable.
 >
-> The moment the issue gets closed and the turnover cost moves from at risk to recovered.
+> Then the same thing happens with the next resident, because it is a queue and nothing in it moves until somebody taps approve.
 >
-> Groups come from the lease end date and nothing else. No payment history, no ticket counts, nothing about the person.
+> Who gets contacted comes from the lease end date. No payment history, no ticket counts, nothing about the person.
 >
-> All of it synthetic. Made up residents, one controlled mailbox. Nobody real was contacted to make this, and there is no client yet. This would be the first.
+> What it does not do: it does not price a renewal, it does not predict who will renew, it does not write into a property management system, and it will not send a resident anything without a person approving that specific message.
+>
+> All of it is synthetic. Made up residents, and one mailbox playing both sides, mine. In a real install the resident is on their own address and nothing else changes. Nobody real was contacted to make this, and there is no client yet. This would be the first.
 
 ---
 
@@ -739,25 +650,28 @@ First person, honest, no product claim. Weakest hook, decent search match.
 
 ## YouTube description
 
-The first two lines are what shows before "show more". Everything load-bearing goes there.
+The first two lines are what shows before "show more". Everything load-bearing goes there. Fill the chapter timestamps from the final cut and keep them identical to the segment list above.
 
 > The renewal conversation usually starts with an offer, which means the first thing you hear back is about the price. This is a walkthrough of an automation that asks a different question ninety days out, reads what comes back, and stops for a human before anything reaches a resident.
 >
 > Built for a US residential property management company on tools they already own: Airtable, Telegram and email, orchestrated with self-hosted n8n. There is no app for residents to install, no portal, and no dashboard to log into. Residents reply to an email the way they reply to any email.
 >
 > Chapters
-> 0:00 Forty residents, and the eight rows with problems
-> 0:38 One field decides who gets contacted
-> 1:10 Fourteen drafts, and not one mentions rent
-> 1:52 Fourteen finished messages, doing nothing
-> 2:24 One approval, one email, and a refused second tap
-> 3:12 It refuses my wording, not just the model's
-> 3:56 The reply that reads like good news
-> 5:04 It writes the reply, I send it
-> 5:46 Closing the issue, and the money moving
-> 6:30 What it does not do
+> `__:__` The lease export, and the four points where it asks
+> `__:__` The draft, and four buttons that all need a finger
+> `__:__` Rewriting what the model wrote
+> `__:__` Approving it, and the edited version arriving
+> `__:__` The reply that reads like good news
+> `__:__` The record fills in
+> `__:__` The alert, and what it decided
+> `__:__` It writes the reply, I send it
+> `__:__` The next resident, all the way through
+> `__:__` The wiring, and the model doing the writing
+> `__:__` Everything that was sent, written down
 >
 > What it does not do: it does not price a renewal, it does not predict who will renew, it does not write into your property management system, and it never contacts a resident without a person approving that specific message.
+>
+> One mailbox plays both sides in this recording, mine. In a real install the resident replies from their own address and nothing else changes. Replies are matched by the reference code in the subject line rather than by who sent them.
 >
 > The data in this video is synthetic. It is a working build running against test fixtures, not a client's live portfolio. There is no client yet.
 >
@@ -765,30 +679,30 @@ The first two lines are what shows before "show more". Everything load-bearing g
 
 ---
 
-## Capture checklist
+## Before this goes up
 
-Run in order. Items 1 to 4 cannot be fixed after recording.
+The shoot is done, so this is a review list rather than a capture list. Items 1 and 2 are the ones that can still cost something.
 
-1. `node scripts/v2/demo-start.js` completes and reports fourteen drafted, zero needing wording.
-2. **Telegram chat cleared.** A stale card with old buttons will behave in ways the narration does not match, and this has already happened once during testing.
-3. Resident mailbox open on the demo address, previous threads out of frame.
-4. Airtable open on the Leases table with `needs_attention` and `cohort` both visible without horizontal scrolling.
-5. Window sizes set once. Telegram Desktop, not a phone frame.
-6. Notifications silenced everywhere, including the phone on the desk.
-7. Record clip 7 before clip 6 if the guardrail refusal needs more than two attempts, so the best clip gets the freshest take.
-8. After recording, confirm clip 6 exists and is usable. **If it does not, post 7 drops from video to text** and the plan already says so.
+1. **Watch the audio for the word "tenant."** Shoot rule 9 existed because it is the most audible tell of an outsider and this audience hears it in one word. If it is spoken, cut around it or drop the segment it sits in. Do not paper over it with a subtitle reading resident while the audio says tenant.
+2. **Check that nothing spoken on camera claims a moment the footage does not show.** The refusal, the duplicate-tap block, the exposure figures and the generation time are all out of the copy. If any of them is narrated in the audio, that segment needs a trim.
+3. Subtitles burned in for LinkedIn. The Telegram card text and the Airtable column values are small, and compression is unkind to both.
+4. Timestamps filled in once, in the segment list and the YouTube chapters, from the same pass.
+5. The two disclosure lines present and unbudged: one mailbox, and no client.
+
+**For a future recording, if there ever is one.** The four things worth adding are the eight flagged roster rows, a second approval tap being refused, the unsafe-wording refusal, and `Mark resolved` closing the loop. Each is real in the build and each would earn its place. None of them justifies reshooting what already works.
 
 ---
 
 ## Discipline check
 
-- Every number spoken on camera traces to something visible in the frame. No industry statistics are quoted in the video at all, which keeps the recording free of anything a viewer cannot check for themselves.
-- Clip 10 states there is no client, out loud, in the video. The LinkedIn text and the YouTube description both repeat it.
-- Nothing is called a product, a platform or a dashboard. The word "software" is never spoken.
-- "Resident" throughout. Shoot rule 9 exists because one slip costs credibility with this audience.
-- The exposure figure in clip 9 is described as surfaced and recovered, never as money earned. That distinction is in `customer-language.md` and it is the easiest thing in this build to overclaim.
-- Clip 7 uses an on-screen time card for the wait rather than a silent cut. The wait is real, the automation takes about a minute, and hiding that would be the one dishonest edit available in this recording.
-- No competitor is named or implied anywhere in the video. Post 13 does that work, in a format where the nuance survives.
+- **Nothing in the copy describes a moment the recording does not contain.** Four claims were removed for that reason: the generation time, the refused second tap, the guardrail refusing unsafe wording, and the exposure figure moving from at risk to recovered. Every one of those is true of the build and none of them is on camera.
+- Every number that survives traces to something visible in the frame. No industry statistics are quoted in the video.
+- **The limits and the no-client disclosure are not spoken on camera**, so the LinkedIn text and the YouTube description carry them and neither may be trimmed for length.
+- **One mailbox is disclosed in both places.** A viewer who works that out for themselves after not being told has been misled, whether or not anything false was said.
+- No exposure, recovery or money-moved language anywhere in the copy attached to this video. That distinction is in `customer-language.md` and it is the easiest thing in this build to overclaim.
+- Nothing is called a product, a platform or a dashboard, and the word "software" is never used.
+- "Resident" throughout the written copy. The audio needs the check in item 1 above.
+- No competitor is named or implied. Post 13 does that work, in a format where the nuance survives.
 
 ---
 
@@ -1105,7 +1019,7 @@ What does transfer is its anti-pattern instinct, and that part is genuinely usef
 
 Everything below applies those four and ignores the rest. **Future builds should either re-scope this step to a static-image skill or drop it**, rather than carrying a web-UI skill through a fifth plan.
 
-**Post 7 is a cut from the demo**, not a shoot. Same constraint as build 3: a post can only be video if that moment already exists in the demo footage, saying out loud what the post needs said. Nothing is filmed twice and nothing is narrated twice.
+**Post 7 is a cut from the demo**, not a shoot. Same constraint as build 3: a post can only be video if that moment already exists in the demo footage. Nothing is filmed twice and nothing is narrated twice. **The demo has now been recorded and it does not contain the moment this post was originally built on**, so the post has been rebuilt on footage that does exist. The rewrite below explains what changed and why the argument survives it.
 
 ---
 
@@ -1113,57 +1027,61 @@ Everything below applies those four and ignores the rest. **Future builds should
 
 **Format:** native video, roughly 45 seconds, cut from the demo · **Pillar:** failure lessons · **CTA:** none
 
-**No shoot, no new audio, no voiceover.** This post is demo clip 6 (It refuses my wording, 3:12 to 3:56) carrying its original audio exactly as recorded. Batch 2 writes that clip to stand alone, which is what makes this an edit rather than a second recording session.
+**Rebuilt on 2026-08-29 against the footage that exists.** The original version of this post was demo clip 6, in which unsafe wording is typed into a resident message and the guardrail refuses it. **That moment was never recorded.** The edit made on camera is a safe trim of a sentence, and no refusal appears anywhere in the video.
+
+The plan permitted this post dropping to text if the clip did not exist. It does not need to, because the recording contains something that carries the same argument: the manager rewriting a draft by hand and that rewritten wording arriving in the resident's inbox. That is the editable field, on screen, doing exactly the thing the defect was about. **What is missing is the refusal, not the point.**
+
+**No shoot, no new audio, no voiceover.** The clip carries its original demo audio.
 
 ### Assembly
 
-| Order | Source | Runtime | On-screen text |
-|---|---|---|---|
-| 1 | Demo clip 6, whole, from its first frame | 44s | `I tried to send this. It said no.` held over the first 4 seconds |
-| 2 | Optional tail: the last block of demo clip 10 | 12s | none |
+| Order | Source | On-screen text |
+|---|---|---|
+| 1 | Demo segment 3, whole: `Edit wording`, the sentence trimmed by hand, the redrafted card arriving | `The AI wrote this. I rewrote it.` held over the first 4 seconds |
+| 2 | Demo segment 4, whole: `Approve & Send`, then the received email in Gmail | `Mine is what went out.` held as the inbox lands |
 
-Roughly 45 seconds on its own, or 58 with the optional tail. **Use the short version first.** The tail adds a limits line, which is useful in isolation but dilutes a post whose whole argument is one specific defect.
+Roughly 45 seconds joined, depending on how long the typing runs. **Trim inside segment 3 if it needs to be shorter**, never inside segment 4, because the inbox is the proof and everything before it is setup.
 
 ### Why this clip
 
-The post makes one argument and the footage already contains all of it: unsafe wording typed live, a refusal appearing on screen, and the reason stated out loud. Nothing has to be explained over the top, which is the test for whether a clip can carry a post.
+The post argues that a check which runs at draft time and not at send time is not really a check, because a person can rewrite the message in between. The footage shows a person rewriting the message in between, and then shows the rewritten version landing in a resident's inbox. A viewer who watches that does not need the defect explained to them; they can see where it would live.
 
-The hook is the typing. A viewer watching somebody deliberately type a rent increase into their own system knows exactly where it is going and stays for the refusal.
+The hook is watching somebody edit an AI's words and then watching their own words arrive somewhere real. That is a satisfying forty five seconds even for a viewer who does not care about validation timing.
 
 ### Edit notes
 
-- **Original demo audio only.** If clip 6's audio is unusable, re-record it as part of the demo, not as a voiceover for this post.
-- Hard cuts at both ends. Clip 6 already opens and closes on still frames.
-- Subtitles burned in, mandatory. Two lines maximum, three to five words per line. The refusal text on screen is small and the subtitles are what carry it after compression.
-- Original audio only. No music bed, no trending sound.
-- For a vertical crop, crop to the Telegram message column rather than the full window. The refusal message survives 9:16; the surrounding chrome does not.
-- **If clip 6 does not exist in the footage, this post becomes text.** The plan permits that and the capture checklist in batch 2 makes it the last item for that reason.
+- **Original demo audio only.** No voiceover, no music bed, no trending sound.
+- **The refusal is not in this footage and must not be implied.** No caption saying it refused, no red overlay, no cutaway to an error state, no subtitle describing a block that the viewer cannot see. The post text states the fix in words and says outright that it is not visible in the clip.
+- Hard cuts at both ends. Both segments open and close on still frames.
+- Subtitles burned in, mandatory. Two lines maximum, three to five words per line. The Telegram card text and the email body are small and they are the whole payload.
+- For a vertical crop, crop to the Telegram message column and then to the email body. The surrounding chrome does not survive 9:16 and does not need to.
+- **If the demo is ever reshot with the unsafe-wording refusal in it**, that version replaces this one and is stronger, because the refusal is the fix and this clip only shows the gap the fix closes.
 
 ### LinkedIn post text
 
-> The checks in this thing run when the model writes a draft. They did not run when the message was sent.
+> The checks in this thing ran when the model wrote a draft. They did not run when the message was sent.
 >
 > Between those two moments sits an editable field.
 >
-> A manager can rewrite any draft, in Airtable or straight from the chat, and whatever the record says at the moment of approval is what goes out. So it was checking the AI's words carefully and then sending whatever a human typed over the top of them, unchecked.
+> In the clip I rewrite a resident check-in by hand, the system redrafts it, I approve it, and the copy that arrives in her inbox is mine. None of that is unusual. It is the entire point of having a person in the loop.
+>
+> It is also the hole. The rules that block rent, renewal terms, deadlines and money were doing careful work on the model's sentences, and then handing the send over to whatever I had typed on top of them. It was checking the AI and not checking the message.
 >
 > The boundary existed. It was guarding the wrong instant.
 >
-> In the clip I type a rent increase and a signing deadline into a resident message on purpose, and it refuses, listing what is wrong with it. That refusal is the fix, not the original design.
+> The fix is not something you can watch, which is the honest thing to say about it: the same checks now run again at approval, against whatever the record holds by then, so an edited message gets checked exactly like a generated one.
 >
 > The general version of this is worth ten minutes on anything you have automated.
 >
-> Find the last point where your system checks something. Then ask what a person can change after that point. Everything in that gap is running on trust, and it is usually a bigger gap than anyone expects, because validation gets attached to the moment data is created rather than the moment it is used.
+> Find the last point where your system checks something. Then ask what a person can change after that point. Everything in that gap is running on trust, and it is usually a wider gap than anyone expects, because validation gets attached to the moment data is created rather than the moment it is used.
 >
 > Mine was about four seconds wide and a whole approval workflow long.
->
-> The rules are the same rules either way. Rent, renewal terms, deadlines, money. What changed is that they now run twice, and the second time is the one that matters, because by then the message is whatever a human decided it should be.
 
 ### Discipline check
 
-- **Build 2 post 9 owns what an automation should and should not say to a resident.** This post does not re-argue the contents of the boundary. Its lesson is about timing, and the banned wording is named once in the last paragraph without being justified.
-- The refusal shown is real and appears on screen. Nothing is described that the footage does not contain.
-- The post says plainly that the refusal is the fix rather than the original design. Presenting it as a feature would be the dishonest version.
+- **Build 2 post 9 owns what an automation should and should not say to a resident.** This post does not re-argue the contents of the boundary. The lesson is about timing, and the banned wording is named once, in passing, without being justified.
+- **Nothing is described that the footage does not contain.** The edit, the redraft, the approval and the received email are all on screen. The refusal is not, and the post says so in its own words rather than hoping nobody notices.
+- The post says plainly that the second check is the fix rather than the original design. Presenting it as a feature would be the dishonest version.
 - No product named, and the transferable question in the middle works on any automated system.
 
 ---
@@ -1285,8 +1203,9 @@ One column header at the top, and a struck-through list of everything deliberate
 | US spelling | Checked: behavior, labeled |
 | Resident, not tenant | No instance of "tenant" |
 | Client results implied | None |
-| Word counts | Post 7 text 245, post 5 228, post 9 255 |
-| Video posts carry no new audio | Post 7 is demo clip 6 with its original audio |
+| Word counts | Post 7 text 236, post 5 228, post 9 255 |
+| Video posts carry no new audio | Post 7 is demo segments 3 and 4 with their original audio |
+| Claims match the footage | Post 7 states in its own text that the fix is not visible in the clip |
 | Image posts specify treatment, not just content | Both carry a design discipline paragraph |
 
 **Collision audit:**
@@ -1296,7 +1215,7 @@ One column header at the top, and a struck-through list of everything deliberate
 - Post 9 makes no legal claim. Post 6 carries the fair-housing material with its disclaimers.
 - No duplicate-protection material anywhere in this batch.
 
-**Shoot dependency, restated.** Post 7 exists only if demo clip 6 does. The batch 2 capture checklist ends by confirming that clip is usable, and the plan already permits post 7 dropping to text. **Do not reshoot for it.** If the footage is not there, the argument works fine as text and loses only the moment of watching somebody try to sabotage their own system.
+**Shoot dependency, resolved.** The demo was recorded without the unsafe-wording refusal, so post 7 no longer rests on it. It is now demo segments 3 and 4, the manager rewriting a draft and that rewritten wording arriving in the resident's inbox, which is the editable field the defect lived in. **Do not reshoot for it.** The one thing the post gives up is the moment of watching somebody try to sabotage their own system, and the post text compensates by naming the fix and saying outright that it is not on screen.
 
 ---
 
@@ -1307,7 +1226,7 @@ All fifteen posts are written.
 | Batch | Posts | Format |
 |---|---|---|
 | 1 | 1, 3, 6, 13 | Document carousels |
-| 2 | 2 | The demo video, ten clips |
+| 2 | 2 | The demo video, eleven segments, recorded |
 | 3 | 7, 5, 9 | One video cut, two single images |
 | 4 | 4, 8, 10, 11, 12, 14, 15 | Text |
 
@@ -1315,4 +1234,6 @@ All fifteen posts are written.
 
 The first is that primary practitioner voice was never reached. Reddit is blocked, BiggerPockets and the multifamily groups need logins, and retention is a category where most of what ranks is vendor content marketing. Every number in these scripts traces to a named survey, but the tone is not verified against how a property manager actually talks about a resident who left quietly. That is worth a pass if a source ever opens up.
 
-The second is that there is no client. Posts 2, 14 and 15 each say so directly, in three different formats, which is deliberate rather than repetitive.
+The second is that there is no client. Posts 2, 14 and 15 each say so directly, in three different formats, which is deliberate rather than repetitive. For post 2 that disclosure now lives only in the written copy, because it was not spoken on camera, so the LinkedIn text and the YouTube description both have to carry it.
+
+**Recording deviation, 2026-08-29.** Batch 2 was rewritten to match the demo as it was actually recorded rather than as it was scripted, and batch 3 post 7 was rebuilt on the footage that resulted. The full list of differences is in the "What changed against the original script" table in batch 2. The four claims that left the copy for lack of footage are the generation time, the refused second approval tap, the guardrail refusing unsafe wording, and the exposure figure moving from at risk to recovered. All four remain true of the build and none of them may appear in copy attached to this video.
