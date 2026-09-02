@@ -1,7 +1,7 @@
 # LinkedIn Content Plan
 
 Created: 2026-08-01
-Revised: 2026-08-02
+Revised: 2026-08-02, 2026-08-06, and 2026-08-09
 
 Fifteen posts: one demo video, fourteen supporting. Each brief carries the elements a script needs, so turning one into a draft is a writing job, not a thinking job. Finished copy lives in `linkedin-post-scripts.md`.
 
@@ -17,6 +17,17 @@ Two corrections:
 2. **A new pillar: AI buying literacy.** These buyers are being pitched AI by everyone right now and have no way to evaluate any of it. That asymmetry is real, current, and mine to teach into honestly. It also positions without being about me, which is the thing the seller-centric pillars could never do.
 
 A note on what content is for here. Engagement and outcomes are different machines. Comments drive distribution, and *who* comments decides who sees the post next, so a post pulling engineer comments makes the audience problem worse. Six comments from property managers beats sixty from developers. Nothing in this plan is optimized for engagement volume.
+
+## What changed in the 2026-08-06 revision
+
+Only one video is being recorded: the demo. The short video posts are cuts from that same recording, with no separate shoot and no separate voiceover.
+
+That forced two changes, because both short videos described footage the demo does not contain.
+
+- **Post 9** was "The boxes on a certificate that matter", which needed a certificate walked box by box. It is now a clip of the approval gate, which the demo does contain and which the demo script itself calls the emotional centre of the video. Its pillar moved from insurance domain literacy to AI buying literacy.
+- **Post 12** was a before-and-after of the dashboard chase column. That footage was never filmed. The finding needs no visual, so the post moves to text with the lesson intact.
+
+The insurance research behind the old post 9 is preserved in `linkedin-post-scripts.md` rather than deleted, in case it is ever built as a single annotated image.
 
 ## What is being sold
 
@@ -46,10 +57,12 @@ Posts 6–15 assume the reader knows what a certificate of insurance is. Publish
 
 | Format | Count | Posts |
 |---|---|---|
-| Text | 6 | 3, 5, 6, 8, 10, 15 |
+| Text | 7 | 3, 5, 6, 8, 10, 12, 15 |
 | Document carousel | 4 | 1, 4, 7, 13 |
-| Native video | 3 | 2 (demo), 9, 12 |
+| Video | 2 | 2 (the demo), 9 (a clip of it) |
 | Single image | 2 | 11, 14 |
+
+**Only one video gets recorded.** Post 2 is the demo. Post 9 is a clip cut out of that same recording, not a second shoot, and no separate voiceover is recorded for it. That constraint is the reason post 12 is text: the footage its argument needed was never filmed, and the finding does not need a visual. Anything proposed as a future video post has to already exist inside the demo recording, or it is not a video post.
 
 Carousels carry the explaining — they are the best format for making an unfamiliar domain legible, which is exactly what the gateway posts need. Video carries trust, which is what a stranger overseas needs most. Text is the backbone and the cheapest to produce, which matters when the same person is also building.
 
@@ -57,8 +70,8 @@ Carousels carry the explaining — they are the best format for making an unfami
 
 | Pillar | Count | Posts | Job |
 |---|---|---|---|
-| AI buying literacy | 4 | 1, 3, 4, 13 | How to evaluate and buy automation, from the person who builds it. Nobody else in their feed can write these honestly |
-| Insurance domain literacy | 5 | 6, 7, 9, 10, 11 | What a certificate does and does not prove. Unfakeable, and genuinely useful to someone never trained in insurance |
+| AI buying literacy | 5 | 1, 3, 4, 9, 13 | How to evaluate and buy automation, from the person who builds it. Nobody else in their feed can write these honestly |
+| Insurance domain literacy | 4 | 6, 7, 10, 11 | What a certificate does and does not prove. Unfakeable, and genuinely useful to someone never trained in insurance |
 | Failure lessons anyone can apply | 3 | 8, 12, 14 | Things I got wrong that generalize to any system they own. The lesson is theirs, the story is mine |
 | Proof and operating model | 2 | 2, 5 | The work is real, and this is a service rather than a product |
 | The ask | 1 | 15 | The only real CTA |
@@ -259,23 +272,31 @@ Assume the reader knows what a certificate of insurance is. Publish once industr
 
 ---
 
-## 9. The boxes on a certificate that matter, and the one that misleads everyone
+## 9. It drafted the email, then stopped and waited
 
-**Format:** native video, 75 seconds · **Framework:** Hook / Body / Close, 0–3s hook · **Pillar:** insurance domain literacy · **CTA:** none
+**Format:** video clip cut from the demo recording, 35–50 seconds · **Pillar:** AI buying literacy · **CTA:** none
 
-**Replaces "The locked PDF that disappears," cut 2026-08-02.** That video showed my system's behavior with an unopenable file. A property manager learned nothing they could apply anywhere else.
+**Re-topiced 2026-08-06.** Was "The boxes on a certificate that matter." That post required footage of a certificate being walked box by box, and no such footage exists. Only one video is being recorded, the demo, and the short posts are cuts from it.
 
-**Hook angle:** A certificate on screen in the first second, cursor already moving to a box. State that most of this page does not matter and one box on it gets misread constantly.
+**Hook angle:** Open on the pause. The automation has just written a reminder email and it is sitting there, unsent, waiting for a person.
 
-**The turn:** The coverages table is the part that carries facts: effective and expiration dates, limits, policy numbers, per line. The Description of Operations box is free text, and free text is where the misreading happens. Wording in that box saying a company is additional insured does not make it so. Only a carrier-issued endorsement does that.
+**The turn:** Accuracy is what people ask about when they are buying automation. The question that actually decides exposure is what the thing can do before a person sees it. Here that line is visible rather than described: one click releases one email, it releases nobody else's, and it says nothing about the vendor.
 
-**Evidence:** Walk a synthetic fixture on screen. The form's fixed structure and the free-text box, from `01-vendor-coi-chase.md`, "Why the document is easy." The endorsement point from `foundation-1-vendor-insurance.md`: a certificate describes, an endorsement grants, and the standard forms are ISO CG 20 10 and CG 20 37. Texas DOI guidance that additional-insured and cancellation-notice wording depend on policy or endorsement terms.
+**Evidence:** The approval gate in `Vendor Approval Request`, called once per actionable vendor by `Daily Watch and Chase`, so each vendor gets its own execution and its own genuine pause. The 24-hour expiry, which is default behaviour and not a setting anyone has to remember. Both in `docs/how-the-system-works.md`.
 
-**Takeaway:** The dates are facts you can act on. The description box is a claim someone typed. Treat them differently.
+**Takeaway:** Ask any automation vendor what it can do before a person sees it. This is what a specific answer looks like.
 
-**Discipline:** This is the video with the highest accuracy bar in the set, because it teaches insurance rather than automation. Every claim must trace to a cited source, and the framing stays "here is what I had to learn to build this correctly" rather than advice. Do not use the ACORD name in the video or the post copy, per `coi-demo-build-plan.md` section 1.5.
+**Re-cut 2026-08-09 against the recording that actually exists.** The demo script was not followed on the day, so the earlier version of this brief pointed at a line that was never said. Cut points are now anchored to what is visibly on screen.
 
-**Capture note:** Record in the same session as the demo. Use a fixture PDF, never a real certificate, and say on screen that it is synthetic.
+**Source:** the stretch of the recording running from the Gmail inbox showing several waiting approval requests, through approving one, to the vendor-side email appearing. In point is the first frame with more than one request visible in the inbox; out point is the vendor's email, stopping before the form link is clicked.
+
+**The shot that must survive any trim** is the one showing more than one approval request waiting. Without it a viewer sees a single email approved and reads approval as a formality. With it they can see that releasing one leaves the others sitting there, which is the whole argument.
+
+**No new voiceover, and the audio content is unknown.** The line this post's argument depends on may not be in the recording at all. Burned-in captions therefore carry the point, whether or not the audio does. Write them as on-screen commentary rather than as a transcript, so nothing implies you said something you did not.
+
+**Overlap with post 13, deliberately:** this clip plants the question, post 13 systematizes it four posts later. Post 9's copy leads with the moment rather than the question so the two do not open identically.
+
+**The lesson this replaced** is preserved in `linkedin-post-scripts.md` under post 9, so the insurance research is not lost if it ever gets built as a single annotated image.
 
 ---
 
@@ -309,21 +330,25 @@ Assume the reader knows what a certificate of insurance is. Publish once industr
 
 ---
 
-## 12. Seventeen vendors nobody was chasing
+## 12. The failure that doesn't throw an error
 
-**Format:** native video, 60 seconds · **Framework:** Hook / Body / Close, 0–3s hook · **Pillar:** failure lessons anyone can apply · **CTA:** none
+**Format:** text, 200–250 words · **Pillar:** failure lessons anyone can apply · **CTA:** none
 
-**Reframed 2026-08-02.** The old version was an engineering war story about a dashboard column. The finding is real and generalizes to anything they have running, so the lesson leads and my build illustrates it.
+**Format changed 2026-08-06.** Was a 60-second video. It needed a before-and-after of the dashboard with and without the chase column, and that footage does not exist in the demo recording. The finding needs no visual, so it moves to text intact. This was the recommendation on 2026-08-02 anyway, when the dashboard column was noted as a weak thing to film.
 
-**Hook angle:** A screen with nothing wrong with it. State that this is the failure mode that actually costs people money, and it never announces itself.
+**Reframed 2026-08-02.** The version before that was an engineering war story about a dashboard column. The finding is real and generalizes to anything the reader has running, so the lesson leads and my build illustrates it.
 
-**The turn:** Software that breaks tells you. Software that quietly stops doing something does not, and the screen keeps looking healthy. The only defense is that the screen has to show the thing that could stop, which means whatever is missing from a dashboard is exactly what nobody is watching.
+**Hook angle:** A screen with nothing wrong with it. State that this is the failure mode that actually costs people money, and that it never announces itself.
 
-**Evidence:** Seventeen of eighteen vendors carrying `chase_paused = true` from earlier escalation testing, invisible until a chase column existed. Logged in `progress-notes.md` under Open Behaviour Findings. The column now shows last contacted, follow-up due, request count, and paused state.
+**The turn:** Software that breaks tells you. Software that quietly stops doing something does not, and the screen keeps looking healthy. The only defence is that the screen has to show the thing that could stop, which means whatever is missing from a dashboard is exactly what nobody is watching.
+
+**Evidence:** Seventeen of eighteen vendors carrying `chase_paused = true` from earlier escalation testing, invisible until a chase column existed. Logged in `progress-notes.md` under Open Behaviour Findings.
+
+**What text has to add that the video carried:** the discovery itself. The video cut from a board without the column to a board with it. In text nothing carries that, so the post has to say plainly that it only surfaced because a column was added. Without it the post asserts a finding and never explains how it was found, which is the half a reader can actually apply.
 
 **Takeaway, aimed at them:** Pick anything running unattended in your business, automated reminders, payment retries, screening, and ask what it looks like on screen when it stops. If the answer is "the same as when it's working," that is the problem, not the software.
 
-**Honesty note:** The paused state came from my own escalation testing, not from real vendors ignoring real emails. Say so in the video and the post copy.
+**Honesty note:** The paused state came from my own escalation testing, not from real vendors ignoring real emails. Say so in the post.
 
 ---
 
@@ -331,7 +356,7 @@ Assume the reader knows what a certificate of insurance is. Publish once industr
 
 **Format:** carousel, 8 slides · **Framework:** Problem-Proof, question hook in place of the numbered claim · **Pillar:** AI buying literacy · **CTA:** soft — invite the question about their own systems
 
-**The receipt slide is required.** Slide 8 is a real screenshot of the approval email. It was cut in the 2026-08-02 reframe and restored after a voice sweep: without it the post closed on the same construction as post 1's final slide, and two carousels ending on an identical shape is what makes a set read as templated.
+**Slide 8 carries the close. Superseded 2026-08-04, owner's call: no screenshot, and no image anywhere in the deck.** An earlier revision required a real screenshot of the approval email as the receipt. That was overruled and slide 8 is typed copy instead, set on the deck's one inverted slide. The constraint that produced the screenshot requirement still stands and is met in words: slide 8 must not close on the same construction as post 1's final slide, because two carousels ending on an identical shape is what makes a set read as templated. This brief said "a real screenshot is required" until 2026-08-09, five days after it had stopped being true.
 
 **Reframed 2026-08-02.** The material was right and the subject was wrong. It was written as my operating model, which makes the reader a spectator. It is now a purchasing tool written for them, and my build is the worked answer rather than the topic.
 
@@ -408,7 +433,7 @@ Assume the reader knows what a certificate of insurance is. Publish once industr
 | Forbidden words | Zero: compliant, verified, covered, approved |
 | Hype vocabulary | Zero |
 | First 210 characters | Must stand alone and earn the expand. Measure by truncating, not by eye |
-| Length | Text 150–300 words · carousel slides under 25 words · video voiceover 150–200 words per 75 seconds |
+| Length | Text 150–300 words · carousel slides under 25 words · the demo about 10 minutes · the clip 35–50 seconds |
 | Factual trace | Every number, flag, and citation resolves to a named file or source |
 | Product language | Nothing implying a tool being sold. It's work done inside a client's business |
 | Em dashes | At most one per post. The single most reliable AI tell, and the hardest to notice while writing. Use commas, colons, or parentheses instead |

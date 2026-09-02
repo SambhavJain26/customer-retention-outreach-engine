@@ -22,7 +22,7 @@ This governs every post. The triage system is a **worked example of how I approa
 
 Build 1 spends five posts making vendor insurance paperwork legible before it can say anything. That is a structural cost of the subject, and its own plan documents the revision it took to get there.
 
-This build has no such cost. Everyone understands a broken toilet at 11pm. The problem is also the best-evidenced of the four researched — a 1,000+ manager survey, a separately collected owner survey, a 193,000-request operational dataset, and slow maintenance response identified as the #1 driver of non-renewal. The demo is visceral and needs no domain knowledge: six messages go in, they sort, and an emergency alert lands on the prospect's own phone.
+This build has no such cost. Everyone understands a broken toilet at 11pm. The problem is also the best-evidenced of the four researched — a 1,000+ manager survey, a separately collected owner survey, a 193,000-request operational dataset, and slow maintenance response identified as the #1 driver of non-renewal. The demo needs no domain knowledge either: a resident says "there's a problem in my bathroom," the system refuses to make a request out of it and asks what the problem is, and a manager approves a named contractor with one tap.
 
 The recommendation is to lead with this build. The decision is not mine to make, and the plan works in either order.
 
@@ -134,23 +134,38 @@ Numbered in publishing order.
 
 ---
 
-## 2. The demo — six messages go in, and the emergency reaches a phone
+## 2. The demo — three ways a request arrives, one place the manager decides
 
-**Format:** native video, 2–3 minutes · **Framework:** scene structure from `docs/operating-guide.md` · **Pillar:** proof · **CTA:** soft — offer to walk through it
+**Format:** native video, roughly 3 minutes · **Framework:** the recorded sequence, documented below · **Pillar:** proof · **CTA:** soft — offer to walk through it
 
-**Why not the short-form template:** at 2–3 minutes this sits outside short-form video, where the 0–3 second hook rules apply.
+**Rewritten to match the recording.** The original brief described six fixtures fired into an empty board, an emergency reaching a phone, and the accommodation refusal. None of that was filmed. The footage that exists follows one resident through a live chat, then the same system reached by email and by web form, with a manager approval on each. This brief describes what is on screen, not what was planned.
 
-**Hook angle:** Open on an empty board and immediately do the thing. No preamble, no introduction.
+**Why not the short-form template:** at roughly 3 minutes this sits outside short-form video, where the 0–3 second hook rules apply.
 
-**The turn:** Nothing here required anyone to read anything. Six messages arrived together, the gas smell and the burst pipe went to the top, the squeaky door went to the bottom, the rambling three-paragraph one came out as nine words, and the manager's phone rang for exactly one of them.
+**Hook angle:** Open on the resident roster, then immediately to two chats side by side, the resident's on the left and the manager's on the right. No preamble.
 
-**Evidence:** The six live-demo fixtures. The Telegram emergency alert landing on a phone on screen. The manager message showing the request summary, the drafted vendor email, and the vendor buttons. One tap sending one email. Then twenty seconds, unhurried, on what it does not do: it does not create the work order in your PMS, it does not pick the vendor, and it does not tell the resident when anyone is arriving.
+**The turn:** The strongest moment is the refusal, and it happens in the first thirty seconds. The resident opens with "there's a problem in my bathroom, and I noticed it yesterday," which is how a large share of them genuinely arrive. The system does not create a request from it. It asks what the problem is, and only builds a request once there is a concrete symptom to build one from.
 
-**Takeaway:** This is real, it works, and the person who built it volunteers its limits before being asked.
+**Evidence, all visible on screen:**
+- The vague opening producing no request, followed by the clarification prompt.
+- The concrete description ("the faucet drips constantly even when it's off, maintenance may enter, no pets") producing a request and a reference number.
+- The manager message carrying a named contractor button, `Send to Maple Plumbing`, matched on trade and property from the roster shown at the start.
+- One tap, one vendor email, arriving.
+- The same system reached by email instead of chat, for a bathroom exhaust fan, producing a different contractor: `Send to General Property Repairs`. The button changes because the classification did.
+- The execution history showing the model's actual structured output for a request: trade, urgency, and what it judged to be missing.
+- Both requests in the manager's Airtable workspace.
+- A third request through the web form, a kitchen pipe leaking into a cabinet, back to `Send to Maple Plumbing`.
+- A closing twenty seconds on what it does not do: no work order in the PMS, no contractor chosen for you, no arrival time given to a resident.
+
+**Takeaway:** Three different front doors, one place the manager decides, and the system refuses to invent a request out of a vague sentence.
 
 **Framing discipline:** "Here's something I built for a property management company's maintenance inbox." Never "here's my product." The video is evidence of how I work, not a launch.
 
-**Capture note:** Synthetic fixtures only, stated on screen. Reset to clean demo state first, per the pre-call checklist.
+**Single-mailbox disclosure — non-negotiable.** The recording runs on one mailbox for every party, so the resident, the manager and the contractor are visibly the same inbox. A viewer paying attention will notice. Say it on camera, once, plainly, at the first point an email appears. Leaving it unsaid is the difference between a test environment and a thing that looks staged.
+
+**What is deliberately not claimed:** no emergency, no safety override, no phone alert for a life-safety case, no accommodation refusal, no Hold, no double-tap guard, no Spanish, no status question. None of it was filmed and none of it may be narrated as though it was. Those behaviours have their own posts.
+
+**Capture note:** Synthetic residents, roster and mailbox. State it on screen in the first ten seconds as well as saying it aloud at the end.
 
 ---
 

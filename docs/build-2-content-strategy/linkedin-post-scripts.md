@@ -118,99 +118,136 @@ The three posts that go up before driving anyone to the profile. They answer, in
 
 ## Post 2. The demo
 
-**Format:** native video, roughly 2 minutes 40 seconds. **Pillar:** proof. **CTA:** soft.
+**Format:** native video, roughly 3 minutes. **Pillar:** proof. **CTA:** soft.
 
-**Not short-form.** At this length the 0–3 second hook rules in `short-form-video.md` do not apply, and the Demo Walkthrough carousel framework is for documents rather than video. The structure below follows the demo sequence in `docs/operating-guide.md`.
+**Rewritten to match the footage that exists.** The earlier version of this script described six fixtures fired into an empty board, an emergency alert reaching a phone, and the accommodation refusal. None of that was recorded. Everything below is narration for the sequence that was actually filmed, in the order it was filmed.
+
+**Not short-form.** At this length the 0–3 second hook rules in `short-form-video.md` do not apply.
 
 ### The video script
 
-**[0:00–0:10] Screen: Airtable Requests table, empty.**
+**[0:00–0:08] Screen: Airtable, Tenant Roster table.**
 
-> This is the maintenance inbox for a property management company. Right now there's nothing in it. I'm going to send it six messages at once, the way a Monday morning actually arrives.
+> This is the resident roster for a property management company. Everything you are about to see is synthetic, including this.
 
-**[0:10–0:30] Screen: the six messages going in.**
+**[0:08–0:20] Screen: two Telegram chats side by side, resident left, manager right.**
 
-> A burst pipe, written in a panic, with no unit number. Someone who thinks they can smell gas, understated, three lines. A squeaky bathroom door marked urgent in capitals. A three-paragraph complaint with the real problem in sentence nine. One in Spanish. And a request for a disability accommodation.
+> Two chats, side by side. On the left is what a resident sees. On the right is what the manager sees. Nothing else gets opened.
 
-**[0:30–0:55] Screen: the records appearing, sorted by priority.**
+**[0:20–0:37] Screen: resident sends the vague opening; the system replies asking for the problem.**
 
-> Here's what came back. The burst pipe and the gas smell are at the top, both emergencies. The squeaky door is routine, at the bottom, where the resident's capital letters didn't move it. The rambling one has been cut down to nine words and correctly called urgent. The Spanish message was classified from the Spanish.
+> The resident opens with this. There's a problem in my bathroom, and I noticed it yesterday. That is how a lot of them arrive. Watch what it does, because it doesn't create a request. It asks what the problem is.
 
-**[0:55–1:10] Screen: the accommodation request detail view.**
+**[0:37–0:55] Screen: resident pastes the full description; the system returns a reference.**
 
-> The accommodation request has no drafted reply attached to it at all. That one is legal-sensitive, so the system writes nothing and routes it to a person. That's deliberate, and it's the only correct behavior.
+> Now the real one. The faucet drips constantly even when it's off, maintenance may enter, and there are no pets. That is something a contractor could act on, so now it makes a request and sends back a reference number.
 
-**[1:10–1:35] Screen: phone, Telegram alert arriving.**
+**[0:55–1:11] Screen: the manager chat, approval message with the vendor button.**
 
-> One of those six made a phone ring. The gas smell. Not the one the resident marked urgent, and not the longest one. The manager gets the summary, the priority, the property and unit, and a drafted email to a plumber who actually covers that property.
+> On the manager's side, one message. The summary, the property, and a button with a contractor's name on it. Maple Plumbing is in that roster and covers this property. The manager isn't composing anything. They're approving.
 
-**[1:35–2:00] Screen: the manager taps a vendor button; the email sends.**
+**[1:11–1:15] Screen: tap the button, cut to Gmail, the vendor email arriving.**
 
-> Three vendor buttons, because three active vendors match this trade at this property. Tapping one sends that email. Tapping Hold sends nothing. If the manager taps twice, the second tap says the request is already handled, because the first tap claimed it in the database. Two plumbers turning up is a real failure mode and it's cheap to prevent.
+> One tap. One email. Here it is arriving.
 
-**[2:00–2:15] Screen: the resident's Telegram conversation.**
+**[1:15–1:32] Screen: stay on the inbox.**
 
-> The resident is told a provider has been contacted. Not when anyone is arriving, because nobody knows that yet.
+> To be straight about one thing: this is a test environment on a single mailbox, so the resident, the manager and the contractor are all the same inbox on screen. In a real setup those are three addresses.
 
-**[2:15–2:40] Screen: static, plain, no UI.**
+**[1:32–1:42] Screen: composing the exhaust fan email as the resident, then sending.**
 
-> What this doesn't do. It doesn't create the work order in your property management system, so that data entry is still yours. It doesn't pick the vendor. It doesn't dispatch anyone. It doesn't close anything, and it never gives a resident an arrival time. Everything you just watched is synthetic: test residents, a test vendor roster, a controlled mailbox. Nobody real was contacted to make this.
+> Second way in. Same system, but the resident emails instead. The bathroom exhaust fan has stopped working. No smoke, no burning smell, nothing electrical.
 
-*Voiceover word count: 352, which lands around 2:35–2:45 at a natural pace.*
+**[1:42–1:52] Screen: the manager chat, second approval, different vendor button.**
+
+> Different problem, different trade, different contractor. This one says General Property Repairs, not the plumber. The button changed because the classification did.
+
+**[1:52–1:53] Screen: tap, cut to the inbox showing the vendor mail landed.**
+
+> Sent, and received.
+
+**[1:53–2:16] Screen: n8n, Triage Engine, executions, the model output expanded.**
+
+> This is the part I'd want to see if someone showed me this. Every run is recorded. That's the model's actual output: the trade, the urgency, and what it thought was missing. When it gets something wrong, and it will, you can open the run and read what it did.
+
+**[2:16–2:18] Screen: Airtable Requests table, both records.**
+
+> Both requests, in the manager's workspace.
+
+**[2:18–2:27] Screen: the web form, filling and submitting the kitchen pipe request.**
+
+> Third way in. A web form. The pipe under the kitchen sink is leaking into the cabinet and getting worse.
+
+**[2:27–2:37] Screen: manager chat, third approval, tap, then the vendor email opened.**
+
+> Same manager chat, third approval, back to Maple Plumbing because this one is plumbing again. Tap, and that's the email the contractor receives.
+
+**[2:37–3:00] Screen: static, plain, no UI.**
+
+> What this doesn't do. It doesn't create the work order in your property management system, so that data entry is still yours. It doesn't choose the contractor, it proposes one and you approve. It never tells a resident when someone is arriving, because nobody knows that yet.
+
+*Voiceover word count: 402. At a natural 135 words a minute that is 2:58 of speech. The finished cut lands around 3:00–3:20 depending on how much of the waiting between sends is trimmed. Redo this arithmetic if the narration changes.*
 
 ### The LinkedIn post copy
 
-> Six maintenance messages, sent into an empty inbox at the same time.
+> A resident opened with "there's a problem in my bathroom, and I noticed it yesterday."
 >
-> A burst pipe with no unit number. A gas smell, described in three understated lines. A squeaky door marked URGENT in capitals. A three-paragraph complaint with the real problem in sentence nine. One in Spanish. One accommodation request.
+> The system didn't create a maintenance request from that. It asked what the problem was, and waited.
 >
-> Two and a half minutes of it working, including the part where the manager's phone rings for exactly one of the six, and the part at the end where I list what it refuses to do.
+> That's the part of this build I'd point at first. Not the classification, not the vendor matching. The refusal to turn a vague sentence into a work item, because a half-formed request landing on a manager's desk is worse than no request at all.
 >
-> The accommodation request is the one I'd watch. It gets no drafted reply at all, because that's a legal-sensitive matter and the correct output there is a person, not a paragraph.
+> Three minutes, three ways a request arrives: the resident's chat, an email, and a web form. All three land in the same place, and all three stop at a manager with one button and a named contractor on it. A faucet goes to the plumber. A dead extractor fan goes to general repairs. The button changes because the classification did.
 >
-> Everything in the video is synthetic. Test roster, controlled mailbox, invented residents. Nobody was contacted to make it.
+> It also shows the execution history, which is the bit most demos skip. That's the model's actual output for a request, so when it gets something wrong you can open the run and read exactly what it did.
+>
+> Everything in it is synthetic. Test roster, invented residents, one controlled mailbox standing in for every party, which I say on camera because you'd notice.
 
-*Word count: 143. Characters: 831. Em dashes: 0. First 210 characters end mid-list, which stands alone and earns the expand.*
+*Word count: 199. Characters: 1,130. Em dashes: 0. First 210 characters end just after "It asked what the problem was, and waited," which states the refusal and withholds why it matters.*
 
 ### YouTube title (100-char limit, ~70 visible)
 
-`AI maintenance triage for property managers: six messages, one alert` (68 characters)
+`AI maintenance triage: three ways a request arrives, one manager approval` (73 characters)
 
-Leads with the searchable phrase, stays inside the visible truncation point, and states the demo's structure rather than promising a transformation.
+Slightly over the ~70 visible mark, so the tail may clip on narrow mobile. The alternative below is safer if that matters more than the phrasing.
+
+**Alternative:** `AI maintenance triage for property managers: chat, email, and form` (66 characters)
 
 ### YouTube description (5,000-char limit, ~100 visible before "Show more")
 
-> Six maintenance requests go into an empty inbox at once. Here's how they sort, which one makes a phone ring, and what the system refuses to do.
+> A resident says "there's a problem in my bathroom." Watch the system refuse to make a maintenance request out of it.
 >
-> This is a demo-depth build for US residential property management companies. It reads maintenance requests from email, a web form, or a resident messaging channel, classifies urgency and trade, asks the resident for details it needs before anyone is interrupted, matches vendors on property and trade, and puts a drafted vendor email in front of the manager for approval.
+> This is a demo-depth build for US residential property management companies. A maintenance request can arrive three ways: a resident messaging channel, an email, or a web form. All three land in the same pipeline, which classifies urgency and trade, asks the resident for the details it needs before anyone is interrupted, matches contractors on property and trade, and puts a drafted vendor email in front of the manager for approval.
 >
 > Chapters:
-> 0:00 An empty inbox
-> 0:10 Six messages sent at once
-> 0:30 How they sorted
-> 0:55 The accommodation request, and why it has no draft
-> 1:10 The emergency alert reaching a phone
-> 1:35 Manager vendor approval, and the double-tap guard
-> 2:00 What the resident is told
-> 2:15 What this does not do
+> 0:00 The resident roster
+> 0:08 Two chats, resident and manager
+> 0:20 A vague message, and why it creates nothing
+> 0:37 The real description, and a reference number
+> 0:55 The manager's approval, with a named contractor
+> 1:15 One mailbox for every party, and why
+> 1:32 The same system by email
+> 1:42 A different trade, a different contractor
+> 1:53 The model's actual output in the execution history
+> 2:18 The same system by web form
+> 2:37 What this does not do
 >
-> The six messages: a burst pipe written in a panic with no unit number, an understated gas smell, a squeaky door marked URGENT by the resident, a rambling complaint with the real issue in sentence nine, one message in Spanish, and a disability accommodation request.
+> A note on what this is not. It does not create the work order in a property management system, so that data entry stays with the manager. It does not select or dispatch a contractor. It does not close a request or promise an arrival time. Every outbound vendor email requires a manager to tap a button.
 >
-> A note on what this is not. It does not create the work order in a property management system, so that data entry stays with the manager. It does not select or dispatch a vendor. It does not close a request or promise an arrival time. Every outbound vendor email requires a manager to tap a button, and the safety rules can raise a priority but have no path to lower one.
->
-> Everything shown is synthetic: test residents, a test vendor roster, and a controlled mailbox. No real resident, vendor, or property management company appears in this video.
+> This recording runs on a single controlled mailbox, so the resident, the manager and the contractor appear as the same inbox on screen. In a real deployment those are three separate addresses. Everything shown is synthetic: test residents, a test contractor roster, invented properties. No real resident, contractor, or property management company appears in this video.
 >
 > Built with self-hosted n8n, Postgres and Airtable, with OpenAI handling classification and drafting.
 >
 > #propertymanagement #propertymaintenance #automation
 
-*Characters: 1,847. First 100 characters stand alone before "Show more". Three hashtags, which render above the title.*
+*Characters: 1,798. First 100 characters stand alone before "Show more". Three hashtags, which render above the title.*
 
 ### Production notes
 
-- Run `.\scripts\reset-demo.ps1 -Apply` and restore the clean snapshot before recording, so no historical `MR-` references appear.
-- The six fixtures are the live-demo set: `01-understated-gas`, `02-panicked-burst-pipe-no-unit`, `03-urgent-squeaky-door`, `04-buried-lede`, `05-spanish-no-hot-water`, `06-accommodation-request`.
-- Put "synthetic test data" on screen as a caption during the first ten seconds as well as saying it at the end. The spoken disclaimer at 2:15 is the credibility beat; the on-screen one covers anyone who watches muted.
+- **Chapter timestamps above are derived from the voiceover timing table, not estimated.** If the edit shifts, recompute both together.
+- The three requests on screen are: the bathroom sink faucet (resident chat), the bathroom exhaust fan (email), and the kitchen pipe leaking into the cabinet (web form). The two contractors are Maple Plumbing and General Property Repairs, both from the synthetic roster.
+- **Say the single-mailbox line.** It is at 1:15 and it is not optional. The same inbox visibly receives mail from a resident, sends to a contractor, and receives it again. A viewer who spots that without being told will assume the whole thing is staged.
+- Do not narrate anything that was not filmed. Specifically absent from this recording and therefore off-limits here: any emergency or safety escalation, the phone ringing for a life-safety case, the accommodation refusal, the Hold button, the double-tap guard, the Spanish message, and the status question. Each has its own post.
+- Put "synthetic test data" on screen as a caption during the first ten seconds as well as saying it at the start. The spoken line covers listeners; the caption covers anyone watching muted.
 - Do not say "my product" or "my platform" anywhere in the voiceover. The framing is "something I built for a property management company's maintenance inbox."
 - Subtitles are required. Most feed video is watched without sound, and the closing limitation list is the most important part of the video.
 - The full-length recording belongs in the profile Featured section, not the feed. Only this cut is post 2.
@@ -262,15 +299,15 @@ Leads with the searchable phrase, stays inside the visible truncation point, and
 | Response target language | Not used | Not used | Not used |
 | Competitor claims | Not used | Not used | Quoted accurately, no disparagement, anti-persona named |
 | Product language ("my tool", "my platform") | Clear | Clear, flagged in production notes | Clear |
-| First 210 characters | Stands alone, both reveals withheld | Stands alone mid-list | Stands alone, turn withheld |
-| Length | 264 words / 1,486 chars | 143 words / 831 chars | 293 words / 1,714 chars |
+| First 210 characters | Stands alone, both reveals withheld | Stands alone after the refusal, reason withheld | Stands alone, turn withheld |
+| Length | 264 words / 1,486 chars | 199 words / 1,130 chars | 293 words / 1,714 chars |
 | Slide length (under 25 words) | All 9 pass | n/a | n/a |
 | Em dashes | 0 | 0 | 0 (1 in the named variant, flagged) |
 | Banned openers, transitions, closers | Clear | Clear | Clear |
 | Structural AI patterns | Clear | Clear | Clear |
 | Sentence length variance | Varied | Varied | Varied |
 | Build 1 collision | No counterpart | No counterpart | Rebuilt away from build 1 posts 3 and 13 |
-| Factual trace | Both fixtures named; industry figures attributed | Six fixtures named; all six behaviors verified | All four competitor facts sourced |
+| Factual trace | Both fixtures named; industry figures attributed | Every beat traced to the actual recording; nothing narrated that was not filmed | All four competitor facts sourced |
 
 **Seven Sweeps pass:** run after you've read these aloud and rewritten anything that sounds like me rather than you. I've kept the register consistent with build 1's scripts, but the final voice pass is yours.
 
@@ -663,6 +700,8 @@ Two 60-second videos, two text posts, one image post, and the only post that ask
 
 - Recorded in `progress-notes.md` 2026-08-13: vendor emails for `MR-0011` and `MR-0012` went out without the configured prefix and were re-ingested as `MR-0014` and `MR-0015`.
 - The two real reference numbers can appear on screen. They are synthetic demo tickets.
+- **This is not a clip of the main demo recording, and cannot be.** The defect is fixed and published, so the loop no longer reproduces. The hook and journey footage has to come from the recorded incident, from the execution history, or from a reconstruction that is labelled as one on screen. Same rule as post 12.
+- **The one shot you can reuse from the post 2 footage is the setup.** Post 2 shows a vendor email leaving and arriving in the same inbox, and says the single-mailbox line out loud at 1:15. That is exactly the condition that caused this defect, already on camera. Cutting from it here is legitimate and makes the two posts reinforce each other rather than compete.
 - The closing honesty line about the controlled mailbox belongs in both the video and the post copy. It is the difference between a war story and a claim that real vendors were spammed.
 - Subtitles required. The line that carries the post is the last one, and most feed video is watched muted.
 
@@ -749,7 +788,8 @@ Two 60-second videos, two text posts, one image post, and the only post that ask
 
 - Recorded in `progress-notes.md` 2026-08-13. The status question missed a narrow arrival-only pattern and became `MR-0013`. The post-fix verification (execution `1315`) created no ticket, held the count at 15, and held manager executions at 21.
 - The five non-request categories are all real fixtures: `10-pure-venting-no-request`, `13-vendor-email`, `14-out-of-office-auto-reply`, `15-newsletter-marketing-spam`, `16-forwarded-portal-notification`. The scrolling shot should show those actual files.
-- Do not reshoot the defect live. The fix is published, so the hook footage has to come from the recorded incident or a clearly labelled reconstruction. If reconstructing, say so on screen.
+- Do not reshoot the defect live. The fix is published, so the hook footage has to come from the recorded incident or a clearly labelled reconstruction. If reconstructing, say so on screen. **This is not a clip of the main demo recording**, for the same reason.
+- **The resolution shot at 0:45–0:55 has no footage yet.** It needs a status question asked in a live conversation, showing one consolidated reply and an unchanged ticket count. No status question was asked during the main demo recording, so this is a separate capture of roughly twenty seconds: open the resident chat with at least two open requests, ask "when will all this be fixed?", and film the reply plus the request list before and after. That shot is the proof the post rests on, so it cannot be narrated over unrelated footage.
 
 ---
 

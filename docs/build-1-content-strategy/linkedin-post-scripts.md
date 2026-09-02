@@ -2,7 +2,7 @@
 
 Finished copy for the 15 posts briefed in `docs/linkedin-content-plan.md`.
 
-**Revised 2026-08-17.** Seven posts were rebuilt after an audit against the question "would a property manager learn something and keep this." Posts 1, 4 and 9 were replaced outright, because they taught the reader nothing they did not already know. Posts 8, 12, 13 and 14 kept their evidence and changed their subject, from what my build does to what the reader can check in their own business. Post 2 was later replaced to show the actual Stage 9 maintenance-triage demo, rather than the retired vendor-certificate workflow. The plan's pillar and format allocation was rewritten at the same time, and the reasoning is recorded at the top of `linkedin-content-plan.md`.
+**Revised 2026-08-02.** Seven posts were rebuilt after an audit against the question "would a property manager learn something and keep this." Posts 1, 4 and 9 were replaced outright, because they taught the reader nothing they did not already know. Posts 8, 12, 13 and 14 kept their evidence and changed their subject, from what my build does to what the reader can check in their own business. The plan's pillar and format allocation was rewritten at the same time, and the reasoning is recorded at the top of `linkedin-content-plan.md`. Posts 2, 3, 5, 6, 7, 10, 11 and 15 are unchanged.
 
 The batch headings below record the order things were written, not the publishing order. Publish in numerical order.
 
@@ -12,7 +12,7 @@ Every post below has been checked for: zero banned words (compliant, verified, c
 
 **Standing note on COI and lapse.** `docs/customer-language.md` says use COI unexpanded and lapse for expiry. Both apply from post 6 onward. Posts 1 to 5 are the gateway posts, which the plan requires a non-industry reader to follow without jargon, so those spell the document out and use plain expiry language. Posts 6, 7, 8 and 10 were corrected to COI and lapse after the first pass missed it.
 
-**One standing note on "approve."** The word appears in two posts as the verb for a person authorizing an email to be sent. It never appears as a claim about a vendor or a certificate. Post 2 makes the distinction out loud: the manager approves one drafted email, not the vendor or a dispatch decision. If you would rather it never appear at all, the substitutions are marked in each post's notes.
+**One standing note on "approve."** The word appears in two posts as the verb for a person authorizing an email to be sent. It never appears as a claim about a vendor or a certificate. Post 2 makes the distinction out loud, which is the honest use of the word and worth keeping. If you would rather it never appear at all, the substitutions are marked in each post's notes.
 
 ---
 
@@ -117,92 +117,92 @@ Slides 5 and 6 are the pair the whole carousel turns on, and slide 6 is the shor
 
 ---
 
-## Post 2. The demo: three ways in, one manager decision
+## Post 2. The demo
 
-**Format:** native video, 2 minutes 35 seconds. **Pillar:** proof. **CTA:** soft.
+**Format:** native video, 2 minutes 35 seconds. **Pillar:** build in public. **CTA:** soft.
 
-Scene structure follows `docs/operating-guide.md`, cut down from the live Stage 9 walkthrough. Screen recording throughout. No face, no intro card, no music.
+Scene structure follows `docs/demo-script.md`, cut down from the six-minute walkthrough. Screen recording throughout. No face, no intro card, no music.
 
 ### The post copy
 
-> Three maintenance requests enter this demo in three different ways: an email, a form, and a Telegram conversation. Each reaches the same manager decision point, not three places to sort.
+> A vendor's certificate arrives as a PDF. Someone opens it, finds the dates, checks the name, types it into a spreadsheet, and files the original somewhere. Then again next year, for every vendor, on a different date each time.
 >
-> The Telegram part is the useful test. "There is a problem in my bathroom" is not enough to send someone out. The bot asks for the symptom. It does not create a request, alert the manager, or pretend it knows what the problem is. When the resident says the faucet is dripping, it creates one request using the conversation so far.
+> Here is two and a half minutes of that job running without the typing. A certificate goes in. The register updates itself. When a reminder needs to go out, it stops and waits for a person to say yes.
 >
-> Then the workflow classifies the request, keeps the manager workspace up to date, finds vendors who cover that property and trade, and drafts the email. A manager chooses whether to send it. One tap releases one email.
+> The last twenty seconds are the part I would want to hear if I were the one watching. It does not tell you a vendor is insured. Nothing that reads a certificate can. A certificate describes the day it was issued and nothing after it.
 >
-> It stops before the work order. It does not select a vendor by itself, promise an arrival time, or close a request. That is the point.
+> This is not a product launch. There is nothing to log into, no seats, no subscription. It is an example of how I build, running inside a mailbox and a database a company already owns.
 >
-> Here is the live walkthrough, using synthetic data.
+> Happy to walk anyone through it properly.
 
-*Word count: 162. Em dashes: 0. First 210 characters establish the three intake routes and the manager outcome without relying on the video.*
+*Word count: 178. Em dashes: 0. First 210 characters end inside the second sentence of the opening, with the tedium fully established.*
 
 ### Shot list and voiceover
 
-Timings are cumulative. Read at an unhurried pace, roughly 130 words per minute. Total 314 words across 2:35, which sits inside the 150 to 200 words per 75 seconds range.
+Timings are cumulative. Read at an unhurried pace, roughly 130 words per minute. Total 337 words across 2:35, which sits inside the 150 to 200 words per 75 seconds range.
 
-**Shot 1. Start clean. 0:00 to 0:12**
+**Shot 1. The register. 0:00 to 0:14**
 
-*Screen: Airtable `Requests` view, empty after the demo reset. Hold for two seconds, then switch to the shared Gmail mailbox.*
+*Screen: dashboard, scrolled to the top. No cursor movement for the first three seconds. Let the rows sit there.*
 
-> "Three requests are about to arrive through three different channels. Email, a web form, and Telegram. This is the manager's workspace. It starts empty, with no old requests left over from an earlier test."
+> "This is the list of vendors a property management company hires. Plumbers, electricians, landscapers, cleaners. Next to each one, the insurance paperwork they are supposed to have on file, and the date it runs out."
 
-**Shot 2. Email intake. 0:12 to 0:34**
+**Shot 2. A certificate arrives. 0:14 to 0:34**
 
-*Screen: Send a synthetic email describing water leaking from the pipe under a kitchen sink. Cut to Airtable only after the request row appears. Briefly show the `[MT-SYSTEM]` onboarding email arriving in the controlled mailbox.*
+*Screen: switch to the upload form. Drag `f02-expiring-20-days.pdf` from File Explorer onto the form. Submit. Hold on the confirmation.*
 
-> "First, an email. It describes water leaking from a pipe under the kitchen sink. The workflow reads the request, assigns a reference, classifies the trade and priority, and writes the result here. It also sends one Telegram pairing link. That system email is marked so the shared mailbox cannot read its own message as a new request."
+> "One just came in. In a real office this is an email attachment from the vendor or their agent. I am uploading it here because it is the same path and it is easier to watch. Nothing gets typed after this point."
 
-**Shot 3. Form intake. 0:34 to 0:54**
+**Shot 3. The row changes. 0:34 to 0:54**
 
-*Screen: Submit the synthetic web form for a failed ceiling fan. Cut to Airtable showing the second request and source field. Do not wait long enough to show an unrelated email notification.*
+*Screen: cut back to the dashboard. It refreshes every five seconds. Wait for the row to change on camera rather than cutting to it.*
 
-> "Second, the same process through a form. A stopped ceiling fan becomes another request, with the intake source shown alongside it. The manager does not need to remember which inbox it came from. It records the channel, not a separate process."
+> "Carrier, policy number, general liability limit, expiration date. That row went from a blank line to a tracked date without anyone opening the file. The system read the document. It did not judge it."
 
-**Shot 4. Telegram clarification. 0:54 to 1:29**
+**Shot 4. Four states. 0:54 to 1:32**
 
-*Screen: Tenant Telegram chat. Send "There is a problem in my bathroom." Show the focused symptom prompt. Send "It started yesterday and is getting worse." Show that it asks again. Send "The bathroom sink faucet is dripping constantly." Then cut to the single new Airtable request.*
+*Screen: move down the board deliberately, resting on one row per state. Do not read any day count out loud.*
 
-> "The third route is the one I wanted to test properly. The resident starts vaguely: there is a problem in my bathroom. Then says it started yesterday and is getting worse. Neither message creates a ticket, because neither names a maintenance symptom. When they say the sink faucet is dripping, it creates one request from the conversation so far. No duplicate requests. No premature manager alert."
+> "The whole board is really four situations. Current, with a date attached. Expiring, which is the one that used to depend on somebody remembering. Expired, meaning the paperwork on file has run out. And needs review, where the document was unclear and it stopped rather than guessing. Read the wording in that column. Every status is a fact printed on a document. None of them is a claim about insurance."
 
-**Shot 5. Manager decision. 1:29 to 2:03**
+**Shot 5. The document is one click away. 1:32 to 1:52**
 
-*Screen: Manager Telegram alert for the plumbing request. Show request reference, summary, matched vendor button, Hold, and the drafted email preview. Keep the Airtable request visible in a second window only if legible.*
+*Screen: click a source link. Let the PDF open in a new tab. Pause on it for a full three seconds before speaking again.*
 
-> "Once the request is complete, the manager gets the decision point. The alert shows the issue, the matching vendor, and the exact email it would send. The manager can choose that vendor or hold it. The workflow does not dispatch anyone. It does not decide that the vendor is right."
+> "Every row links back to the certificate it came from. If anyone wants to check a date against the original, that is one click, not a search through an inbox. Nobody has to take the software's word for anything."
 
-**Shot 6. One approved email. 2:03 to 2:21**
+**Shot 6. The human checkpoint. 1:52 to 2:18**
 
-*Screen: Tap the actual vendor button once. Cut to the controlled Gmail sent message, then the tenant Telegram update and Airtable send state.*
+*Screen: Gmail, approval email already waiting. Show the vendor, reason, recipient, and drafted message. Click Approve. Cut to the sent message.*
 
-> "One tap releases one email. After the SMTP send succeeds, the resident gets a factual update: a maintenance provider has been contacted. The database prevents the second tap from sending that email twice."
+> "When paperwork is missing or about to run out, it writes the reminder email. Then it stops. The manager gets this: the vendor, the reason, who it would go to, and the exact message. That click approves an email. It does not approve a vendor. Ignore two requests and it stops chasing and hands the vendor back to a person."
 
-**Shot 7. The boundary. 2:21 to 2:35**
+**Shot 7. What it will not do. 2:18 to 2:35**
 
-*Screen: Tenant Telegram chat. Send "When will all this be resolved?" Show the single consolidated status reply. Keep the reply and open Airtable records on screen.*
+*Screen: back to the dashboard, static, no cursor.*
 
-> "Last check. A status question gets a status answer, not another request or an invented arrival time. This is where the automation stops: it sorts, asks, drafts, and records. The manager still decides."
+> "Last thing, and it matters more than the rest. It does not tell you a vendor is insured. Nothing that reads a certificate can. It cannot see a cancellation, it cannot read an endorsement, and it will not decide who works on a property. That belongs with the agent and the manager."
 
 ### Burned-in caption notes
 
-- **Captions on every second of it.** LinkedIn autoplays muted, and shots 4 and 7 carry the argument.
+- **Captions on every second of it.** LinkedIn autoplays muted, and shots 4 and 7 are the two that carry the argument.
 - Burn them in rather than relying on the platform's auto-captions. Bottom third, high contrast, two lines maximum, no animation.
-- Terms that need to be right in the captions: **Airtable**, **Telegram**, **SMTP**, **work order**.
-- **Add one persistent corner label** for the first ten seconds only: "Synthetic maintenance data." Every name, request, and vendor email on screen is controlled demo data.
-- Show the `Requests` and `Conversations` tables only at a readable scale. Do not show raw Postgres or n8n execution data in the finished cut.
-- Blur the controlled mailbox address and Telegram chat IDs when visible.
+- Four terms need to be right in the captions and are commonly mangled by auto-transcription: **COI**, **ACORD**, **general liability**, **endorsement**.
+- **Add one persistent corner label** for the first ten seconds only: "Synthetic vendor data." Every name and policy number on screen is a fixture. Saying so once removes an objection that would otherwise sit in a comment.
+- **No day counts in the narration.** The fixture dates are fixed, so the countdown on screen shifts by one every day since the fixtures were generated (`progress-notes.md`, 2026-07-31). Let the screen show the number. The voiceover above already avoids it.
+- Blur the demo mailbox address in shot 6 if it is visible in the Gmail header.
 
 ### Alternative opening lines for the post copy
 
-- "The same maintenance request can arrive in an inbox, a form, or a chat. The manager should not have to triage it three times."
-- "A vague resident message is not a work order. It is the start of a conversation."
-- "I tested the part most maintenance automation skips: what happens before a request is clear enough to send on."
+- "Nobody's job title is 'types dates off a PDF into a spreadsheet.' Somebody still does it, roughly once a year, per vendor."
+- "The certificate is the easy part. Remembering it eleven months later is the part that fails."
+- "Here is the version of vendor paperwork where the typing is gone and the judgment isn't."
 
 ### Notes
 
-- If you would rather the word "approve" never appear: shot 6 becomes "One tap releases one email." The line as written is stronger because it makes the limited decision explicit.
-- Reset local demo state immediately before recording: `./scripts/reset-demo.ps1 -Apply`. Use only the controlled mailbox and synthetic Airtable roster.
-- Facts traced: three intake routes, Telegram clarification, Airtable manager workspace, vendor selection, one-send-only, and status boundaries from `docs/operating-guide.md` and `docs/build-description.md`. The six-fixture rehearsal is not shown and no broad accuracy claim is made.
+- If you would rather the word "approve" never appear: shot 6 becomes "That click releases one email. It says nothing about the vendor." The line as written is stronger, because it negates the claiming sense out loud.
+- Shot 6 requires the approval email to already be waiting. Execute **Daily Watch and Chase** off camera a minute before recording, per the demo script.
+- Facts traced: four states and status wording from `docs/how-the-system-works.md`; two-strike stop-chasing from the same; five-second refresh from the same; the "reports what a document says, never what is true" boundary from `docs/demo-script.md` Language Rules.
 
 ---
 
@@ -787,109 +787,121 @@ Both are screen recordings, no face, no music, no intro card. Both use Hook / Bo
 
 ---
 
-## Post 9. The boxes on a certificate that matter, and the one that misleads everyone
+## Post 9. It drafted the email, then stopped and waited
 
-**Format:** native video, 75 seconds. **Pillar:** insurance domain literacy. **CTA:** none.
+**Format:** video clip cut from the demo recording, 35 to 50 seconds. **Pillar:** AI buying literacy. **CTA:** none.
 
-**Rebuilt 2026-08-02.** Replaces "The locked PDF that disappears," which showed my system's behavior with an unopenable file and taught a property manager nothing they could use elsewhere.
+**Re-cut 2026-08-09 against the recording that actually exists.** The earlier version of this section keyed its in and out points to lines from `demo-script.md`. That script was not followed on the day, so those lines are not in the footage. Everything below is anchored to what is visibly on screen instead, which is the only reliable way to cut a video somebody has already made.
+
+### What the demo recording actually contains
+
+Recorded order, as filmed:
+
+1. The dashboard
+2. Sending an email as a vendor, certificate attached
+3. Opening that certificate to explain what it is and what is on it
+4. The dashboard again, with the certificate now filed
+5. Clicking **Open PDF** to show the same document came back
+6. The COI Intake execution, showing only the model node's output
+7. Daily Watch and Chase, triggered by hand, drafting the emails
+8. The Vendor Approval Request execution, showing the approval emails have gone
+9. Gmail, showing those same approval emails
+10. Approving one of them
+11. The vendor receiving the certificate request
+12. Clicking the form link and submitting a certificate
+13. The dashboard, showing the new record
+
+**This clip is beats 8 through 11.** That range is better material than the one I originally specced, because it shows the whole gate rather than just the click: several requests waiting, one released, and the consequence of releasing it.
 
 ### The post copy
 
-> Most of a COI does not matter. Four parts do, and one of them gets misread constantly.
+> The automation drafted this email. Then it stopped and waited for me.
 >
-> Seventy-five seconds walking an actual certificate, pointing at the boxes.
+> Forty seconds of the only part of a build I think a stranger should judge me on.
 >
-> The short version. The coverages table carries facts: effective date, expiration date, limits, one row per line of insurance. Printed, structured, safe to act on.
+> A daily check found the vendors whose insurance paperwork is missing or lapsed, and wrote a reminder for each one. Nothing was sent. Every draft sits in an inbox until a person clicks, and if nobody clicks within twenty-four hours the request expires rather than going out.
 >
-> The Description of Operations box is free text. Somebody typed it. Wording in there saying your company is an additional insured does not make your company an additional insured. That takes an endorsement issued by the carrier, which is a separate document, and it is not the one you were sent.
+> What that click does is narrow, and worth being precise about. It releases one email. It does not release the others, and it says nothing at all about the vendor.
 >
-> I am not an insurance professional. This is what I had to learn in order to build something that reads these correctly, and it is the part I wish somebody had told me first.
+> Accuracy is what people ask about when they are buying automation. This is the thing I would ask about instead: what can it do before a person sees it?
 >
-> Synthetic certificate. Fictional carrier, fictional vendor.
+> Clipped from a longer walkthrough. Synthetic vendors, synthetic paperwork.
 
-*Word count: 155. Em dashes: 0. First 210 characters end just inside "The short version," with the promise made and the misread box still unnamed.*
+*Word count: 152. Em dashes: 0. First 210 characters end inside "A daily check found the vendors whose insur", with the pause established and the mechanism still ahead.*
 
-### Shot list and voiceover
+*Unchanged from the previous version, and still accurate. The 24-hour expiry is a true property of the build that the video does not happen to show; stating it in copy is fine, and the clip is not claimed as evidence for it.*
 
-Total 156 words across 75 seconds, inside the 150 to 200 range.
+### The clip, cut on visual beats
 
-**Shot 1. The hook. 0:00 to 0:06**
+**In point:** the first frame where the Gmail inbox is visible with more than one approval request sitting in it. Not the workflow execution before it. A viewer with no context needs an inbox, not a canvas.
 
-*Screen: a fixture certificate, full page, cursor already moving toward the coverages table before the first word.*
+**Out point:** the vendor-side email being visible on screen. Stop before the form link is clicked. That click belongs to a different story and it dilutes this one.
 
-> "Most of this page doesn't matter. Four parts do. And one of them gets misread constantly."
+**Target 35 to 50 seconds.** If the range runs longer, cut inside it rather than trimming the ends: the two things that must survive are several requests visibly waiting, and exactly one of them being approved.
 
-**Shot 2. Where the facts are. 0:06 to 0:24**
+**Keep the shot that shows more than one approval email.** It is doing more work than it looks like. Without it the viewer sees a single email approved and assumes approval is a formality. With it they can see that releasing one leaves the others sitting there, which is the entire argument and cannot be made in words as cheaply as it is made by that frame.
 
-*Screen: zoom into the coverages table. Move down the rows as they are named.*
+### Audio, and a problem to solve before you cut
 
-> "This block is where the facts are. One row per line of insurance. General liability, auto, umbrella, workers' comp. Each row carries a policy number, an effective date, an expiration date, and limits. Printed, structured, and safe to act on."
+You are not recording a voiceover. Whatever you said on the day is what the clip has.
 
-**Shot 3. The checkboxes. 0:24 to 0:38**
+**I do not know what you said over these beats, and the spec cannot assume it.** The line the earlier version leaned on, about approving an email rather than approving the vendor, was written for a script that was not followed. If you did not say something like it, the clip has no spoken version of its own point.
 
-*Screen: zoom to the two narrow checkbox columns beside the coverage rows.*
+That is recoverable without recording anything, because LinkedIn autoplays muted and most viewers will never hear the audio anyway. Two options:
 
-> "These two columns are checkboxes. They record that somebody made a mark. That is all a checkbox can tell you."
+- **Captions carry the argument.** Burn in a short caption over the approval click that states the point directly, whether or not the audio says it. This is the option I would take.
+- **Mute the clip entirely** and run it as a silent sequence with captions only. Also fine, and it removes any risk of the audio contradicting the captions.
 
-**Shot 4. The one that misleads. 0:38 to 1:02**
-
-*Screen: zoom to the Description of Operations box. Hold here longer than any other shot.*
-
-> "And this is the one. Description of Operations. Free text, typed by whoever issued the certificate. Wording in here saying your company is an additional insured does not make it so. That takes an endorsement issued by the carrier, which is a separate document, and it is not the one you were sent."
-
-**Shot 5. Close. 1:02 to 1:15**
-
-*Screen: pan to the certificate holder box, then pull back to the full page and hold still.*
-
-> "Last one. Certificate holder should be your exact legal name, not a close approximation. The dates are facts. The description box is a claim. Treat them differently."
+**Do not burn in a caption that quotes you saying something you did not say.** Write captions as on-screen commentary rather than as a transcript, so there is no implied claim about the audio.
 
 ### Burned-in caption notes
 
-- Captions throughout. This video is dense with terms auto-transcription mangles: **COI**, **additional insured**, **endorsement**, **workers' comp**, **umbrella**.
-- **Every zoom needs a label burned in**, naming the box being shown. A muted viewer watching a document zoom without labels learns nothing.
-- Corner label for the whole video, not just ten seconds: **"Synthetic certificate."** This is the one video where a viewer might otherwise think they are looking at a real vendor's paperwork.
-- End card, held two seconds: **"The dates are facts. The description box is a claim."**
+- Captions throughout, bottom third, high contrast, two lines maximum.
+- **Over the inbox shot:** something naming what is waiting, for example `Every vendor got its own request. None of them have gone out.`
+- **Over the approval click, the load-bearing caption:** `This releases one email. It doesn't approve the vendor for anything.` This is the sentence the clip exists for. If it is not in the audio, it has to be on screen.
+- **Over the vendor-side email:** `Now it sends.`
+- Corner label for the first five seconds: **"Synthetic vendors, test data."**
+- **Redact the mailbox address** in the Gmail header. The recording shows a real address.
+- End card, held two seconds: **"What can it do before a person sees it?"**
 
 ### Alternative opening lines for the post copy
 
-- "Four parts of a COI matter. One of them is where nearly everyone gets it wrong."
-- "The box people trust most on a certificate is the only one that is just free text."
-- "Somebody typing 'additional insured' into a certificate does not make anyone an additional insured."
+- "It wrote the email and then it stopped, which is the only interesting thing about it."
+- "Nothing in this system reaches a vendor without somebody clicking. Here is what that looks like."
+- "Forty seconds of an automation refusing to do the thing it just spent a minute preparing."
 
-### Accuracy discipline, higher here than anywhere else in the set
+### Overlap with post 13, and why it is fine
 
-This is the only piece that teaches insurance rather than automation, so it carries the highest risk of being wrong in public.
-
-- **Do not use the ACORD name** in the video, the captions, or the post copy. `coi-demo-build-plan.md` section 1.5 says to write "standard certificate of liability insurance forms" in written marketing and never to imply affiliation.
-- **Keep the "I am not an insurance professional" line.** It is not hedging. It sets the frame that makes the whole video defensible: this is what I had to learn to build correctly, not advice.
-- **Do not name the endorsement form numbers on camera.** CG 20 10 and CG 20 37 are correct and sourced, but saying them makes a 75-second video sound like a broker wrote it, and invites a technical argument in the comments you are not positioned to win.
-- Before publishing, confirm the box names against a real certificate. The layout is documented in `01-vendor-coi-chase.md` but I have not had one in front of me.
+Post 13 is the carousel built around the same question. This clip plants it, post 13 systematizes it four posts later, and that order is deliberate. Keep post 9's copy leading with the moment rather than the question, so the two do not open identically.
 
 ### Facts traced
 
-- **The form's fixed structure**, box by box: producer, insured, insurers, coverages table with policy number and effective/expiration dates and limits, the assertion checkbox columns, Description of Operations as free text, certificate holder, authorized representative. `01-vendor-coi-chase.md`, "Why the document is easy."
-- **The four coverage lines**: commercial general liability, automobile liability, umbrella/excess, workers' compensation and employers' liability. `foundation-1-vendor-insurance.md`, "The four coverage types you'll see."
-- **A certificate describes, an endorsement grants**, and description-box wording does not create additional insured status. `foundation-1-vendor-insurance.md`, "The three documents people confuse constantly" and "The four tools of risk transfer."
-- **Additional insured and cancellation notice wording depend on policy or endorsement terms.** Texas Department of Insurance certificate FAQ, cited at the foot of `docs/demo-script.md`.
-- **Certificate holder should be the management company's exact legal name.** `01-vendor-coi-chase.md`, same section, and it is why `HOLDER_MISMATCH` exists as a flag.
+- **The approval gate and the 24-hour expiry.** `docs/how-the-system-works.md`. The request waits up to 24 hours and expires rather than sending. Default behaviour, not a setting anyone has to remember. Shown in the build, not in the footage.
+- **One click releases one email.** The approval gate lives in `Vendor Approval Request`, called once per actionable vendor by `Daily Watch and Chase`, so each vendor gets its own execution and its own genuine pause. This is why the inbox shot with several waiting requests is honest rather than decorative.
+- **Exactly one node in the whole build can email a vendor.** `docs/build-technical-notes.md` records the audit: one node out of eighty-seven, with a single inbound edge that runs through the approval pause. Useful if anyone in the comments asks how the gate is enforced.
 
-### Capture note
+### Two more clips this footage can support
 
-Record in the same session as the demo. Use a fixture PDF from `fixtures/pdfs/`, never a real certificate. The fixtures carry a visible synthetic-document watermark, which works in your favor on camera.
+Not briefed as posts, recorded here because the footage exists and it would be a waste to rediscover it later.
+
+- **Beats 12 to 13, the loop closing.** The vendor clicks the form link, submits a certificate, and the dashboard shows the new record. Self-contained, needs no setup, and it is the most satisfying sequence in the recording.
+- **Beat 3, the certificate itself.** You opened a certificate to explain what it is and what is on it. That is the footage the original post 9 wanted and I retired for lack of it. Whether it carries the sharper lesson about the Description of Operations box depends entirely on what you said over it, which I have not seen.
 
 ---
 
 ## Post 12. The failure that doesn't throw an error
 
-**Format:** native video, 60 seconds. **Pillar:** failure lessons anyone can apply. **CTA:** none.
+**Format:** text. **Pillar:** failure lessons anyone can apply. **CTA:** none.
 
-**Reframed 2026-08-02.** The old version was an engineering war story about a dashboard column. The finding is unchanged. It now opens on the general rule and closes on something the viewer can check in their own business.
+**Format changed 2026-08-06.** Was a 60-second video. The footage it needed, a before-and-after of the dashboard with and without the chase column, does not exist in the demo recording and is not being shot. The finding needs no visual, so it moves to text intact. This is the outcome I recommended on 2026-08-02 anyway, when I noted the dashboard column was a weak thing to film.
 
-### The post copy
+### The post
 
 > The failures that cost you money don't throw errors. They stop, and the screen keeps looking healthy.
 >
-> Sixty seconds on one I found in my own build. Seventeen of eighteen vendors had quietly stopped being chased. Nothing errored, no run failed, every number on the dashboard was accurate. The system was doing exactly what I built it to do, which is stop chasing a vendor who has ignored enough requests and hand them back to a person. It had done that seventeen times and had nowhere to say so.
+> Here is one I found in my own build. Seventeen of eighteen vendors had quietly stopped being chased. Nothing errored, no run failed, every number on the dashboard was accurate. The system was doing exactly what I built it to do, which is stop chasing a vendor who has ignored enough requests and hand them back to a person. It had done that seventeen times and had nowhere to say so.
+>
+> I only found it because I added a column. One column, answering whether anyone had asked this vendor for their paperwork, when, and how many times. Everything that column revealed had been true for as long as the board existed. It just had no way to reach me.
 >
 > Here is the part worth taking away. Pick anything running unattended in your business. Automated rent reminders, payment retries, screening, document requests. Ask one question: what does it look like on screen when it stops?
 >
@@ -897,64 +909,15 @@ Record in the same session as the demo. Use a fixture PDF from `fixtures/pdfs/`,
 >
 > Synthetic vendors. The paused state came from my own testing, not from anybody's real paperwork.
 
-*Word count: 168. Em dashes: 0. First 210 characters end inside "Seventeen of eighteen vendors had quietly stopped", which states the rule and opens the example.*
+*Word count: 217. Em dashes: 0. First 210 characters end inside "Seventeen of eighteen vendors had quietly stopped", which states the rule and opens the example.*
 
-### Shot list and voiceover
+### What changed in the copy when it stopped being a video
 
-Total 122 words across 60 seconds, inside the 120 to 160 range for this length.
+One paragraph was added, the one beginning "I only found it because I added a column." The video carried that beat visually, by cutting from a board without the column to a board with it. In text nothing carries it, so the discovery has to be stated. Without it the post asserts a finding and never explains how it surfaced, which is the half that makes it useful to somebody auditing their own systems.
 
-**Shot 1. The hook. 0:00 to 0:06**
+The line "Sixty seconds on one I found in my own build" also had to go, for the obvious reason.
 
-*Screen: the dashboard as it was before the chase column existed. Static. See the capture note.*
-
-> "There's nothing wrong with this screen. No error, no alert, nothing red. That's exactly what makes it the dangerous kind of failure."
-
-**Shot 2. The board that looked fine. 0:06 to 0:18**
-
-*Screen: slow scroll down the rows. Do not rush. The viewer needs to believe the screen is healthy.*
-
-> "Vendor, trade, carrier, expiration date, status. Every fact on it accurate. Nothing errored. Nothing failed."
-
-**Shot 3. The column. 0:18 to 0:30**
-
-*Screen: cut to the current dashboard, chase column present. Land the cut on the column itself.*
-
-> "Same screen with one column added. Has anyone asked this vendor for their paperwork, when, and how many times."
-
-**Shot 4. Seventeen. 0:30 to 0:46**
-
-*Screen: scroll the chase column with "Chasing paused" repeating. Let it run long enough to feel repetitive.*
-
-> "Seventeen of eighteen had quietly stopped being chased. They tripped a stop rule during my own testing and stayed there. The system was behaving correctly. It just had nowhere to say so."
-
-**Shot 5. Close, aimed at them. 0:46 to 1:00**
-
-*Screen: static on the paused column.*
-
-> "So go and pick something running unattended in your business. Rent reminders, payment retries, document requests. Ask what it looks like on screen when it stops. If that looks the same as working, that's the problem."
-
-### Burned-in caption notes
-
-- Captions throughout.
-- **Shot 4 wants a running count** burned in as the scroll passes each paused row, incrementing to 17. It turns a repetitive scroll into something that builds, and it is the only way a muted viewer feels the number rather than hearing it.
-- Corner label for the first ten seconds: "Synthetic vendors, local test data."
-- End card, held two seconds: **"What does it look like when it stops?"** The question is the takeaway, and it works better as text than spoken.
-
-### Capture note, and it needs doing before you record
-
-Shot 1 requires the dashboard **as it was before the chase column existed**. You cannot fake it by cropping, and you should not, because the honest claim is that a column was absent rather than hidden.
-
-The previous version is one commit back. The chase column was added in `0fcd62d`; the version before it is `efad6d0`.
-
-```bash
-git show efad6d0:db/postgres/005-stage-7-dashboard.sql > tmp/dashboard-before.sql
-```
-
-Apply that to the running Postgres, load the dashboard, record shots 1 and 2, then restore with `.\scripts\apply-stage-7.ps1` and confirm the Chase column is back before recording shots 3 to 5. Run `.\scripts\verify-stage-7-dashboard.ps1` afterwards, since it checks for the Chase column header and will catch a restore that did not take.
-
-If that is more surgery than you want on a recording day, record shots 3 to 5 only and open on the current board with the voiceover changed to "I added one column to this screen and it told me something I didn't want to know." Weaker hook, zero risk.
-
-### Alternative opening lines for the post copy
+### Alternative opening lines
 
 - "Software that breaks tells you. Software that quietly stops doesn't, and that's the expensive one."
 - "Seventeen of my eighteen vendors had stopped being chased and every number on the screen was correct."
@@ -968,7 +931,7 @@ If that is more surgery than you want on a recording day, record shots 3 to 5 on
 
 ### Honesty notes, because this one could drift
 
-- **It had not "been sending reminders for weeks."** This is a local build with outbound test mode on, and the paused state came from my own escalation testing rather than real vendors ignoring real emails. Shot 4 says so and the post copy repeats it. Neither can be cut for pace.
+- **It had not "been sending reminders for weeks."** This is a local build with outbound test mode on, and the paused state came from my own escalation testing rather than real vendors ignoring real emails. The last line of the post says so and it cannot be cut.
 - **No duration claims.** Git history for this build runs 2026-07-31 to 2026-08-01, so nothing longer is supportable.
 
 ---
