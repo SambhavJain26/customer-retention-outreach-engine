@@ -1,8 +1,10 @@
 # Production Blueprint: Pre-Renewal Resident Retention and Grievance-Resolution Loop
 
-**Audience:** Property management owners, executives, operations leaders, regional managers, and implementation sponsors  
-**Purpose:** Business-level design for a production deployment and the single source of reference for an Excalidraw workflow map  
-**Scope:** US residential property management companies with multiple properties and recurring fixed-term lease expirations  
+**Audience:** Property management owners, executives, operations leaders, regional managers, and implementation sponsors
+
+**Purpose:** Business-level design for a production deployment and the single source of reference for an Excalidraw workflow map
+
+**Scope:** US residential property management companies with multiple properties and recurring fixed-term lease expirations
 **Core job:** Surface resident concerns early enough to resolve them before the formal renewal process, without allowing automation or AI to make legal, commercial, or resident-facing decisions on its own
 
 > **The system is not a renewal platform.** The company's property-management software continues to control lease data, pricing, offers, notices, documents, and signatures. This system creates an early-warning and follow-through loop before and alongside that process.
@@ -646,10 +648,10 @@ This section follows one lease cycle from source event to completed or handed-of
 
 ### Phase A: source data and eligibility
 
-**P01 — Lease or resident record changes in the PMS**  
+**P01 — Lease or resident record changes in the PMS**
 A lease is created, amended, renewed, ended, or moved closer to a configured date window. A resident contact or unit assignment may also change.
 
-**P02 — Integration receives the change**  
+**P02 — Integration receives the change**
 The event arrives through an API/webhook or the next scheduled report. The event includes source IDs and timestamps.
 
 **D01 — Is the source event complete and recognizable?**
@@ -657,7 +659,7 @@ The event arrives through an API/webhook or the next scheduled report. The event
 - **Yes:** continue to P03.
 - **No:** create E01 Data exception; assign it; do not contact the resident.
 
-**P03 — Normalize and reconcile**  
+**P03 — Normalize and reconcile**
 The system maps fields, validates dates and contact information, checks duplicates, preserves prior consent and workflow state, and compares the new source version with the current case.
 
 **D02 — Is there a material conflict?**
@@ -665,7 +667,7 @@ The system maps fields, validates dates and contact information, checks duplicat
 - **No:** continue to P04.
 - **Yes:** create E02 Source conflict; show both values; pause affected resident actions.
 
-**P04 — Calculate days to lease end and cohort**  
+**P04 — Calculate days to lease end and cohort**
 The calculation uses the property or client timezone and lease end date only.
 
 **D03 — Which timing window applies?**
@@ -677,15 +679,15 @@ The calculation uses the property or client timezone and lease end date only.
 - **30-day internal handoff:** go to P30.
 - **Expired/ended/renewed:** close or archive active pre-renewal work under policy.
 
-**P05 — Assemble internal context**  
+**P05 — Assemble internal context**
 Retrieve related open/recent work orders, existing retention case state, assigned property team, and prior approved communication history.
 
-**P06 — Create watchlist visibility**  
+**P06 — Create watchlist visibility**
 Show the resident in the appropriate PMS view, operations dashboard, or regional report. No resident message is created solely because the resident entered the 120-day window.
 
 ### Phase B: 90-day check-in
 
-**P07 — Recheck eligibility**  
+**P07 — Recheck eligibility**
 Confirm lease is current, resident identity is current, email is usable, consent permits contact, no equivalent message was sent for this lease cycle, and no source conflict is open.
 
 **D04 — Eligible for check-in?**
@@ -694,10 +696,10 @@ Confirm lease is current, resident identity is current, email is usable, consent
 - **No, correctable:** create E03 Eligibility exception and assign it.
 - **No, opted out or already sent:** record the reason and stop this stage.
 
-**P08 — Build minimum drafting context**  
+**P08 — Build minimum drafting context**
 Use first name, tenure, company identity, manager identity, property-specific tone policy, and message purpose. Do not send unrelated resident data to the AI service.
 
-**P09 — AI prepares a structured draft**  
+**P09 — AI prepares a structured draft**
 The draft asks one open question about anything unresolved. It does not discuss renewal terms, money, deadlines, or notices.
 
 **P10 — Run draft policy checks**
@@ -708,7 +710,7 @@ The draft asks one open question about anything unresolved. It does not discuss 
 - **No, first failure:** return the specific failure for one controlled rewrite, then recheck.
 - **No, repeated failure or AI unavailable:** create E04 Manager wording required; preserve visibility; do not send.
 
-**P11 — Deliver approval card or task**  
+**P11 — Deliver approval card or task**
 Place the exact draft and relevant context in the manager's existing action surface.
 
 **D06 — What does the manager do?**
@@ -719,7 +721,7 @@ Place the exact draft and relevant context in the manager's existing action surf
 - **Assign for review:** move ownership and due time; remain pending.
 - **Ignore:** remain pending; remind or escalate internally under SLA; never auto-send.
 
-**P13 — Final send-time revalidation**  
+**P13 — Final send-time revalidation**
 Fetch fresh PMS/contact/consent/case state and run the current wording policy against the exact final text.
 
 **D07 — Still safe and valid to send?**
@@ -727,10 +729,10 @@ Fetch fresh PMS/contact/consent/case state and run the current wording policy ag
 - **Yes:** continue to P14.
 - **No:** refuse, record reasons, and return to the responsible employee.
 
-**P14 — Reserve unique send action**  
+**P14 — Reserve unique send action**
 Atomically claim the one allowed 90-day send for this lease cycle. A retry or second approval cannot claim it again.
 
-**P15 — Send through company mailbox**  
+**P15 — Send through company mailbox**
 Use the client's authenticated sender identity and a traceable conversation reference.
 
 **D08 — Did delivery succeed?**
@@ -741,13 +743,13 @@ Use the client's authenticated sender identity and a traceable conversation refe
 
 ### Phase C: resident reply and triage
 
-**P17 — Resident replies normally by email**  
+**P17 — Resident replies normally by email**
 The email platform produces a mailbox event or the monitored mailbox check finds the message.
 
-**P18 — Deduplicate the inbound message**  
+**P18 — Deduplicate the inbound message**
 Use provider message ID and conversation reference so the same email is processed once.
 
-**P19 — Match reply deterministically**  
+**P19 — Match reply deterministically**
 Use the embedded conversation reference first and exact approved sender address second.
 
 **D09 — Is there one confident resident match?**
@@ -755,7 +757,7 @@ Use the embedded conversation reference first and exact approved sender address 
 - **Yes:** continue to P20.
 - **No or multiple:** create E07 Unmatched reply; attach to nobody; alert human resolver.
 
-**P20 — Clean the reply**  
+**P20 — Clean the reply**
 Remove quoted prior messages, standard signatures, and transport noise while preserving the verbatim original in the restricted audit record.
 
 **D10 — Is it an automatic or empty response?**
@@ -763,7 +765,7 @@ Remove quoted prior messages, standard signatures, and transport noise while pre
 - **Yes:** P21 log `NO_SIGNAL`; leave resident state unchanged; no ordinary alert.
 - **No:** continue to P22.
 
-**P22 — Run fixed sensitive-category and opt-out detection**  
+**P22 — Run fixed sensitive-category and opt-out detection**
 Apply deterministic rules before general AI interpretation.
 
 **D11 — Is it an opt-out?**
@@ -771,10 +773,10 @@ Apply deterministic rules before general AI interpretation.
 - **Yes:** P23 write permanent cross-channel consent state, stop future outreach, notify assigned human, and audit.
 - **No:** continue to P24.
 
-**P24 — AI classifies and summarizes**  
+**P24 — AI classifies and summarizes**
 Return fixed fields for intent, grievance presence and category, urgency, sensitive-category flag, suggested human action, and confidence.
 
-**P25 — Apply deterministic routing rules**  
+**P25 — Apply deterministic routing rules**
 Human review is required for any grievance, question, mixed or leaving intent, sensitive flag, unclear meaning, low/medium confidence, or fixed/AI disagreement.
 
 **D12 — Is it a clean, high-confidence positive with no question or concern?**
@@ -782,10 +784,10 @@ Human review is required for any grievance, question, mixed or leaving intent, s
 - **Yes:** P26 record positive response, update case, and keep it visible for reporting. No urgent alert.
 - **No:** continue to P27.
 
-**P27 — Open or update a retention issue**  
+**P27 — Open or update a retention issue**
 Assign category, owner, due time, urgency, resident quote, source links, and the next expected human action.
 
-**P28 — Correlate maintenance or service context**  
+**P28 — Correlate maintenance or service context**
 Search for related work orders or service records and attach links. Do not auto-merge uncertain records.
 
 **D13 — Is there a clearly related open work item?**
@@ -794,12 +796,12 @@ Search for related work orders or service records and attach links. Do not auto-
 - **No:** create a proposed or approved internal task according to client policy.
 - **Uncertain:** require a human to link or create the work item.
 
-**P29 — Alert and assign in existing tools**  
+**P29 — Alert and assign in existing tools**
 Send a person-sized action card and create/synchronize the task. Sensitive cases receive the client-defined additional route and response deadline.
 
 ### Phase D: human response and issue resolution
 
-**P31 — Employee reviews the resident's words and source context**  
+**P31 — Employee reviews the resident's words and source context**
 The employee decides the correct operational response and updates the source system as required.
 
 **D14 — Should a resident acknowledgement be sent?**
@@ -807,10 +809,10 @@ The employee decides the correct operational response and updates the source sys
 - **Yes:** P32 request a draft or write one manually.
 - **No:** record reason and continue internal work; the case remains open.
 
-**P32 — Prepare acknowledgement draft**  
+**P32 — Prepare acknowledgement draft**
 AI may draft from the approved issue facts and company policy. The employee can edit it.
 
-**P33 — Validate and approve exact acknowledgement**  
+**P33 — Validate and approve exact acknowledgement**
 Run message-specific guardrails and require an authorized individual approval.
 
 **D15 — Approved and still valid?**
@@ -818,10 +820,10 @@ Run message-specific guardrails and require an authorized individual approval.
 - **Yes:** P34 reserve unique send and deliver through the company mailbox.
 - **No:** keep pending or record discard; nothing sends.
 
-**P35 — Perform operational work in source systems**  
+**P35 — Perform operational work in source systems**
 Maintenance, leasing, compliance, or property staff use their normal tools and authority.
 
-**P36 — Synchronize assignment and progress**  
+**P36 — Synchronize assignment and progress**
 The automation reflects owner, status, due time, last action, and source links in the retention case.
 
 **D16 — Is work overdue, stalled, or unacknowledged?**
@@ -834,7 +836,7 @@ The automation reflects owner, status, due time, last action, and source links i
 - **No:** remain open.
 - **Yes:** P38 move to `RESOLUTION_PENDING_CONFIRMATION` rather than closing invisibly.
 
-**P39 — Prepare resident confirmation message**  
+**P39 — Prepare resident confirmation message**
 Ask whether the specific issue is now sorted. Run policy checks and require a new approval.
 
 **D18 — Confirmation approved and delivered?**
@@ -856,30 +858,30 @@ Ask whether the specific issue is now sorted. Run policy checks and require a ne
 - **No:** P42 prepare the client-approved lighter follow-up, then repeat individual drafting, validation, approval, uniqueness, and delivery controls.
 - **Opted out, invalid contact, conflict, or already handled:** no send; record reason.
 
-**P30 — Thirty-day internal handoff**  
+**P30 — Thirty-day internal handoff**
 Create or update the renewal-team work item with response state, known unresolved concerns, early departure signal, and source links. The automation sends no resident check-in at this stage.
 
-**P43 — Existing renewal process operates**  
+**P43 — Existing renewal process operates**
 Authorized staff use the PMS and approved legal/document process for pricing, offers, notices, negotiation, and signatures.
 
-**P44 — Renewal outcome returns from PMS**  
+**P44 — Renewal outcome returns from PMS**
 The system records renewed, non-renewed, month-to-month, pending, or unknown outcome without inventing causation.
 
-**P45 — Reporting closes the cycle**  
+**P45 — Reporting closes the cycle**
 Aggregate coverage, responses, concerns, service levels, confirmed resolutions, unresolved cases, and outcomes. Financial attribution uses the client's approved methodology.
 
 ### Phase F: continuous operations
 
-**P46 — Daily reconciliation sweep**  
+**P46 — Daily reconciliation sweep**
 Recalculate timing, compare source and workflow state, identify missed events, age assignments, and refresh reporting.
 
-**P47 — Heartbeat and watchdog**  
+**P47 — Heartbeat and watchdog**
 Every critical scheduled process writes a heartbeat. A separate watchdog alerts if a job has not run, even when no ordinary error was emitted.
 
-**P48 — Retention and deletion**  
+**P48 — Retention and deletion**
 Delete or archive resident content, execution payloads, and expired cases according to written policy while preserving only permitted audit metadata.
 
-**P49 — Backup and restore verification**  
+**P49 — Backup and restore verification**
 Backups run automatically. Restore tests occur on a documented schedule so recovery is demonstrated rather than assumed.
 
 ---
