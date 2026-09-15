@@ -1,6 +1,6 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-08-21
+Last updated: 2026-09-15
 
 ## Current Status
 
@@ -76,6 +76,15 @@ Current proposed direction:
 | 8 | End-to-End Rehearsal and Demo Package | Complete | POC-complete: docs-only fallback, demo runbook, operator guide, prospect-facing explainer, package helper, and three cold-start rehearsals passed. |
 
 ## Deviations From Original Plan
+
+2026-09-15: Added `docs/production-blueprint.md`, a business-level production operating
+model and diagram specification for the complete pre-renewal retention loop. It starts with
+an illustrative 4,800-unit operating scenario, distinguishes the production design from the
+demo, keeps the PMS and maintenance platform authoritative, places employee actions in the
+client's existing work surfaces, defines AI and human boundaries, specifies end-to-end and
+exception flows, and provides Excalidraw-ready actors, systems, inputs, outputs, decisions,
+human gates, status states, and control bands. No production integration or infrastructure
+was deployed as part of this documentation task.
 
 2026-08-22: Built the four Batch 1 LinkedIn document carousels from the signed-off
 Build 4 copy. Added HTML decks for posts 1, 3, 6, and 13 plus upload-ready PDFs.
