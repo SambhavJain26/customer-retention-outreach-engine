@@ -488,3 +488,10 @@ linkedin-post-scripts.md from the leasing-tenant-screening project. The existing
 13-post campaign is preserved, not rewritten. Each file identifies its canonical
 leasing source; supporting Markdown links resolve to that project, while the three
 collection files link to each other locally. No renewal workflows or policy changed.
+
+## 2026-09-18 — Build 5 reference scripts formatted
+
+Updated the Build 5 script reference to match the earlier builds' Markdown convention:
+publishable copy and narration in blockquotes, bold instruction labels and separators
+between posts. The leasing source received the same presentation-only revision.
+Existing wording, 13 posts, 49 slides, reference notice and document links are preserved.
