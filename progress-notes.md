@@ -479,3 +479,12 @@ Record the demo. The build and its documentation are complete; remaining work is
 recording. Before each session run `node scripts/v2/start-tunnel.js`, re-import WF6, reset with
 `node scripts/v2/seed-airtable-demo.js`, and clear the Telegram chat so no stale card can be
 tapped on camera.
+
+## 2026-09-18 — Build 5 content reference folder added
+
+Added docs/build-5-content-strategy beside the existing Build 1–4 folders at the
+user's request. Includes customer-language.md, linkedin-content-plan.md and
+linkedin-post-scripts.md from the leasing-tenant-screening project. The existing
+13-post campaign is preserved, not rewritten. Each file identifies its canonical
+leasing source; supporting Markdown links resolve to that project, while the three
+collection files link to each other locally. No renewal workflows or policy changed.
