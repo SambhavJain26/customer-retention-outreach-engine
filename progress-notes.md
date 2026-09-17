@@ -495,3 +495,12 @@ Updated the Build 5 script reference to match the earlier builds' Markdown conve
 publishable copy and narration in blockquotes, bold instruction labels and separators
 between posts. The leasing source received the same presentation-only revision.
 Existing wording, 13 posts, 49 slides, reference notice and document links are preserved.
+
+## 2026-09-18 — Posting queue updated across five builds
+
+Updated docs/posting-order.md to start after Make-ready 5, without a publication-history
+tracker, per the user's clarification. Interleaved all thirteen active Build 5 posts
+in their planned sequence and excluded standalone image posts. The remaining queue
+has 42 slots: 9 carousels, 26 text posts and 7 videos. Source copy is unchanged.
+Verified slot numbering, format totals, local links/anchors and build/format adjacency.
+No durable implementation command or gotcha arose; AGENTS.md/CLAUDE.md need no change.
