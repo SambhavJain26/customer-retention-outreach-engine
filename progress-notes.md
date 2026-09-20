@@ -504,3 +504,11 @@ in their planned sequence and excluded standalone image posts. The remaining que
 has 42 slots: 9 carousels, 26 text posts and 7 videos. Source copy is unchanged.
 Verified slot numbering, format totals, local links/anchors and build/format adjacency.
 No durable implementation command or gotcha arose; AGENTS.md/CLAUDE.md need no change.
+
+## 2026-09-20 — Posting queue synchronized with Build 5 edits
+
+Updated `docs/posting-order.md` after the Build 5 caption and video-direction revision.
+The queue still begins after Make-ready 5, contains 42 posts, and excludes standalone image
+posts. Build 5's 13 IDs, formats and positions did not change. Its full-demo and short-video
+notes now reflect manager-approved tour booking, manager-recorded synthetic tour completion,
+the human rental decision, sandbox signature and separately approved welcome delivery.
