@@ -528,3 +528,4 @@ Template data architecture:
 - `concept-brief/scripts/render-brief.cjs`: Playwright rendering script with automated validation, layout bounding box checks (0 escaped elements, 0 clipped texts, ≥12px edge padding, exact lane/spine alignments), screenshot capture, and tagged PDF export. Refuses to overwrite baseline template.
 - Verified both baseline template (`output/pdf/renewal-retention-solution-brief.pdf`) and prospect export (`output/pdf/sample-property-co-renewal-retention-brief.pdf`) with 0 layout check errors.
 - Verified error handling: rejection of invalid slug, unreplaced bracketed placeholders, and attempts to overwrite protected PDFs.
+- Fixed hosting-note text leak on Page 3: tightened footer note copy to `PMS remains the business record.` (giving ~49px of clearance inside the container) and added explicit `.hosting-inner` boundary and tightness tests to `render-brief.cjs`.

@@ -170,6 +170,20 @@ try {
         if (bottom < 12) tight.push({ component: "comparison key to panel", bottom });
       }
 
+      const hostingInner = paper.querySelector(".hosting-inner");
+      const hostingNote = paper.querySelector(".hosting-note");
+      if (hostingInner && hostingNote) {
+        const innerBox = hostingInner.getBoundingClientRect();
+        const noteBox = hostingNote.getBoundingClientRect();
+        const rightClearance = +(innerBox.right - noteBox.right).toFixed(1);
+        if (rightClearance < 12) {
+          tight.push({ component: "hosting-note right clearance", right: rightClearance });
+        }
+        if (noteBox.right > innerBox.right + 0.5) {
+          clipped.push("hosting-note leaking out of hosting-inner");
+        }
+      }
+
       const misaligned = [];
       const matchEdge = (name, selectorA, selectorB, edge) => {
         const a = paper.querySelector(selectorA);
