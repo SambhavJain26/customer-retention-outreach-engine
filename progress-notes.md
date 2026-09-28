@@ -512,3 +512,19 @@ The queue still begins after Make-ready 5, contains 42 posts, and excludes stand
 posts. Build 5's 13 IDs, formats and positions did not change. Its full-demo and short-video
 notes now reflect manager-approved tour booking, manager-recorded synthetic tour completion,
 the human rental decision, sandbox signature and separately approved welcome delivery.
+
+## 2026-09-28 — Reusable prospect-personalized solution brief created
+
+Created the prospect-personalized solution brief template for Pre-Renewal Retention under `concept-brief/`.
+Adopted an executive 4-page square format (9 in × 9 in / 864 px × 864 px) answering the four key decision-maker questions:
+1. What problem in our current work would this solve, and what changes? (Page 1: Comparison between manual lease administration and the early-warning retention loop)
+2. What does the system actually do from start to finish? (Page 2: 7-stage workflow from 120-day watchlist to 30-day formal renewal handoff, with strict human approval gates)
+3. What tools connect, and what information moves? (Page 3: System architecture separating existing PMS/maintenance/email tools, client-dedicated n8n orchestration, and external AI)
+4. What do people decide, and what are the practical results? (Page 4: Daily operating view, human authority boundaries, fail-visible controls, and measured pilot metrics)
+
+Template data architecture:
+- `concept-brief/prospect-data.template.json`: Master editable data file with fields for `slug`, `company`, `decisionMaker`, `research.reviewed`, `research.note` (≤200 chars), `research.evidence` (kept internal, never rendered in PDF), `systems`, and `routes`.
+- `concept-brief/fixtures/prospect-data.qa.json`: Validated fictional prospect fixture (`Sample Residential Group`).
+- `concept-brief/scripts/render-brief.cjs`: Playwright rendering script with automated validation, layout bounding box checks (0 escaped elements, 0 clipped texts, ≥12px edge padding, exact lane/spine alignments), screenshot capture, and tagged PDF export. Refuses to overwrite baseline template.
+- Verified both baseline template (`output/pdf/renewal-retention-solution-brief.pdf`) and prospect export (`output/pdf/sample-property-co-renewal-retention-brief.pdf`) with 0 layout check errors.
+- Verified error handling: rejection of invalid slug, unreplaced bracketed placeholders, and attempts to overwrite protected PDFs.

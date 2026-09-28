@@ -51,6 +51,7 @@ Useful commands:
 - `node scripts/v2/setup-airtable-schema.js`: create the demo tables and fields in an empty base.
 - `node scripts/v2/build-wf<n>-*.js`: regenerate a workflow export after changing a shared library.
 - `node scripts/v2/import-v2-workflows.js [name ...]`: substitute local ids and import/activate in n8n.
+- `node concept-brief/scripts/render-brief.cjs [--data <prospect.json>]`: render 4-page square solution brief and run automated QA checks.
 - `.\scripts\verify-stage-1.ps1`: verify Docker, Compose config, and local n8n reachability.
 
 Do not assume package managers, Docker images, API keys, Gmail OAuth credentials, Telegram bots, OpenAI credentials, tunnels, or n8n credentials already exist.

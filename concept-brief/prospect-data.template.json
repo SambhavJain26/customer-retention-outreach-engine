@@ -1,0 +1,26 @@
+{
+  "slug": "replace-with-prospect-slug",
+  "company": "",
+  "decisionMaker": "",
+  "research": {
+    "reviewed": ["", "", ""],
+    "note": "",
+    "evidence": []
+  },
+  "systems": {
+    "hosting": "",
+    "pms": "",
+    "mailbox": "",
+    "managerChannel": "",
+    "maintenance": "",
+    "reportingTool": ""
+  },
+  "routes": {
+    "pmsSync": "",
+    "residentEmail": "",
+    "managerChannel": "",
+    "maintenance": "",
+    "hosting": "",
+    "reporting": ""
+  }
+}

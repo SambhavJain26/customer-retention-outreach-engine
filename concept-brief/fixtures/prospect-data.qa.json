@@ -1,0 +1,36 @@
+{
+  "slug": "sample-property-co",
+  "company": "Sample Residential Group",
+  "decisionMaker": "Jordan Vance",
+  "research": {
+    "reviewed": [
+      "Portfolio website",
+      "Multifamily directory",
+      "Operating profile"
+    ],
+    "note": "At Sample Residential Group, managing renewals across 3,500 units makes retention critical. Connecting lease timing to an early check-in lets your team resolve issues before formal offers.",
+    "evidence": [
+      {
+        "fact": "Fictional portfolio size 3,500 units across regional suburban assets",
+        "source": "Fictional QA scenario",
+        "url": "https://example.com/internal-evidence-only"
+      }
+    ]
+  },
+  "systems": {
+    "hosting": "Client AWS environment",
+    "pms": "Yardi Voyager",
+    "mailbox": "Microsoft 365",
+    "managerChannel": "Microsoft Teams",
+    "maintenance": "Yardi Maintenance IQ",
+    "reportingTool": "Power BI"
+  },
+  "routes": {
+    "pmsSync": "Scheduled secure report (SFTP)",
+    "residentEmail": "Microsoft Graph API OAuth",
+    "managerChannel": "Teams webhook & action cards",
+    "maintenance": "PMS work-order sync",
+    "hosting": "Client-dedicated AWS container",
+    "reporting": "Daily BI dashboard feed"
+  }
+}
