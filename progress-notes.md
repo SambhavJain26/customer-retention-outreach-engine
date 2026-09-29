@@ -8,6 +8,11 @@ Last updated: 2026-09-15
 - Visual QA covered all 15 rendered pages. Extracted text and screenshot review found no repository paths, internal document names, contact details, or links in the public PDF.
 - Airtable remained populated with 40 synthetic lease rows, eight outreach-log records, and a metrics snapshot showing 14 residents in the window, two check-ins sent, two replies, two issues found, and one resolved.
 - A fresh `demo-start.js` run repaired the tunnel and confirmed all five workflows active, then stopped before reset because Airtable returned `401 UNAUTHORIZED` for the configured PAT. The PDF labels output screenshots as a recorded demo snapshot and does not claim a fresh run.
+
+## 2026-09-29 - Work sample canvas brightness correction
+
+- The first PDF's n8n canvas captures were visibly dimmed by an editor overlay. Recaptured all five workflows in the existing dark theme after the editor returned to normal brightness; no workflow logic changed.
+- Rebuilt the 15-page PDF with fresh full-canvas and enlarged crops. Recaptured the populated Airtable cohort and reply-classification views, tightened the log and status crops, and inspected the rendered pages. Final text checks found no contact details, links, repository paths, or internal document names.
 - The n8n editor displayed an autosave error after Tidy Up on the first workflow. Captures were taken from the visually tidied live canvases; committed workflow exports remain the implementation source of truth.
 
 ## Current Status

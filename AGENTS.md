@@ -113,6 +113,7 @@ Known gotchas to account for:
 - The bundled Playwright package may not have its managed Chromium executable installed. For local dashboard/browser smoke tests, use the system Chrome executable at `C:\Program Files\Google\Chrome\Application\chrome.exe` when present.
 - An Airtable `401 UNAUTHORIZED` during `demo-start.js` means the configured PAT needs renewal. The reset stops before clearing rows when its first Airtable read fails; do not describe an older populated base as a fresh run.
 - n8n's editor may show an autosave error after Tidy Up. Verify the live layout visually before capture, and keep workflow exports as the source of truth until a layout save is confirmed.
+- Before capturing an n8n canvas for a public PDF, dismiss any feedback or modal overlay and inspect the screenshot itself. An overlay can dim every node while leaving the workflow visible; recapture after the editor returns to normal brightness. Keep the chosen dark theme.
 - Stage 6 reply timing slows as local `outreach_log` fixture residue grows because the POC duplicate check reads log rows from Data Tables. Run the Stage 7 reset path, or clear demo log rows with verifier-owned temporary workflows, before rehearsing strict timing.
 
 ## Testing And Verification
