@@ -340,7 +340,7 @@ c.setCreator('Automation Work Sample')
 for draw in pages:
     draw()
     c.setStrokeColor(BORDER);c.setLineWidth(.7);c.line(42,40,750,40)
-    lab('LOCAL DEMO / SYNTHETIC DATA / WORK SAMPLE',42,26,8,color=TEXT)
+    lab('PRE-RENEWAL GRIEVANCE DETECTION / WORK SAMPLE',42,26,8,color=TEXT)
     c.setFont('Manrope',8);c.setFillColor(TEXT);c.drawRightString(750,26,f'{c.getPageNumber()} / {len(pages)}')
     c.showPage()
 c.save()

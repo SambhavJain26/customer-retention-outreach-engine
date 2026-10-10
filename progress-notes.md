@@ -2,6 +2,11 @@
 
 Last updated: 2026-10-10
 
+## 2026-10-10 - Work sample footer revision
+
+- Replaced the repeated demo-data footer on all 35 pages with `PRE-RENEWAL GRIEVANCE DETECTION / WORK SAMPLE`, as requested. Demo and synthetic-data explanations remain in the body and evidence captions.
+- Re-rendered the PDF, checked all footer renders, and verified that page content above the footer is pixel-identical to the reviewed version. Public-asset, extracted-text and metadata privacy checks passed again.
+
 ## 2026-10-10 - Client work sample with connected execution evidence
 
 - Created `output/pdf/renewal-retention-upwork-work-sample.pdf`: 35 landscape pages following the existing reference's Manrope typography, green/navy palette, spacing and restrained page design.

@@ -47,6 +47,8 @@ for number, page in enumerate(reader.pages, 1):
     assert not page.get('/AA'), number
     text = page.extract_text()
     assert f'{number} / 35' in text
+    assert 'PRE-RENEWAL GRIEVANCE DETECTION / WORK SAMPLE' in text
+    assert 'LOCAL DEMO / SYNTHETIC DATA / WORK SAMPLE' not in text
     for label, pattern in patterns.items():
         assert not re.search(pattern, text, re.I), (number, label)
     for embedded in page.images:
