@@ -114,6 +114,7 @@ Known gotchas to account for:
 - An Airtable `401 UNAUTHORIZED` during `demo-start.js` means the configured PAT needs renewal. The reset stops before clearing rows when its first Airtable read fails; do not describe an older populated base as a fresh run.
 - n8n's editor may show an autosave error after Tidy Up. Verify the live layout visually before capture, and keep workflow exports as the source of truth until a layout save is confirmed.
 - Before capturing an n8n canvas for a public PDF, dismiss any feedback or modal overlay and inspect the screenshot itself. An overlay can dim every node while leaving the workflow visible; recapture after the editor returns to normal brightness. Keep the chosen dark theme.
+- For work-sample capture, inspect the saved raster: a browser screenshot clip may return the wrong origin. Capture the full viewport and crop the actual pixels when needed. Use native-zoom branch captures rather than enlarging small overview images. Rebuild the public PDF with `python scripts/render-work-sample.py` and verify its flattened assets, text and metadata with `python scripts/verify-work-sample.py`; visually inspect every page as well.
 - Stage 6 reply timing slows as local `outreach_log` fixture residue grows because the POC duplicate check reads log rows from Data Tables. Run the Stage 7 reset path, or clear demo log rows with verifier-owned temporary workflows, before rehearsing strict timing.
 
 ## Testing And Verification

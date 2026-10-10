@@ -1,6 +1,16 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-09-15
+Last updated: 2026-10-10
+
+## 2026-10-10 - Client work sample with connected execution evidence
+
+- Created `output/pdf/renewal-retention-upwork-work-sample.pdf`: 35 landscape pages following the existing reference's Manrope typography, green/navy palette, spacing and restrained page design.
+- Read the required documentation and inspected v2 builders, shared logic, fixtures, Stage 9 verification and preserved n8n execution data before authoring. Reused the August 24 synthetic demonstration rather than resetting useful evidence. Started the stopped local n8n service with its existing volume; no reset or outbound message was performed during this revision. Airtable API reads returned 401, while the signed-in browser showed the preserved 40 leases, eight log rows and metrics.
+- Used the actual Tidy Up control on WF6–WF10, kept the dark theme, dismissed dimming overlays, and captured full canvases plus native-zoom branches. All 25/21/21/18/3 nodes respectively appear in their overview captures. Workflow exports remain the logic source of truth; layout capture does not assert that editor autosave persisted a layout.
+- Captured the genuine Telegram approval conversations, preserved Gmail messages, populated Airtable records, metrics and audit log. Avery/R-33F8 connects manager editing and approval, Gmail check-in, maintenance reply, alert, separately approved reply assistance and delivery. José/R-0545 connects an accommodation alert to manager-recorded closure. A separate August 21 execution shows duplicate approval returning `already_sent` without entering Gmail.
+- Preserved results: 14 drafts with zero review failures in 24.373 seconds; two approved check-ins, two received replies, two issues and one recorded resolution. Explained the configured exposure proxy without claiming realized savings, a repair or signed renewal. Manual fixture paths are described separately from genuine integration evidence.
+- Inspected all 35 rendered pages, including screenshot content and privacy masks. Contact headers and private request details are solid flattened raster redactions; unrelated sidebars and contact footer links are cropped or removed. Automated verification passed: 43 PDF images exactly match approved RGB PNGs, no image is enlarged above its source dimensions, extracted text has no prohibited details, and there are no links, annotations, attachments, XMP, personal metadata or dates. Metadata-only finalization preserves the rendered page content.
+- Rebuild with `python scripts/render-work-sample.py`; check with `python scripts/verify-work-sample.py` (ReportLab, Pillow and pypdf required). Raw captures and local execution copies stay ignored under `tmp/`; only reviewed public assets are committed.
 
 ## 2026-09-29 - Work sample PDF
 
@@ -19,8 +29,8 @@ Last updated: 2026-09-15
 
 Stage 9 is complete at POC depth. The demo now runs entirely on Airtable and Telegram:
 WF6 (Telegram router and actions), WF7 (cadence generation and approval cards), WF8 (reply
-matching, classification, routing), WF9 (daily sweep, metrics, error alerts), and optional
-WF10 (automatic reply polling, shipped inactive).
+matching, classification, routing), WF9 (daily sweep, metrics, error alerts), and
+WF10 (automatic reply polling, active per the August 21 decision).
 
 The v1 board build has been removed from the working tree after v2 passed live testing. It
 remains recoverable at tag `poc-v1-board`.
