@@ -2,6 +2,12 @@
 
 Last updated: 2026-10-19
 
+## 2026-10-19 - Posting queue narrowed to eight technical posts
+
+- Updated `docs/posting-order.md` at the user's request to contain only the eight previously identified remaining technical posts: original slots 20, 21, 23, 27, 28, 29, 33 and 35. Preserved their relative order, source post IDs, script links, plan links and formats; renumbered the active queue 1-8 with a separate original-slot column.
+- Removed all other queue entries and replaced obsolete 42-post counts, production lists, rotation rules and cadence notes. The active queue is seven text posts and one video. Source scripts, plans and assets remain intact; the new technical retrospective carousel stays outside this queue while under review. No posts were published or scheduled.
+- Checked the exact retained slot set, row count, format totals and local link targets. No new durable command or repository rule was needed.
+
 ## 2026-10-19 - AI-engineer audience and annotation revision
 
 - Revised the technical retrospective caption, 11 slide scripts, generated HTML, PDF and contact sheet after the user requested the maintenance-triage carousel kit as a reference and an AI-engineer hiring audience. Read both reference decks' source and inspected their rendered examples. Maintenance-triage files were read only.
