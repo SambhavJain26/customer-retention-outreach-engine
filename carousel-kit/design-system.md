@@ -629,6 +629,8 @@ visual quality are independent here.
 
 ### Technical retrospective layout
 
+**2026-10-20 audience correction:** The current retrospective is problem-first for property-management readers and hiring readers together. Use the existing visual primitives for plain-language workflow lanes, responsibility comparisons, bug/fix flows and specific checks. No public stack, schema, code, node counts or internal status labels. The cover payoff is now listening. This direction supersedes the engineering-heavy content descriptions below; their reusable layout mechanics remain available.
+
 **2026-10-19 visual-first revision:** `.technical--visual` replaces the repeated
 heading/paragraph/small-flow composition with diagram-led slides. Supporting body
 copy is 40/48px. The eleven bodies total 279 words, down from 459; diagrams and

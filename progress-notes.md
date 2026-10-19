@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-20
 
+## 2026-10-20 - Problem-first carousel for buyers and hiring readers
+
+- Applied the user's audience correction across the eleven-slide carousel, full caption and reusable project prompt. The story now leads with surfacing unresolved concerns before renewal, followed by the plain-language workflow, manager decisions, wording choices, two actual bugs and fixes, exception handling, lessons, specific checks and proposed improvements.
+- Removed public stack names, node counts, schema/code excerpts and internal state labels. Kept concrete substance through the edited-message validation gap, Skip making a sent resident eligible again, individual message approval and visible human-review routes. Preserved the public-copy direction and internal evidence boundaries; no customer outcomes or classifier accuracy claims were added.
+- Reused the varied visual layouts with accessible labels, retained blue/yellow annotations and changed the single Zodiak cover payoff to listening. Updated design guidance and the matching AGENTS.md/CLAUDE.md rule. Normalized CRLF in the Markdown builder so Windows checkouts preserve slide parsing.
+- Verification: rebuilt PDF; all eleven title/body/footer fields match extracted text; expected dimensions, nine font subsets and one grain image; browser confirms Switzer/Zodiak loading and no content overflow or furniture collisions. Visually inspected all eleven raster pages and refreshed contact sheet. Final PDF is 160,006 bytes. No workflow runtime, posting queue or publication changes.
+
 ## 2026-10-20 - Build-focused public copy and reusable prompt
 
 - Applied the user's direction to remove public demo/synthetic-data mentions and no-client/no-deployment disclaimers from the technical carousel and caption. Updated affected footers, verification context and next-improvement wording without adding deployment, accuracy or business-outcome claims. Internal provenance and evidence mapping remain intact; proposed controls remain future work.
