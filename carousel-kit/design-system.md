@@ -629,6 +629,23 @@ visual quality are independent here.
 
 ### Technical retrospective layout
 
+**2026-10-19 user revision:** For this technical carousel, annotation shape and
+color are independent. Every highlight, circle, underline, strike and selection
+box may be blue or yellow/gold. This overrides the older fixed-color and
+cover-only selection-box restrictions for this deck. Choose meaning first and
+color for hierarchy and legibility. Use the maintenance-triage carousel kit as
+the visual reference: prominent headline annotations, paired devices and
+double-stroke circles, rather than one small highlight per prose paragraph.
+
+The `.hl--blue`, `.pen--blue`, `.pen--gold` and `.sel--gold` variants are scoped
+under `.technical`. Default marker and box classes supply gold and blue
+respectively. Gold pens on cream use a darker gold for contrast; dark-page
+overrides use bright gold and lighter blue. Both highlight colors use dark ink.
+`.technical--ai` enlarges titles to 72/96px and body copy to 44/48px; the cover
+remains 96/120px. `.tech-measure` isolates a figure at 120/144px. A second box
+is used purposefully on the reproducibility slide; the original decks remain
+unchanged. Small schema excerpts are labeled as configuration, not model output.
+
 `.technical` uses the same paper, fonts and annotation vocabulary for longer
 technical explanations. `.tech-title` is 64/72px and `.tech-copy` is 40/48px;
 `.tech-flow` adds ruled process rows at 32/48px. The body spans 192px from the

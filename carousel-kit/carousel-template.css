@@ -356,6 +356,27 @@ html, body {
 .technical.slide--invert .tech-flow,
 .technical.slide--invert .tech-flow p { border-color: rgba(253,240,214,0.22); }
 
+/* User-directed annotation colors: shape and color are independent.
+   Scoped to technical decks so established carousel exports keep their look. */
+.technical .hl--blue {
+  --swipe: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='40' preserveAspectRatio='none'%3E%3Cpath d='M1,7 C46,1 128,11 206,5 C284,-1 348,10 399,3 L399,34 C352,39 268,29 186,35 C104,41 44,32 1,37 Z' fill='%2396B0E3'/%3E%3C/svg%3E");
+  color: var(--ink);
+}
+.technical .pen--gold > svg { stroke: var(--gold-400); }
+.technical .sel--gold { background: var(--marker); color: var(--ink); }
+.technical .sel--gold i { border-color: var(--gold-400); }
+.technical .pen--blue > svg { stroke: var(--pen); }
+.technical.slide--invert .pen--gold > svg { stroke: var(--marker); }
+.technical.slide--invert .pen--blue > svg { stroke: var(--blue-200); }
+.technical.slide--invert .sel { color: var(--paper); }
+.technical.slide--invert .sel--gold { color: var(--ink); }
+.technical.technical--ai .tech-title { font-size: 72px; line-height: 96px; }
+.technical.technical--ai .tech-copy { font-size: 44px; line-height: 48px; }
+.technical.technical--ai .tech-cover { font-size: 96px; line-height: 120px; }
+.technical .tech-measure { display: block; font-size: 120px; line-height: 144px; margin-bottom: 24px; }
+.technical .tech-schema p { font-size: 30px; }
+.technical .tech-schema code { font-family: var(--sans); font-weight: 600; }
+
 /* ===========================================================================
    ANNOTATION LAYER — the marker, the pen, the selection
    Hand-drawn geometry, deliberately imperfect. Nothing here is a rectangle

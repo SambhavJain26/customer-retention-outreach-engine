@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-19
 
+## 2026-10-19 - AI-engineer audience and annotation revision
+
+- Revised the technical retrospective caption, 11 slide scripts, generated HTML, PDF and contact sheet after the user requested the maintenance-triage carousel kit as a reference and an AI-engineer hiring audience. Read both reference decks' source and inspected their rendered examples. Maintenance-triage files were read only.
+- Replaced the Telegram card-parameter slide with the classifier schema contract and added explicit bounded-draft-retry and model-error-routing coverage. Kept the validation/edit and Skip/state defects as engineering examples. Clarified that the recorded 14/14 result concerns draft wording, not classifier accuracy; a held-out reply set, concurrent-send controls and uncertain-send recovery remain proposed work. All implementation claims were checked against shared logic, schemas and builders; no new live integration run or production outcome is implied.
+- Expanded annotation use following the user's explicit color direction: every shape can use blue or gold. The final deck has eight highlights (five blue), seven double-stroke circles, six underlines, four strikes and two selection boxes (one blue, one gold). Marks appear on headlines and state/validation diagrams as well as body text. Added scoped color variants and the larger `.technical--ai` layout, with both colors handled on the dark slide. Existing carousels retain their styles. Updated design-system.md, AGENTS.md and CLAUDE.md to preserve this user direction.
+- Rebuilt and visually inspected all 11 pages plus the contact sheet. Corrected a split dark-page highlight and rechecked changed final pages. Final checks pass: all title/body/footer wording preserved, 11 expected portrait pages, eight font subsets, one shared grain image, no internal paths/notes, and no geometry overflow or furniture collisions. PDF is 158,452 bytes. Copy remains a draft for user review; no publication or posting-order change.
+
 ## 2026-10-19 - Rendered technical retrospective carousel
 
 - Built `carousel-kit/technical-retrospective-renewal-retention.html`, an 11-page review PDF in `carousel-kit/out/technical-retrospective-renewal-retention.pdf`, and `carousel-kit/out/technical-retrospective-preview.png`. Preserved all drafted title/body/footer wording; added explanatory process labels from the visual directions. No publication or queue change.
