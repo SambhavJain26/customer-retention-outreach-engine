@@ -1,6 +1,6 @@
 # Technical retrospective: an AI workflow with human approval
 
-Created: 2026-10-19. Revised after density and layout review: 2026-10-19.
+Created: 2026-10-19. Revised after public-copy review: 2026-10-20.
 Status: rendered draft for review. Not published or added to the posting queue.
 
 Review PDF: `carousel-kit/out/technical-retrospective-renewal-retention.pdf`.
@@ -18,6 +18,7 @@ Verify: `python carousel-kit/scripts/verify-technical-retrospective.py` (pypdf a
 - Document title: `An AI workflow that waits for approval`.
 - Palette and annotations: preserve paper, Switzer, blue and yellow. Any annotation shape can use either color. Follow the maintenance-triage references, but mark consequential decisions instead of circling a keyword in every headline. Zodiak is used once for the cover's landing word, approval.
 - Evidence: committed v2 logic and recorded synthetic checks. No new service run, classifier score, client result or deployment is claimed. Future work stays labeled.
+- Public-copy direction, 2026-10-20: discuss the implemented build without demo, synthetic-data, no-client or no-deployment labels/disclaimers. Keep evidence provenance internal. Omission must not turn tests into customer outcomes or proposed controls into completed work.
 
 ## LinkedIn caption
 
@@ -29,7 +30,7 @@ Verify: `python carousel-kit/scripts/verify-technical-retrospective.py` (pypdf a
 >
 > This carousel walks through the architecture, output contract, failure handling and fixes. It also separates what the recorded integration checks established from what still needs evaluation. A held-out reply set, protection against concurrent sends, and recovery when email succeeds but the state write fails are next steps.
 >
-> Built with n8n, OpenAI, Airtable, Gmail and Telegram. The recorded tests used 40 synthetic residents and real service integrations. This is a local demo, with no client deployment, held-out classifier accuracy score or measured renewal improvement.
+> Built with n8n, OpenAI, Airtable, Gmail and Telegram.
 
 ## Carousel copy
 
@@ -41,7 +42,7 @@ Title, Body and Footer are public wording. Visual notes describe diagrams and th
 
 **Body:** A pre-renewal resident check-in loop. The architecture, two bugs, and what I'd change before deployment.
 
-**Footer:** Applied AI · Local demo · Synthetic residents
+**Footer:** Applied AI · Pre-renewal retention · Human approval
 
 **Visual:** lead with the headline, landing on approval in Zodiak with a gold underline. Blue selection box on AI. Compact stack line: n8n / OpenAI / Airtable / Gmail / Telegram. Keep the subtitle short.
 
@@ -111,7 +112,7 @@ Title, Body and Footer are public wording. Visual notes describe diagrams and th
 
 **Body:** Skip could reset an already-sent record and make it eligible again. I restricted it to pending review states. A sent record now refuses Skip and keeps its history.
 
-**Footer:** Recorded bug and fix · No real resident duplicate claimed
+**Footer:** State protection · Skip respects completed sends
 
 **Visual:** stacked state transitions, with states much larger than labels. Before: SENT → Skip → PENDING. After: SENT → Skip → SENT. Show Refused below the second Skip. Gold strike on the old PENDING state; blue highlight on the retained SENT state. Small consequence below Before: Eligible again. No repeated prose version of the transitions.
 
@@ -129,17 +130,17 @@ Title, Body and Footer are public wording. Visual notes describe diagrams and th
 
 **Title:** What the recorded checks established
 
-**Body:** These synthetic checks verify specific behaviors. They do not establish classifier generalization, production reliability or improved renewals. A held-out reply evaluation is still needed.
+**Body:** I checked draft wording, repeated approvals, Skip after sending and reply matching. Each check targets a specific workflow behavior. A held-out reply evaluation is a separate next step.
 
-**Footer:** Recorded tests · 40 synthetic residents · Real service integrations
+**Footer:** Verification · Wording, state transitions and reply matching
 
-**Visual:** large two-column table. Check / Recorded result. Draft wording / 14 passed. Repeated approval / No second send. Skip after sending / Refused. Reply matching / Matched by token. Classifier generalization / Not established. Blue underline on No second send; yellow highlight on Not established. Keep 14 a normal table value, not a benchmark headline.
+**Visual:** large two-column table. Check / Recorded result. Draft wording / 14 passed. Repeated approval / No second send. Skip after sending / Refused. Reply matching / Matched by token. Blue underline on No second send; yellow highlight on Matched by token. Keep 14 a normal table value, not a benchmark headline.
 
 ### Slide 11
 
 **Title:** Three things I'd change next
 
-**Body:** Before deployment, I'd prioritize evaluation, send integrity and recovery. The demo's sequential second-tap refusal doesn't prove concurrent approvals or a crash after sending are safe.
+**Body:** Next I'd prioritize evaluation, send integrity and recovery: measure classifier errors, protect concurrent approvals, and recover when email succeeds but the state write fails.
 
 **Footer:** Proposed work · Not implemented production controls
 

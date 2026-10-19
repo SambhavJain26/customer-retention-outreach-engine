@@ -1,6 +1,12 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-10-19
+Last updated: 2026-10-20
+
+## 2026-10-20 - Build-focused public copy and reusable prompt
+
+- Applied the user's direction to remove public demo/synthetic-data mentions and no-client/no-deployment disclaimers from the technical carousel and caption. Updated affected footers, verification context and next-improvement wording without adding deployment, accuracy or business-outcome claims. Internal provenance and evidence mapping remain intact; proposed controls remain future work.
+- Rebuilt the eleven-page PDF and refreshed the preview. Verification passed: public source/HTML/caption scans contain none of the removed wording; PDF title/body/footer copy preserved; expected page dimensions, eleven font subsets, one grain image and no geometry overflow. Inspected the affected native-size pages and refreshed contact sheet. Final PDF is 175,676 bytes.
+- Added `docs/technical-carousel-project-prompt.md` with the reusable project prompt reflecting the current diagram-led design, AI-engineer audience and public-wording direction. Synchronized the durable public-copy rule in AGENTS.md and CLAUDE.md. No runtime, publication or posting-order changes.
 
 ## 2026-10-19 - Technical carousel caption verification
 
