@@ -1,172 +1,168 @@
-# Technical retrospective: an AI check-in workflow
+# Technical retrospective: an AI workflow with human approval
 
-Created: 2026-10-19. Revised after visual review: 2026-10-19.
-Status: rendered draft for review. No publication or queue placement.
+Created: 2026-10-19. Revised after density and layout review: 2026-10-19.
+Status: rendered draft for review. Not published or added to the posting queue.
 
 Review PDF: `carousel-kit/out/technical-retrospective-renewal-retention.pdf`.
 Contact sheet: `carousel-kit/out/technical-retrospective-preview.png`.
-Editable layout: `carousel-kit/technical-retrospective-renewal-retention.html`.
+Editable HTML: `carousel-kit/technical-retrospective-renewal-retention.html`.
 
-Rebuild HTML with `node carousel-kit/scripts/build-technical-retrospective.cjs`, then render with `.\carousel-kit\scripts\render-carousel.ps1 -Name technical-retrospective-renewal-retention`.
-Check with `python carousel-kit/scripts/verify-technical-retrospective.py` (pypdf and pdfplumber required; bundled Python includes both).
+Build HTML: `node carousel-kit/scripts/build-technical-retrospective.cjs`.
+Render PDF: `.\carousel-kit\scripts\render-carousel.ps1 -Name technical-retrospective-renewal-retention`.
+Verify: `python carousel-kit/scripts/verify-technical-retrospective.py` (pypdf and pdfplumber required; bundled Python includes both).
 
 ## Editorial direction
 
-- **Audience:** AI engineers and hiring managers assessing applied AI engineering: model responsibility, output contracts, deterministic policy, retries, state, failure handling and evaluation. This demonstrates an LLM application built with n8n, not model training or a deployed production service.
-- **Format:** 11-slide technical retrospective and caption. Property management supplies the use case; engineering decisions drive the story.
-- **Document title:** `How I built an AI check-in workflow`.
-- **Visual reference:** maintenance-triage's `carousel-kit/post-08-the-accuracy-test-i-failed.html` and `post-06-three-rules-that-look-absurd.html`, and their PDFs. Use prominent annotated words, paired marks and double-stroke circles. User direction supersedes old fixed colors and cover-only box restrictions: every annotation shape may use blue or yellow/gold, with contrast checked.
-- **Evidence:** committed v2 code and recorded synthetic tests. Future changes are labeled. No new live test, classifier benchmark or client outcome is claimed. This additional carousel has no queue slot yet.
+- Audience: AI engineers and hiring managers assessing model boundaries, structured outputs, deterministic policy, bounded retries, state, failure routing and evaluation.
+- Eleven slides. Short supporting copy; the architecture, comparison, schema, pipeline, branch, state transition and verification table carry the detail. Reproducibility moves before runtime validation; recorded tests sit immediately before proposed improvements.
+- Document title: `An AI workflow that waits for approval`.
+- Palette and annotations: preserve paper, Switzer, blue and yellow. Any annotation shape can use either color. Follow the maintenance-triage references, but mark consequential decisions instead of circling a keyword in every headline. Zodiak is used once for the cover's landing word, approval.
+- Evidence: committed v2 logic and recorded synthetic checks. No new service run, classifier score, client result or deployment is claimed. Future work stays labeled.
 
 ## LinkedIn caption
 
-> I built an AI check-in workflow with n8n, OpenAI, Airtable, Gmail and Telegram. The useful engineering decisions started with deciding what the model was allowed to own.
+> I built an AI workflow that drafts resident check-ins and classifies the replies. A manager approves every outbound message.
 >
-> It drafts messages and classifies replies. Code selects the lease cohort, matches a reply to a resident, applies routing rules and checks wording. A manager authorizes every outbound message.
+> The interesting work was around those model calls: a structured output contract, deterministic identity matching, bounded retries, and state that must survive edits and repeated actions.
 >
-> The build uses structured outputs, a bounded retry for failed drafts, and an explicit failure route when classification is unavailable. Those controls still left room for bugs: editing could bypass an earlier wording check, and Skip could reset a record that had already been sent.
+> Two defects changed the design. Editing could bypass an earlier wording check. Skip could reset an already-sent record. Neither needed a better prompt; both needed a change to workflow logic.
 >
-> This carousel covers the architecture, output contract, failure paths and fixes. It also separates what I tested from what I would need to test next. Fourteen drafts passing wording checks tells me something about drafting. It gives me no classifier accuracy score.
+> This carousel shows the architecture, those fixes, and the tests behind the demo. It also separates a successful integration check from a classifier evaluation, and explains what I'd build next.
 >
-> Before deployment, I'd add a held-out reply evaluation set, concurrent-send protection, and recovery for the gap between a successful email and a failed state write.
->
-> This is an applied AI demo with 40 synthetic residents and real service integrations. There is no client deployment or measured renewal improvement. The implementation and its remaining limits are what I'm showing.
+> Built with n8n, OpenAI, Airtable, Gmail and Telegram. Tested with 40 synthetic residents and real service integrations. No client deployment or measured renewal improvement.
 
 ## Carousel copy
 
-Title, Body and Footer are public wording. Visual notes guide layout. Diagram labels explain implemented flows or explicitly proposed improvements.
+Title, Body and Footer are public wording. Visual notes describe diagrams and their exact supporting labels. They are not extra prose paragraphs to place on the page.
 
 ### Slide 1
 
-**Title:** How I built an AI check-in workflow
+**Title:** How I built an AI workflow that waits for approval
 
-**Body:** A pre-renewal resident check-in loop using n8n and OpenAI. Model boundaries, structured outputs, failure paths, real bugs, and the evaluation I'd add next.
+**Body:** A pre-renewal resident check-in loop. The architecture, two bugs, and what I'd change before deployment.
 
-**Footer:** Applied AI build · Local demo · Synthetic residents
+**Footer:** Applied AI · Local demo · Synthetic residents
 
-**Visual:** blue selection box on AI; yellow highlight on failure paths; blue underline on evaluation. Three cover marks.
+**Visual:** lead with the headline, landing on approval in Zodiak with a gold underline. Blue selection box on AI. Compact stack line: n8n / OpenAI / Airtable / Gmail / Telegram. Keep the subtitle short.
 
 ### Slide 2
 
-**Title:** One path can send
+**Title:** One route to the resident's inbox
 
-**Body:** Five workflows handle outreach, actions, replies, operations and polling. Airtable stores state; Telegram carries manager actions; Gmail carries resident email. Only the action workflow contains a resident send node. Check-ins, replies and confirmations each need an individual approval.
+**Body:** Five n8n workflows share Airtable state. Outreach generates drafts; the action workflow owns the only resident send node. Every outbound message needs individual approval.
 
-**Footer:** n8n in Docker · One resident send node across 88 nodes
+**Footer:** Implemented architecture · 88 nodes · One resident send node
 
-**Visual:** prominent blue circle around One. Yellow highlight on individual approval. Ruled architecture rows show outreach/review/send and reply/match/route.
+**Visual:** connected two-lane diagram. Outbound: Outreach → OpenAI draft → Telegram approval → Action router → Gmail. Inbound: Gmail reply → Match + classify → Manager alert. Airtable is a shared-state rail connected to both lanes. Bottom label: Daily operations + reply polling. Highlight the approval gate in yellow and underline One in the headline in blue.
 
 ### Slide 3
 
-**Title:** The model never picks the resident
+**Title:** Give the model a narrow job
 
-**Body:** OpenAI drafts wording and classifies replies. Code selects cohorts from lease end dates and matches replies by subject token, then exact normalized email. An unmatched reply alerts the manager without assigning anyone. Resident identity never comes from the model's output.
+**Body:** The model drafts and classifies. Fixed code owns identity and routing. If a reply cannot be matched, it reaches a person without being assigned to a resident.
 
-**Footer:** Subject token → exact email → unmatched alert
+**Footer:** Model output never selects resident identity
 
-**Visual:** gold circle around model in the title and blue highlight on never. Keep matching sequence in a ruled row.
+**Visual:** two equal ruled columns. Model: Draft wording / Classify intent / Suggest next action. Code: Select cohorts / Match identity / Apply routing rules. Bottom matching ladder: Subject token → Exact email → Unmatched alert. Blue highlight on identity in the code column; yellow highlight on narrow job in the title.
 
 ### Slide 4
 
-**Title:** JSON gives me a contract
+**Title:** Define the output contract
 
-**Body:** The classifier uses a closed JSON Schema: required fields, fixed enums and no additional properties. It returns intent, urgency, grievance details, flags and confidence. Code determines the human-review route. A valid schema constrains the shape of an answer; it doesn't prove the answer is correct.
+**Body:** A closed JSON Schema requires the configured fields and rejects extra properties. Enums constrain intent, urgency and confidence. Workflow code decides the human-review route; schema validity alone doesn't establish correctness.
 
-**Footer:** Structured output · Shape validation is separate from semantic accuracy
+**Footer:** Configuration excerpt · Structure and meaning are separate checks
 
-**Visual:** blue circle around JSON and gold underline on contract. A labeled schema excerpt uses actual enum values, not a fabricated model result.
+**Visual:** large ruled schema excerpt: intent: enum / urgency: HIGH | MEDIUM | LOW / confidence: HIGH | MEDIUM | LOW / additionalProperties: false. One gold underline on false and one blue highlight on output contract. Label this as configuration, not a model response.
 
 ### Slide 5
 
-**Title:** A valid draft can still fail
+**Title:** Make the build reproducible
 
-**Body:** After generation, JavaScript checks the assembled check-in: 35-95 words, one question, the resident's first name, and no prohibited terms. Failed drafts get one retry with their violations. A second failure becomes REVIEW_FAILED and reaches the manager without an approve button.
+**Body:** Shared JavaScript libraries feed builder scripts that generate importable workflow JSON. Exports keep placeholders; local import resolves identifiers and credentials. Git holds the reviewable source and exports.
 
-**Footer:** Generate → validate → retry once → visible review failure
+**Footer:** Generated workflows · No credentials in committed exports
 
-**Visual:** gold circle on fail. Blue highlight on one retry. Use a clearly bounded retry flow.
+**Visual:** three large numbered steps: Shared libraries / Workflow builders + JSON / Local import. Small notes: Cohorts, guardrails, routing / Placeholders in Git / Resolve local credentials. Gold selection box on build. Blue underline on Shared libraries. No extra paragraph describing the same pipeline.
 
 ### Slide 6
 
-**Title:** I checked the draft too early
+**Title:** Validate, then retry once
 
-**Body:** A manager could edit a draft after its wording check. The text being approved was no longer the text I had validated. I added the same guardrails to the approval path, checking the stored wording used for that send. Human review also needs validation.
+**Body:** JavaScript checks the draft after generation. Failures return their violations for one retry. A second failure becomes REVIEW_FAILED, visible to the manager without an approve button.
 
-**Footer:** Recorded defect and fix · Check after edits, before sending
+**Footer:** Check-in rules · 35-95 words · One question · First name · Wording checks
 
-**Visual:** blue circle around early. Strike the old unchecked Edit in gold in the Before flow, underline the added Check in blue in After. Diagrams are simplified flows, not screenshots.
+**Visual:** large branch diagram: Generate → Check draft; pass → Await approval; fail → Retry once → Check again; pass → Await approval; fail → REVIEW_FAILED. Blue circle around once in the retry step, gold highlight on the final failure state. Branch lines must show revalidation after retry; don't imply every retry fails.
 
 ### Slide 7
 
-**Title:** Skip could rewind state
+**Title:** The facts changed after validation
 
-**Body:** Skip reset an already-sent record to PENDING and cleared its draft. A later run could select that resident again. I added a status guard: Skip only accepts pending review states. The fix protects workflow state outside the model call, where another prompt would have changed nothing.
+**Body:** A manager edited an already-checked draft. The fix: validate the current wording again immediately before sending. Keep draft-time checks as well.
 
-**Footer:** SENT → Skip → refused · Sent records stay intact
+**Footer:** Recorded bug and fix · Editing remains allowed
 
-**Visual:** gold circle around Skip. Strike PENDING in the labeled old transition and blue-highlight Refused in the fixed transition. No claimed real duplicate email.
+**Visual:** two large aligned rows. Before: Check → Edit → Send. After: Check → Edit → Recheck → Send. Gold callout reading Unchecked gap beneath Before; blue selection box on Recheck. Short lower label: Validate what will actually send. Do not strike Edit, since editing remains a supported action.
 
 ### Slide 8
 
-**Title:** A failed model call stays visible
+**Title:** Skip was a state-changing action
 
-**Body:** When OpenAI returns an error, fixed code emits CLASSIFY_FAILED and routes the reply for human review. Low confidence, grievances, sensitive flags and questions also require a person. Suggested replies remain available, but no resident-facing message leaves without approval. Failure cannot silently become a clean STAYING result.
+**Body:** Skip could reset an already-sent record and make it eligible again. I restricted it to pending review states. A sent record now refuses Skip and keeps its history.
 
-**Footer:** Error route implemented · Full crash recovery remains future work
+**Footer:** Recorded bug and fix · No real resident duplicate claimed
 
-**Visual:** dark page. Gold-highlight visible as one unbroken word; blue-highlight human review; gold strike on clean STAYING in the denied final sentence. Check contrast on both fills.
+**Visual:** stacked state transitions, with states much larger than labels. Before: SENT → Skip → PENDING. After: SENT → Skip → SENT. Show Refused below the second Skip. Gold strike on the old PENDING state; blue highlight on the retained SENT state. Small consequence below Before: Eligible again. No repeated prose version of the transitions.
 
 ### Slide 9
 
-**Title:** 14/14 isn't classifier accuracy
+**Title:** Model failure becomes visible work
 
-**Body:** Fourteen check-in drafts passed wording checks in a recorded run. A repeated approval sent nothing; Skip on a sent record was refused; a reply matched by token. The fixture checks verify those behaviors. They do not measure grievance recall or generalization to unseen replies. That's integration evidence.
+**Body:** An OpenAI error produces CLASSIFY_FAILED and human review. Low confidence, grievances, sensitive flags and questions also require a person. Suggested messages still need approval; an error cannot become a clean STAYING result.
 
-**Footer:** Recorded synthetic checks · No held-out classifier score claimed
+**Footer:** Implemented error route · Complete crash recovery is future work
 
-**Visual:** blue circle on 14/14; gold strike on accuracy, which the headline explicitly denies. End on evidence. in Zodiak with a blue underline.
+**Visual:** dark page with a large vertical route: OpenAI error → CLASSIFY_FAILED → Manager review. Gold highlight on CLASSIFY_FAILED; blue underline on Manager review. Put the shorter supporting copy below the route, with space between them. No duplicated giant payoff word.
 
 ### Slide 10
 
-**Title:** Keep the build reproducible
+**Title:** What the recorded checks established
 
-**Body:** JavaScript builders inline shared libraries into importable n8n workflow JSON. Committed exports contain placeholders; the import helper resolves local identifiers and credentials. Cohort, guardrail and routing logic stay in shared source. Changes can be reviewed in Git instead of surviving only as editor clicks.
+**Body:** These synthetic checks verify specific behaviors. They do not establish classifier generalization, production reliability or improved renewals. A held-out reply evaluation is still needed.
 
-**Footer:** Shared source → generated exports → local import
+**Footer:** Recorded tests · 40 synthetic residents · Real service integrations
 
-**Visual:** gold selection box on build; blue underline on shared source. This intentional second box uses the user's expanded annotation direction.
+**Visual:** large two-column table. Check / Recorded result. Draft wording / 14 passed. Repeated approval / No second send. Skip after sending / Refused. Reply matching / Matched by token. Classifier generalization / Not established. Blue underline on No second send; yellow highlight on Not established. Keep 14 a normal table value, not a benchmark headline.
 
 ### Slide 11
 
-**Title:** What I'd change next
+**Title:** Three things I'd change next
 
-**Body:** I'd build a held-out reply set with labeled grievances, questions and sensitive cases, then measure errors across repeated runs. I'd also add atomic send claims, uncertain-send recovery, paginated reads and backlog processing. Sequential second-tap refusal doesn't prove concurrent approvals or a crash after sending are safe.
+**Body:** Before deployment, I'd prioritize evaluation, send integrity and recovery. The demo's sequential second-tap refusal doesn't prove concurrent approvals or a crash after sending are safe.
 
-**Footer:** Proposed work · Evaluation, send integrity and recovery
+**Footer:** Proposed work · Not implemented production controls
 
-**Visual:** blue-highlight change next; gold underline on held-out reply set. Three ruled labels: evaluation, send integrity, recovery. Proposed controls stay explicitly future work.
+**Visual:** three numbered ruled sections. Evaluation: Held-out labeled replies; measure misses across repeated runs. Send integrity: Atomic claim before sending. Recovery: Reconcile uncertain sends; paginate reads and drain reply backlogs. Blue circle around Three and gold highlight on Atomic claim. Preserve proposed status for every section.
 
 ## Internal evidence mapping
 
-| Slides | Sources checked | Evidence boundary |
+| Slides | Sources | Boundary |
 |---|---|---|
-| 1-3 | v2 exports/builders, `docs/build-technical-notes.md`, `scripts/stage-6-reply-lib.js`, `scripts/v2/cadence-lib.js` | Five workflows, 88 nodes and one Gmail send node measured from committed exports; identity matching deterministic |
-| 4 | `CLASSIFY_SCHEMA` in `scripts/v2/build-wf8-replies.js`; `deterministicClassification` in reply library | Closed schema and enum examples real; schema validity is not accuracy; confidence is not a calibrated probability |
-| 5 | `guardDraft`, `buildRetryPrompt`, `finalizeDraftsFromBatch` in `scripts/stage-5-outbound-lib.js`; WF7 assessment/retry/finalization | 35-95 word range and one-question rule; bounded retry and REVIEW_FAILED implemented |
-| 6-7 | WF6 Decide Action / Apply Action; progress notes 2026-08-21 | Checks loaded record, not transactional locking against concurrent edits; later duplicate was an identified risk, not a real resident outcome |
-| 8 | `finalizeClassificationFailure`, `deterministicClassification`, `finalizeRoute` in reply library; WF8 final route | Explicit OpenAI errors emit CLASSIFY_FAILED and require human review; no claim of complete provider-timeout/crash recovery; suggested replies still need approval |
-| 9 | Current-status verification and preserved 2026-10-10 evidence in `progress-notes.md` | 14 drafting successes are not classifier accuracy; recorded synthetic checks, no new live run |
-| 10 | `scripts/v2/build-wf*.js`, `workflow-common.js`, `import-v2-workflows.js` | Placeholder import and shared libraries; no actual identifiers exposed |
-| 11 | WF6 sends before final state write; read factory uses one page; WF8 chooses one reply per run; production blueprint | Held-out evaluation, atomic claims, reconciliation and backlog handling proposed, not implemented |
+| 1-3 | v2 exports/builders; cadence library; stage-6 reply library; technical notes | Five workflows / 88 nodes / one resident Gmail send node; deterministic cohorting and identity matching |
+| 4 | CLASSIFY_SCHEMA in build-wf8-replies.js; deterministicClassification in stage-6-reply-lib.js | Actual required fields, enums, additionalProperties:false; confidence is not calibrated probability |
+| 5 | build-wf*.js, workflow-common.js, import-v2-workflows.js | Real generated JSON, shared libraries and placeholder import |
+| 6 | guardDraft, buildRetryPrompt, finalizeDraftsFromBatch; WF7 assessment/retry/finalize | One retry with violations; revalidation; REVIEW_FAILED without approve button |
+| 7-8 | WF6 Decide Action / Apply Action; 2026-08-21 progress notes | Final wording check against loaded state; Skip status guards; no transactional/concurrency guarantee |
+| 9 | finalizeClassificationFailure and deterministicClassification; WF8 final routing | Explicit OpenAI errors become human-review work; not complete crash/timeout recovery |
+| 10 | Current status and preserved 2026-10-10 execution evidence | Recorded synthetic checks, no new run or held-out classifier score; no customer result |
+| 11 | WF6 sends before final state write; one-page workflow reads; WF8 one-reply selection; production blueprint | Evaluation, atomic claims, reconciliation and backlog improvements proposed |
 
 ## Production boundaries
 
-Both colors are available for every annotation shape. Blue marker uses a lighter
-blue with dark text; gold boxes use dark text; gold pen on paper uses a darker
-gold for contrast. Dark-page variants are explicit. Circles have a second sweep
-and fit short words or isolated figures. Marks belong in headlines and diagrams
-as well as prose, with the density judged visually against the reference decks.
-
-The carousel demonstrates an applied AI workflow. It makes no claim of model
-training, RAG, fine-tuning, production throughput, classifier benchmark scores,
-customer results or deployment. Keep internal notes and paths out of the PDF.
+Use blue and yellow independently of annotation shape, with contrast checked.
+The same typography, paper and grid connect the different layouts. Annotations
+point to the gate, missing check, retained state or unproved claim. Circles are
+not a default headline decoration. Do not fabricate screenshots or model results.
+The deck demonstrates an applied AI workflow, not model training, RAG, fine-tuning
+or a live client deployment. Keep this appendix and local paths out of the PDF.

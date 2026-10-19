@@ -629,6 +629,24 @@ visual quality are independent here.
 
 ### Technical retrospective layout
 
+**2026-10-19 visual-first revision:** `.technical--visual` replaces the repeated
+heading/paragraph/small-flow composition with diagram-led slides. Supporting body
+copy is 40/48px. The eleven bodies total 279 words, down from 459; diagrams and
+tables carry the engineering detail. Reproducibility comes before runtime
+validation, then defects, failure routing, recorded checks and proposed changes.
+
+Reusable `.v-*` primitives provide connected lanes and chains, a shared-state
+rail, two-column responsibility comparisons, schema/result tables, numbered
+pipelines, pass/fail branches, large state transitions and vertical error routes.
+They inherit the paper, ink, baseline grid and annotation vocabulary. Relevant
+dark-page colors are explicit. Chain nodes stretch to a common row height so
+their rules align even when one label wraps. Put annotations on the meaningful
+gate, changed state, missing check or unproved result. Keep diagrams explanatory;
+they are not simulated screenshots or fabricated execution evidence. Review the
+recorded checks as an ordinary table; do not enlarge 14/14 into an accuracy-like
+claim. The one Zodiak word now lands on the cover's approval, not on a repeated
+closing word within a dense evidence page.
+
 **2026-10-19 user revision:** For this technical carousel, annotation shape and
 color are independent. Every highlight, circle, underline, strike and selection
 box may be blue or yellow/gold. This overrides the older fixed-color and

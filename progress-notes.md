@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-19
 
+## 2026-10-19 - Shorter, diagram-led technical carousel
+
+- Implemented the user-approved density/layout assessment while retaining eleven slides and the applied-AI hiring audience. Supporting body copy fell from 459 to 279 words (39.2%); diagrams, schema fields, numbered steps and result rows now carry detail. Shortened the caption and strengthened the cover around individual approval.
+- Reordered reproducibility before runtime validation, followed by two defects, model failure, recorded verification and three future priorities. Added distinct architecture lanes, model/code columns, a schema table, source/build/import steps, an explicit retry/revalidation branch, before/after validation flows, large state transitions, a vertical failure route and a check/result table. Replaced the large 14/14 headline and oversized evidence payoff with ordinary labeled results. The single Zodiak landing word is now approval on the cover.
+- Added shared `.technical--visual` and `.v-*` layouts, documented them in the design system, and synchronized durable guidance in AGENTS.md/CLAUDE.md. Blue/gold marks now emphasize the approval gate, recheck, retained SENT state, retry bound and unestablished classifier generalization. Corrected unequal diagram-node rule alignment and placed the unchecked-gap callout between Edit and Send; editing is no longer struck as though removed.
+- Verification passed against the final PDF: eleven pages at expected portrait dimensions; title/body/footer copy preserved; eleven font subsets and one shared grain image; no internal notes/paths; no geometry overflow or furniture collision. PDF is 176,289 bytes. Inspected every page at native resolution, the contact sheet, and changed-page re-renders. No runtime changes, live tests, publication or posting-order changes were made; the eight-post queue is preserved.
+
 ## 2026-10-19 - Posting queue narrowed to eight technical posts
 
 - Updated `docs/posting-order.md` at the user's request to contain only the eight previously identified remaining technical posts: original slots 20, 21, 23, 27, 28, 29, 33 and 35. Preserved their relative order, source post IDs, script links, plan links and formats; renumbered the active queue 1-8 with a separate original-slot column.

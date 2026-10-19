@@ -377,6 +377,63 @@ html, body {
 .technical .tech-schema p { font-size: 30px; }
 .technical .tech-schema code { font-family: var(--sans); font-weight: 600; }
 
+/* Visual technical layouts: diagrams carry the detail, copy supplies context. */
+.technical--visual .body { top: 192px; bottom: 192px; }
+.technical--visual .tech-title { font-size: 72px; line-height: 96px; margin-bottom: 48px; }
+.technical--visual .tech-copy { font-size: 40px; line-height: 48px; }
+.technical--visual .v-cover { font-size: 88px; line-height: 96px; margin-bottom: 48px; }
+.technical--visual .v-cover .pay { font-size: 144px; line-height: 168px; }
+.technical--visual .v-stack { font-size: 24px; line-height: 48px; font-weight: 600; margin-top: 24px; }
+.v-visual { margin-bottom: 48px; }
+.v-label { font-size: 22px; line-height: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 24px; color: var(--ink-soft); }
+.v-lane + .v-lane { margin-top: 24px; }
+.v-chain { display: grid; align-items: stretch; gap: 0; }
+.v-chain--5 { grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr; }
+.v-chain--4 { grid-template-columns: 1fr 32px 1fr 32px 1fr 32px 1fr; }
+.v-chain--3 { grid-template-columns: 1fr 40px 1fr 40px 1fr; }
+.v-node { border-top: var(--w-line) solid var(--ink); padding: 24px 0; font-size: 30px; line-height: 48px; font-weight: 700; text-align: center; }
+.v-arrow { font-size: 28px; line-height: 48px; text-align: center; color: var(--ink); align-self: center; }
+.v-rail { border-top: var(--w-hair) solid var(--rule); border-bottom: var(--w-hair) solid var(--rule); padding: 24px 0; margin-top: 24px; font-size: 30px; line-height: 48px; font-weight: 600; }
+.v-quiet { font-size: 24px; line-height: 48px; color: var(--ink-soft); }
+.v-columns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; margin-bottom: 24px; }
+.v-column { border-top: var(--w-line) solid var(--ink); padding-top: 24px; }
+.v-column h3 { font-size: 48px; line-height: 72px; font-weight: 800; margin-bottom: 24px; }
+.v-column p { font-size: 36px; line-height: 48px; padding-bottom: 24px; }
+.v-table { width: 100%; border-collapse: collapse; table-layout: fixed; color: var(--ink); }
+.v-table th { text-align: left; font-size: 24px; line-height: 48px; text-transform: uppercase; letter-spacing: .06em; border-bottom: var(--w-line) solid var(--ink); }
+.v-table td { vertical-align: top; font-size: 36px; line-height: 48px; padding: 24px 0; border-bottom: var(--w-hair) solid var(--rule); }
+.v-table th:first-child, .v-table td:first-child { width: 48%; padding-right: 24px; }
+.v-schema td { font-size: 32px; }
+.v-schema td:first-child { font-weight: 700; }
+.v-results td { padding: 24px 0 0; height: 72px; font-size: 34px; }
+.v-steps { list-style: none; }
+.v-steps li { position: relative; padding: 24px 0 24px 96px; border-top: var(--w-hair) solid var(--rule); }
+.v-steps b { position: absolute; left: 0; top: 24px; font-size: 48px; line-height: 72px; font-weight: 800; }
+.v-steps h3 { font-size: 40px; line-height: 48px; font-weight: 800; }
+.v-steps p { font-size: 30px; line-height: 48px; color: var(--ink-soft); }
+.v-root { font-size: 44px; line-height: 72px; font-weight: 800; text-align: center; border-bottom: var(--w-line) solid var(--ink); padding-bottom: 24px; }
+.v-branches { display: grid; grid-template-columns: 1fr 1.35fr; gap: 48px; margin-top: 24px; }
+.v-branches h3 { font-size: 24px; line-height: 48px; letter-spacing: .08em; }
+.v-branches p { font-size: 34px; line-height: 48px; font-weight: 600; }
+.v-branches .v-outcome { font-size: 30px; line-height: 48px; border-top: var(--w-hair) solid var(--rule); margin-top: 24px; padding-top: 24px; }
+.v-gap { text-align: right; padding-right: 192px; font-size: 26px; line-height: 48px; }
+.v-transition { display: grid; grid-template-columns: 1fr 48px 120px 48px 1fr; align-items: center; text-align: center; }
+.v-state { font-size: 64px; line-height: 96px; font-weight: 800; }
+.v-operation { font-size: 32px; line-height: 48px; font-weight: 600; }
+.v-lane--state { padding: 24px 0; border-top: var(--w-hair) solid var(--rule); }
+.v-route { text-align: center; }
+.v-route p { font-size: 48px; line-height: 72px; font-weight: 800; }
+.v-route .v-route-arrow { font-size: 28px; line-height: 48px; font-weight: 500; }
+.technical--visual.slide--invert .v-label,
+.technical--visual.slide--invert .v-route,
+.technical--visual.slide--invert .v-quiet,
+.technical--visual.slide--invert .v-stack { color: var(--paper); }
+.technical--visual.slide--invert .v-node,
+.technical--visual.slide--invert .v-table,
+.technical--visual.slide--invert .v-steps p,
+.technical--visual.slide--invert .v-rail,
+.technical--visual.slide--invert .v-arrow { color: var(--paper); border-color: rgba(253,240,214,.4); }
+
 /* ===========================================================================
    ANNOTATION LAYER — the marker, the pen, the selection
    Hand-drawn geometry, deliberately imperfect. Nothing here is a rectangle
