@@ -322,6 +322,40 @@ html, body {
 
 .body--close { bottom: 264px; }
 
+/* Technical retrospective: longer explanations and small workflow diagrams.
+   Uses the same paper, annotations and 24px rhythm as the statement decks. */
+.technical .body { top: 192px; bottom: 192px; }
+.technical .tech-title {
+  font-size: 64px; line-height: 72px; font-weight: 800;
+  letter-spacing: -0.035em; color: var(--ink); margin-bottom: 48px;
+}
+.technical .tech-copy {
+  font-size: 40px; line-height: 48px; font-weight: 500;
+  letter-spacing: -0.018em; color: var(--ink-soft);
+}
+.technical .tech-copy + .tech-copy { margin-top: 24px; }
+.technical .tech-cover { font-size: 96px; line-height: 120px; margin-bottom: 48px; }
+.technical .tech-flow { margin-top: 48px; border-top: var(--w-line) solid var(--rule); }
+.technical .tech-flow p {
+  font-size: 32px; line-height: 48px; font-weight: 600;
+  color: var(--ink); padding: 24px 0; border-bottom: var(--w-hair) solid var(--rule);
+}
+.technical .tech-flow strong { font-weight: 800; }
+.technical .tech-label {
+  font-size: 22px; line-height: 24px; letter-spacing: 0.08em;
+  text-transform: uppercase; font-weight: 700; color: var(--ink-micro); margin-top: 48px;
+}
+.technical .tech-figure { margin: 0 0 24px; }
+.technical .tech-pay { margin-top: 24px; }
+.technical .footer { font-size: 17px; letter-spacing: 0; }
+.technical .eyebrow { letter-spacing: 0.12em; }
+.technical.slide--invert .tech-title,
+.technical.slide--invert .tech-copy,
+.technical.slide--invert .tech-flow p { color: var(--paper); }
+.technical.slide--invert .tech-label { color: rgba(253,240,214,0.65); }
+.technical.slide--invert .tech-flow,
+.technical.slide--invert .tech-flow p { border-color: rgba(253,240,214,0.22); }
+
 /* ===========================================================================
    ANNOTATION LAYER — the marker, the pen, the selection
    Hand-drawn geometry, deliberately imperfect. Nothing here is a rectangle

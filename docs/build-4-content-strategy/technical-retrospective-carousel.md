@@ -1,7 +1,17 @@
 # Technical retrospective: pre-renewal check-in loop
 
 Created: 2026-10-19
-Status: copy draft for review. No carousel artwork, PDF, publication or queue placement yet.
+Status: rendered carousel draft for visual and text review. No publication or queue placement.
+
+Review PDF: `carousel-kit/out/technical-retrospective-renewal-retention.pdf`.
+Contact sheet: `carousel-kit/out/technical-retrospective-preview.png`.
+Editable layout: `carousel-kit/technical-retrospective-renewal-retention.html`.
+The original Title, Body and Footer wording is preserved; process labels follow the visual directions below.
+
+Rebuild HTML with `node carousel-kit/scripts/build-technical-retrospective.cjs`,
+then render with `.\carousel-kit\scripts\render-carousel.ps1 -Name technical-retrospective-renewal-retention`.
+Verify text and PDF structure with `python carousel-kit/scripts/verify-technical-retrospective.py`
+(pypdf and pdfplumber required; use the bundled Python when the system Python lacks them).
 
 ## Editorial direction
 

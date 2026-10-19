@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-19
 
+## 2026-10-19 - Rendered technical retrospective carousel
+
+- Built `carousel-kit/technical-retrospective-renewal-retention.html`, an 11-page review PDF in `carousel-kit/out/technical-retrospective-renewal-retention.pdf`, and `carousel-kit/out/technical-retrospective-preview.png`. Preserved all drafted title/body/footer wording; added explanatory process labels from the visual directions. No publication or queue change.
+- Added the reusable, scoped `.technical` layout to the shared stylesheet and documented it in `carousel-kit/design-system.md`: existing cream paper, Switzer, blue/gold annotations, one dark slide and one Zodiak payoff, with 40/48px explanatory copy and 32/48px process rows. Existing deck classes remain unaffected. Added a Markdown-to-HTML builder and a PDF copy/structure verifier.
+- Found that the combined Fontshare URL omitted Zodiak. Separate family stylesheet links restored the intended serif; browser font loading and visual inspection confirmed it. Updated both AGENTS.md and CLAUDE.md with this durable gotcha and the new builder command.
+- Verification passed: 11 pages, expected approximately 810 x 1013pt portrait dimensions, all title/body/footer wording preserved through positioned PDF extraction (whitespace and middle-dot mapping normalized), eight embedded font subsets and one shared grain image. PDF is 151,971 bytes. Browser geometry checks found no content overflow or furniture collisions. Inspected the contact sheet and every final-PDF page at native size, including diagram rows and annotation placement. Review copy remains open for the user's wording changes.
+
 ## 2026-10-19 - Technical retrospective carousel copy
 
 - Created `docs/build-4-content-strategy/technical-retrospective-carousel.md`: an additional 11-slide technical retrospective and LinkedIn caption for user review, aimed at builders and people hiring for automation/integration roles. Covers scope, architecture, AI boundaries, the single resident send path, three recorded defects, reproducible exports, synthetic verification and proposed production improvements.

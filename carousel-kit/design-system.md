@@ -627,6 +627,17 @@ visual quality are independent here.
 
 ## Standing rules
 
+### Technical retrospective layout
+
+`.technical` uses the same paper, fonts and annotation vocabulary for longer
+technical explanations. `.tech-title` is 64/72px and `.tech-copy` is 40/48px;
+`.tech-flow` adds ruled process rows at 32/48px. The body spans 192px from the
+top to 192px above the bottom. All leading stays on the 24px rhythm. The
+`.tech-cover`, `.tech-figure` and `.tech-pay` variants retain the existing cover,
+figure and single Zodiak payoff roles. Inverted colors exist for every added
+text and rule treatment. These are explanatory diagrams, not simulated UI
+screenshots or evidence captures. Source copy remains unchanged.
+
 - **Nothing bleeds across the footer.** An earlier pass let a graphic run
   over the page number and it read as a mistake rather than a decision.
   Overlap is allowed and wanted, but only where a person would have made it:
