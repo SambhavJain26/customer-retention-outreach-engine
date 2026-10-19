@@ -21,15 +21,15 @@ Verify: `python carousel-kit/scripts/verify-technical-retrospective.py` (pypdf a
 
 ## LinkedIn caption
 
-> I built an AI workflow that drafts resident check-ins and classifies the replies. A manager approves every outbound message.
+> I built a pre-renewal check-in workflow that uses AI to draft messages and classify resident replies. Every resident-facing message requires a manager's individual approval.
 >
-> The interesting work was around those model calls: a structured output contract, deterministic identity matching, bounded retries, and state that must survive edits and repeated actions.
+> The engineering work extends beyond the model calls: JSON Schema for structured outputs, reference-token and email matching in code, one retry for drafts that fail wording checks, and state checks around edits and repeated actions.
 >
-> Two defects changed the design. Editing could bypass an earlier wording check. Skip could reset an already-sent record. Neither needed a better prompt; both needed a change to workflow logic.
+> Two defects changed the design. A manager could edit a draft after its wording check, leaving the final message unchecked. Skip could reset an already-sent record and make it eligible for another check-in. I added wording validation on the send path and restricted Skip to pending review states.
 >
-> This carousel shows the architecture, those fixes, and the tests behind the demo. It also separates a successful integration check from a classifier evaluation, and explains what I'd build next.
+> This carousel walks through the architecture, output contract, failure handling and fixes. It also separates what the recorded integration checks established from what still needs evaluation. A held-out reply set, protection against concurrent sends, and recovery when email succeeds but the state write fails are next steps.
 >
-> Built with n8n, OpenAI, Airtable, Gmail and Telegram. Tested with 40 synthetic residents and real service integrations. No client deployment or measured renewal improvement.
+> Built with n8n, OpenAI, Airtable, Gmail and Telegram. The recorded tests used 40 synthetic residents and real service integrations. This is a local demo, with no client deployment, held-out classifier accuracy score or measured renewal improvement.
 
 ## Carousel copy
 

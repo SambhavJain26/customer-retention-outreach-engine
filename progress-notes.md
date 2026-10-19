@@ -2,6 +2,12 @@
 
 Last updated: 2026-10-19
 
+## 2026-10-19 - Technical carousel caption verification
+
+- Rechecked the caption against the current eleven-slide carousel, v2 builders, shared routing logic and recorded test evidence. Reviewed wording and information rather than shortening it.
+- Clarified individual approval for resident-facing messages (internal alerts are not gated the same way), a single retry for failed draft wording checks, deterministic reference-token/email matching, both defects and their actual fixes, and the separation between recorded integration checks and proposed held-out evaluation/concurrency/recovery work. Retained the synthetic/local-demo boundary and absence of client, classifier-benchmark and renewal-result claims.
+- Caption-only edit; no slide fields, HTML, PDF, preview, runtime or posting-order changes. Checked that all slide content remained byte-identical. No new durable repository rule was needed.
+
 ## 2026-10-19 - Shorter, diagram-led technical carousel
 
 - Implemented the user-approved density/layout assessment while retaining eleven slides and the applied-AI hiring audience. Supporting body copy fell from 459 to 279 words (39.2%); diagrams, schema fields, numbered steps and result rows now carry detail. Shortened the caption and strengthened the cover around individual approval.
