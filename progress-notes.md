@@ -1,6 +1,13 @@
 # Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-10-10
+Last updated: 2026-10-19
+
+## 2026-10-19 - Technical retrospective carousel copy
+
+- Created `docs/build-4-content-strategy/technical-retrospective-carousel.md`: an additional 11-slide technical retrospective and LinkedIn caption for user review, aimed at builders and people hiring for automation/integration roles. Covers scope, architecture, AI boundaries, the single resident send path, three recorded defects, reproducible exports, synthetic verification and proposed production improvements.
+- Checked claims against v2 builders, shared logic, committed exports and recorded verification. Parsed the five exports to confirm 25/21/21/18/3 nodes (88 total), one Gmail send node in WF6 and one Gmail read node in WF8. Distinguished sequential duplicate-approval refusal from unproven concurrency/crash safety; atomic send claims and send/state reconciliation are proposed work, not demo features.
+- Copy checks passed: 11 sequential slides, a 39-character document title, no em dashes or exclamation points in public copy, and explicit synthetic-test boundaries. Slide bodies range from 23 to 50 words. Included internal evidence mapping and visual directions for later production; no artwork, PDF, runtime changes, fresh integration test, publication or posting-order change was performed.
+- No new durable command, workaround or repository rule arose from this writing task; existing AGENTS.md and CLAUDE.md guidance remains applicable without changes. Copy approval and visual production remain separate work.
 
 ## 2026-10-10 - Work sample footer revision
 
