@@ -2,6 +2,12 @@
 
 Last updated: 2026-10-20
 
+## 2026-10-20 - Restore unpublished queue and place build retrospectives last
+
+- Recovered the full posting-order file from the commit before the eight-post reduction. Restored original slots 15-42 in their prior relative order, excluding all four remaining videos: original 17, 20, 22 and 31. Published original slots 1-14 remain outside the active file.
+- Renumbered the remaining queue from 1, preserving original slot references. New #1 is Maintenance triage 15, "Send me a week of your maintenance inbox." Appended the five new whole-build retrospective carousels at #25-29 in build order: COI, maintenance, make-ready, renewal and leasing, with caption and PDF links to their respective repositories.
+- Verified 29 entries: 18 text posts, 11 carousels and zero videos; exact restored slot set, continuous numbering, final five retrospective positions and existence of every linked file. Preserved prior standalone-image/retired-post exclusions and source assets. No publication or scheduling actions. No new durable command or repository rule was needed.
+
 ## 2026-10-20 - Problem-first carousel for buyers and hiring readers
 
 - Applied the user's audience correction across the eleven-slide carousel, full caption and reusable project prompt. The story now leads with surfacing unresolved concerns before renewal, followed by the plain-language workflow, manager decisions, wording choices, two actual bugs and fixes, exception handling, lessons, specific checks and proposed improvements.
