@@ -2,6 +2,12 @@
 
 Last updated: 2026-10-20
 
+## 2026-10-20 - Spread retrospectives toward the end and review editorial value
+
+- Corrected the interpretation of "technical posts at the end": spread the five whole-build retrospectives across #17, #20, #23, #26 and #29, with other posts between them and the leasing retrospective finishing the queue. Preserved all 29 entries and the relative order of the 24 restored posts. Counts remain 18 text and 11 carousels, with no videos.
+- Read the queued source copy and slide material to assess usefulness for the mixed buyer/hiring audience. Five lower-priority cut or substantial-rewrite candidates: Maintenance 15 (inbox invitation), Renewal 12 (rehearsal-mailbox story), Renewal 14 (limits/disclosure post), Renewal 15 (expiration-file invitation), and Leasing B5-15 (handoff invitation). Reasons are repetition among four asks, a narrow rehearsal-specific story, and limits/disclaimer wording that conflicts with the latest public-copy direction. These are editorial recommendations, not removed entries. Make-ready 15's concrete timeline diagnostic is the strongest invitation to retain.
+- Verified continuous 1-29 numbering, unchanged membership, the exact five retrospective positions, original relative order and unchanged format totals. Updated only posting order and this log; no caption, PDF, source post or publication changes. No new durable repository rule was needed.
+
 ## 2026-10-20 - Restore unpublished queue and place build retrospectives last
 
 - Recovered the full posting-order file from the commit before the eight-post reduction. Restored original slots 15-42 in their prior relative order, excluding all four remaining videos: original 17, 20, 22 and 31. Published original slots 1-14 remain outside the active file.
