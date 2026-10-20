@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-20
 
+## 2026-10-20 - Remove the five flagged posts
+
+- Removed the five user-approved editorial cuts from the active queue: Maintenance triage 15, Renewal retention 12/14/15, and Leasing B5-15 (original slots 15, 28, 39, 41 and 42). Source scripts and assets remain intact.
+- Renumbered the remaining 24 posts: 13 text and 11 carousels, with no videos. The queue now starts with Leasing B5-06, "Permission changes as the application progresses" (original #16).
+- Kept the build retrospectives spaced toward the end at #14, #17, #20, #22 and #24, with at least one other post between each and leasing last. Preserved the relative order of all 19 other retained posts.
+- Verified exact removals, membership, continuous numbering, format counts, retrospective spacing and final entry; diff whitespace checks passed. No content, PDF, workflow or publication changes. No new durable repository rule was needed.
+
 ## 2026-10-20 - Spread retrospectives toward the end and review editorial value
 
 - Corrected the interpretation of "technical posts at the end": spread the five whole-build retrospectives across #17, #20, #23, #26 and #29, with other posts between them and the leasing retrospective finishing the queue. Preserved all 29 entries and the relative order of the 24 restored posts. Counts remain 18 text and 11 carousels, with no videos.
