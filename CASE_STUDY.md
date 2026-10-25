@@ -1,4 +1,4 @@
-# Case Study: Autonomous Pre-Renewal Retention & Grievance-Resolution Loop
+﻿# Case Study: Autonomous Pre-Renewal Retention & Grievance-Resolution Loop
 
 > *A complete portfolio case study detailing the architecture, engineering decisions, and business impact of an enterprise property management automation build.*
 
@@ -17,7 +17,7 @@
 
 ## Executive Summary & Impact
 
-In residential property management, lease turnover is a major cost center—averaging **$3,872–$4,000 per unit** in vacancy, maintenance turns, marketing, and leasing concessions. Conventional Property Management Systems (PMS) manage renewals as an administrative transaction at 30–60 days, leaving managers blind to quiet resident grievances until move-out notices arrive.
+In residential property management, lease turnover is a major cost center-averaging **$3,872-$4,000 per unit** in vacancy, maintenance turns, marketing, and leasing concessions. Conventional Property Management Systems (PMS) manage renewals as an administrative transaction at 30-60 days, leaving managers blind to quiet resident grievances until move-out notices arrive.
 
 This system provides a proactive, automated **90-day retention loop** with strict human-in-the-loop controls.
 
@@ -30,7 +30,7 @@ This system provides a proactive, automated **90-day retention loop** with stric
 ```
 
 * **$54,600 in Turnover Exposure Surfaced**: Proactively flagged 14 expiring leases and surfaced unaddressed maintenance issues weeks before formal renewal offers were generated.
-* **100% Structural Human-in-the-Loop Guarantee**: Enforced zero autonomous email dispatching across all 88 workflow nodes—every resident email requires an explicit, authenticated manager callback.
+* **100% Structural Human-in-the-Loop Guarantee**: Enforced zero autonomous email dispatching across all 88 workflow nodes-every resident email requires an explicit, authenticated manager callback.
 * **Sub-30-Second Mobile Triage**: Replaced clunky web portals with interactive Telegram action cards, allowing property managers to review drafts, edit responses, and close grievances from their phone.
 
 ---
@@ -38,7 +38,7 @@ This system provides a proactive, automated **90-day retention loop** with stric
 ## The Problem & Business Context
 
 ### 1. The 30-Day Notice Cliff
-Most property managers initiate renewal conversations 30 to 45 days before lease expiration. By that point, if a resident had a negative experience during their tenancy—such as an unresolved repair or a noisy neighbor—they have already researched competing apartments, attended open houses, and mentally decided to leave.
+Most property managers initiate renewal conversations 30 to 45 days before lease expiration. By that point, if a resident had a negative experience during their tenancy-such as an unresolved repair or a noisy neighbor-they have already researched competing apartments, attended open houses, and mentally decided to leave.
 
 ### 2. Maintenance is the #1 Retention Driver
 Industry research from the *National Apartment Association (NAA)* and *Zego* indicates that slow or uncommunicative maintenance is the primary driver of preventable move-outs. Over **31% of wavering tenants report they would stay if property management were more responsive**. However, property managers have no mechanism to uncover lingering dissatisfaction unless the resident formally submits a complaint.
@@ -89,7 +89,7 @@ When residents enter the 90-day window, **WF7 (Outreach Generator)** triggers pe
 * **Relationship-First Framing**: Messages explicitly avoid transactional terms. They mention the resident by name, reference their tenure, and ask one open question regarding their living experience.
 * **Dual-Pass Programmatic Guardrails**: Prompts are notoriously vulnerable to drift. To guarantee compliance, all drafts are passed through a deterministic regular expression validator (`guardDraft()`) executed in a native JavaScript node:
   * **Strict Prohibitions**: Rejects any occurrence of rent numbers, dollar signs, percentages, renewal terms, expiration dates, deadlines, or eviction language.
-  * **Syntax & Length Enforcement**: Enforces a strict 35–95 word limit, exactly one question mark, and zero bullet points, exclamation marks, or emojis.
+  * **Syntax & Length Enforcement**: Enforces a strict 35-95 word limit, exactly one question mark, and zero bullet points, exclamation marks, or emojis.
   * **Re-Check at Send**: The guardrail runs when the draft is generated and re-runs at execution time to ensure manual edits have not introduced prohibited terms.
 
 ---
@@ -219,11 +219,11 @@ The property manager receives an urgent **Assist Card** in Telegram detailing th
 
 | Metric / Attribute | Baseline / Manual Process | With Retention Loop Automation |
 | :--- | :--- | :--- |
-| **Grievance Detection Window** | 30–45 days before lease end (Offer stage) | **90 days before lease end (Pre-renewal sweep)** |
+| **Grievance Detection Window** | 30-45 days before lease end (Offer stage) | **90 days before lease end (Pre-renewal sweep)** |
 | **Coordination Time per 100 Doors** | ~6.5 hours / month (manual reports & inbox checks) | **< 1.5 hours / month (mobile 1-tap approvals)** |
 | **Human-in-the-Loop Safeguard** | Variable (reliant on employee memory) | **100% Topologically Enforced (Zero rogue emails)** |
 | **Data Ingestion Fault Tolerance** | Bad rows silently dropped in spreadsheets | **100% Logged with `data_quality` exception tags** |
-| **Response Classification Speed** | 4–24 hours (manual inbox reading) | **< 60 seconds (token match + structured AI triage)** |
+| **Response Classification Speed** | 4-24 hours (manual inbox reading) | **< 60 seconds (token match + structured AI triage)** |
 
 ---
 

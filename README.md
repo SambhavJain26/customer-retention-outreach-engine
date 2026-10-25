@@ -1,4 +1,4 @@
-# Pre-Renewal Resident Retention & Grievance-Resolution Loop
+﻿# Pre-Renewal Resident Retention & Grievance-Resolution Loop
 
 [![n8n](https://img.shields.io/badge/Orchestration-n8n_v1.x-EA4B71?style=flat-square&logo=n8n)](https://n8n.io)
 [![Docker](https://img.shields.io/badge/Runtime-Docker_Compose-2496ED?style=flat-square&logo=docker)](https://www.docker.com)
@@ -13,10 +13,10 @@
 
 ## The Operational Problem
 
-In US residential property management (150–600+ units), **resident turnover costs an average of $3,872–$4,000 per unit** in vacancy, make-ready, marketing, and leasing concessions (*National Apartment Association*). 
+In US residential property management (150-600+ units), **resident turnover costs an average of $3,872-$4,000 per unit** in vacancy, make-ready, marketing, and leasing concessions (*National Apartment Association*). 
 
 Traditional property management systems (Buildium, AppFolio, Yardi) are built for **transactional lease administration**, not proactive retention:
-1. **The Late 30-to-60 Day Cliff**: Managers generate renewal offers only 30–60 days before lease expiration—often paired with rent increases. By then, dissatisfied residents have already toured alternative units.
+1. **The Late 30-to-60 Day Cliff**: Managers generate renewal offers only 30-60 days before lease expiration-often paired with rent increases. By then, dissatisfied residents have already toured alternative units.
 2. **Invisible Grievances**: Slow maintenance response is the #1 driver of non-renewals (*Zego Resident Experience Report*). A repair that lagged 4 weeks ago or a noisy neighbor creates quiet non-renewals that never surface in PMS reports until the move-out notice lands.
 3. **Manager Cognitive Overload**: Property teams spend 66% of their week on reactive administration. Manually checking lease dates, drafting personalized check-ins, matching replies, and chasing maintenance updates across hundreds of doors is unsustainable without automation.
 
@@ -93,9 +93,9 @@ In enterprise automations involving resident communications, AI hallucinations o
 ### 2. Dual-Pass Regex Guardrails
 Prompts alone cannot guarantee compliance. Every draft passes through deterministic regular expression guards (`guardDraft()` and `guardReply()`) in a native JavaScript code node:
 * **Strict Rejections**: Rejects any mention of rent increases, renewal terms, lease end dates, dollar figures, percentages, legal phrasing, deadlines, or eviction.
-* **Format Constraints**: Enforces 35–95 word limits, resident first-name inclusion, single question mark syntax, and strict prohibition of exclamation marks, bullet points, or emojis.
+* **Format Constraints**: Enforces 35-95 word limits, resident first-name inclusion, single question mark syntax, and strict prohibition of exclamation marks, bullet points, or emojis.
 * **Anti-Promise Protection**: Inbound reply drafts reject commitments like *"we will fix"*, *"guaranteed"*, *"by Friday"*, or *"within 24 hours"*.
-* **Two-Run Validation**: Guardrails execute twice—once when OpenAI drafts the copy, and again at execution time right before transmission.
+* **Two-Run Validation**: Guardrails execute twice-once when OpenAI drafts the copy, and again at execution time right before transmission.
 
 ### 3. Two-Tier Classification (Pre-LLM Compliance Filtering)
 Incoming resident emails are processed through a two-stage filter:
@@ -234,4 +234,4 @@ renewal-retention/
 ---
 
 ## License & Security
-Private Client Build — Proprietary Intellectual Property. All credentials, API tokens, and resident identities in this repository are sanitized mock data.
+Private Client Build - Proprietary Intellectual Property. All credentials, API tokens, and resident identities in this repository are sanitized mock data.
