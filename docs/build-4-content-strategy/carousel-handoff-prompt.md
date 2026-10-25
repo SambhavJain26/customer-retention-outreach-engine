@@ -1,6 +1,6 @@
 # Carousel handoff prompt — build 4
 
-Paste the block below into a fresh Codex session opened at the repository root.
+Paste the block below into the generator opened at the repository root.
 
 It is the build-specific version of `carousel-kit/PROMPT.md`. That file is the generic
 prompt; this one carries the decisions already made for these four decks, so the new
@@ -9,8 +9,8 @@ session does not have to rediscover them or guess at them.
 **Two things about this repo that the generic prompt assumes and this one corrects:**
 
 - `PROMPT.md` sits at `carousel-kit/PROMPT.md`, not at the repository root.
-- Codex reads `AGENTS.md`, which says nothing about carousels, and it does not load
-  `.claude/skills/`. The skill will **not** fire on its own. The prompt below points at
+- the generator reads `AGENTS.md`, which says nothing about carousels, and it does not load
+  `skills/`. The skill will **not** fire on its own. The prompt below points at
   the skill file directly for that reason.
 
 ---
@@ -22,7 +22,7 @@ annotation, and getting it to render cleanly.
 
 READ THESE FIRST, IN THIS ORDER. Do not skip the first two.
 
-1. .claude/skills/linkedin-carousel/SKILL.md
+1. skills/linkedin-carousel/SKILL.md
    The build method. You will not have loaded this automatically, so read it as a file.
 
 2. carousel-kit/design-system.md
@@ -214,11 +214,11 @@ its payoff word, say so rather than forcing one in.
 
 ## Before you paste it
 
-`carousel-kit/` and `.claude/` are both **untracked in git**. Nothing in them is
+`carousel-kit/` is **tracked in git**. Ensure any decks built from it are
 committed, so a stray clean or a fresh clone loses the kit, the skill and any deck
 built from them. Worth committing before handing the work to another session.
 
-## If Codex invents its own colours or typefaces
+## If the generator alters colours or typefaces
 
 It did not read `design-system.md`. Stop it and point at the file rather than letting
 it continue. A deck built off the wrong palette is easier to rebuild than to correct.

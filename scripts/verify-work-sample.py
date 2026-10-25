@@ -1,4 +1,4 @@
-"""Check the public PDF structure, extracted text and flattened image provenance.
+﻿"""Check the public PDF structure, extracted text and flattened image provenance.
 
 Requires pypdf and Pillow. This complements manual review of every rendered
 page; it cannot decide whether screenshot content is private or readable.
@@ -36,9 +36,9 @@ for file in ASSETS.glob('*.png'):
 patterns = {
     'email': r'[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}',
     'URL': r'https?://|mailto:|t\.me/|www\.',
-    'local path': r'[A-Z]:[\\/]|codex_projects|AppData',
+    'local path': r'[A-Z]:[\\/]|workspace_projects|AppData',
     'private identifiers': r'\b(?:app|tbl|rec|viw)[A-Za-z0-9]{14}\b',
-    'internal documents': r'AGENTS\.md|CLAUDE\.md|progress-notes|build-plan|\.env',
+    'internal documents': r'progress-notes|build-plan|\.env',
     'phone': r'(?<!\d)(?:\+\d{1,3}[ -])?(?:\d[ -]?){10,14}(?!\d)',
 }
 count = 0

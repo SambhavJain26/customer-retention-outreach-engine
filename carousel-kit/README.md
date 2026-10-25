@@ -1,14 +1,14 @@
-# Carousel Kit
+﻿# Carousel Kit
 
 Everything needed to build LinkedIn document carousels in the marked-up-document
-style, in any project. Drop this folder into a repo, point Claude at it, and the
+style, in any project. Drop this folder into a repo, and the
 decks it produces will match the ones already built.
 
 ## What's here
 
 ```
 <your project root>/
-├── .claude/skills/linkedin-carousel/SKILL.md   ← the skill. Loads automatically
+├── PROMPT.md                 ← specifications and instructions
 ├── PROMPT.md                 ← paste this into a new chat session
 └── carousel-kit/
     ├── design-system.md      ← read this first. The rules, and why each exists
@@ -24,9 +24,9 @@ decks it produces will match the ones already built.
     └── out/                  ← rendered PDFs land here
 ```
 
-Copy the **contents** of this starter into your project root, so that `.claude/`
-sits at the root rather than inside `carousel-kit/`. Claude Code only discovers
-skills at the project root, so a `.claude/` folder nested one level down is
+Copy the **contents** of this starter into your project root, so that `config/`
+sits at the root rather than inside `carousel-kit/`. builder Code only discovers
+skills at the project root, so a `config/` folder nested one level down is
 silently ignored — the deck would still get built, but off whatever design the
 session invented instead of this one.
 

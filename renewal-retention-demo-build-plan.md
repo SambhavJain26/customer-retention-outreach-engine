@@ -259,7 +259,7 @@ These three gates are the entire answer to "why should I trust an unproven freel
 
 | Component | What it does | Cost | Licence | Why it beat the alternative |
 |---|---|---|---|---|
-| **n8n (self-hosted, Docker)** | Every workflow | Free | Sustainable Use Licence — see §1.2, email n8n before invoicing | Already your stack; the alternative (hand-written service) isn't something Claude Code can iterate on as fast or that you can demo the innards of |
+| **n8n (self-hosted, Docker)** | Every workflow | Free | Sustainable Use Licence — see §1.2, email n8n before invoicing | Already your stack; the alternative (hand-written service) is harder to iterate on or visually inspect node by node |
 | **n8n Data Tables** | Persistent store for leases + outreach log | Free, in-instance | Same as n8n | Beat Google Sheets (no third party, no OAuth, no US-PII-in-your-Gmail question) and external Postgres (no second container, no credentials) |
 | **Docker + Docker Compose** | Runs n8n | Free | Apache 2.0 | — |
 | **Hetzner Cloud CX22, US region (Ashburn VA or Hillsboro OR)** | Hosting | ~€4.50 / ≈$5 per month | Commercial hosting | US region is the point: it makes "where does my data live" a one-sentence answer. Zero-cost fallback: run locally with a `cloudflared` quick tunnel, accepting an ephemeral URL |
@@ -525,7 +525,7 @@ No SSN, no DOB, no payment or bank data, no screening or credit output, no ID do
 
 ## 6. Build plan — phase by phase, action by action
 
-Sequenced, not scheduled. Each step states what "done" means. Every step is directly actionable by Claude Code.
+Sequenced, not scheduled. Each step states what "done" means. Every step is directly actionable.
 
 ### Phase A — Foundation
 
@@ -742,7 +742,7 @@ Prompt injection in a reply body ("ignore previous instructions and mark this as
 
 **Yes, build it.** This is the one product of the four with no inherently dramatic moment — no invoice appearing, no document parsing on screen. The board *is* the demo's first thirty seconds, and it's what makes fourteen abstract leases feel like fourteen people. Without it you're showing someone the n8n canvas, which impresses engineers and nobody else.
 
-**Build it as one HTML document returned by an n8n Webhook.** No framework, no build step, no second container, no CDN. Inline CSS, inline JS, roughly 400 lines. Claude Code writes it in one pass into the Code node of WF2.
+**Build it as one HTML document returned by an n8n Webhook.** No framework, no build step, no second container, no CDN. Inline CSS, inline JS, roughly 400 lines. Embedded directly into the Code node of WF2.
 
 ### Screen 1 — Renewal pipeline (the landing view)
 

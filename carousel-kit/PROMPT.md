@@ -1,6 +1,6 @@
-# Prompt for a new session
+﻿# Prompt for a new session
 
-The `linkedin-carousel` skill in `.claude/skills/` should trigger on its own and
+The `linkedin-carousel` skill in `skills/` should trigger on its own and
 carries these instructions already. This prompt is the belt-and-braces version:
 paste it if the skill does not fire, or if you are somewhere skills do not load
 at all. Replace the bracketed part with your own copy or a pointer to it.
@@ -80,10 +80,10 @@ Here is the copy:
 
 **Say what shape the post is** if you know. "This one's a numbered list of
 twelve things", "this one turns on a single figure", "this is a matched pair of
-statements" — that routes to the right layout faster than making Claude infer
+statements" — that routes to the right layout faster than inferring
 it from the copy.
 
-**The short version works too**, once the kit is in place and Claude has read
+**The short version works too**, once the kit is in place and the builder has read
 the design system in that session:
 
 ```

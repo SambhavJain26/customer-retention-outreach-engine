@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Render and check the editable HTML solution brief for Pre-Renewal Retention.
  * Exports high-resolution screenshots and an accessible, tagged PDF.
  */
@@ -80,7 +80,7 @@ let playwright;
 try {
   playwright = require("playwright");
 } catch {
-  playwright = require(path.join(os.homedir(), ".cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright"));
+  playwright = require(path.join(os.homedir(), ".cache/playwright-runtimes/dependencies/node/node_modules/playwright"));
 }
 
 (async () => {

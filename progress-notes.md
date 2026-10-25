@@ -1,4 +1,4 @@
-# Pre-Renewal Retention Loop - Progress Notes
+﻿# Pre-Renewal Retention Loop - Progress Notes
 
 Last updated: 2026-10-20
 
@@ -25,14 +25,14 @@ Last updated: 2026-10-20
 
 - Applied the user's audience correction across the eleven-slide carousel, full caption and reusable project prompt. The story now leads with surfacing unresolved concerns before renewal, followed by the plain-language workflow, manager decisions, wording choices, two actual bugs and fixes, exception handling, lessons, specific checks and proposed improvements.
 - Removed public stack names, node counts, schema/code excerpts and internal state labels. Kept concrete substance through the edited-message validation gap, Skip making a sent resident eligible again, individual message approval and visible human-review routes. Preserved the public-copy direction and internal evidence boundaries; no customer outcomes or classifier accuracy claims were added.
-- Reused the varied visual layouts with accessible labels, retained blue/yellow annotations and changed the single Zodiak cover payoff to listening. Updated design guidance and the matching AGENTS.md/CLAUDE.md rule. Normalized CRLF in the Markdown builder so Windows checkouts preserve slide parsing.
+- Reused the varied visual layouts with accessible labels, retained blue/yellow annotations and changed the single Zodiak cover payoff to listening. Updated design guidance and the matching repository guidelines rule. Normalized CRLF in the Markdown builder so Windows checkouts preserve slide parsing.
 - Verification: rebuilt PDF; all eleven title/body/footer fields match extracted text; expected dimensions, nine font subsets and one grain image; browser confirms Switzer/Zodiak loading and no content overflow or furniture collisions. Visually inspected all eleven raster pages and refreshed contact sheet. Final PDF is 160,006 bytes. No workflow runtime, posting queue or publication changes.
 
 ## 2026-10-20 - Build-focused public copy and reusable prompt
 
 - Applied the user's direction to remove public demo/synthetic-data mentions and no-client/no-deployment disclaimers from the technical carousel and caption. Updated affected footers, verification context and next-improvement wording without adding deployment, accuracy or business-outcome claims. Internal provenance and evidence mapping remain intact; proposed controls remain future work.
 - Rebuilt the eleven-page PDF and refreshed the preview. Verification passed: public source/HTML/caption scans contain none of the removed wording; PDF title/body/footer copy preserved; expected page dimensions, eleven font subsets, one grain image and no geometry overflow. Inspected the affected native-size pages and refreshed contact sheet. Final PDF is 175,676 bytes.
-- Added `docs/technical-carousel-project-prompt.md` with the reusable project prompt reflecting the current diagram-led design, AI-engineer audience and public-wording direction. Synchronized the durable public-copy rule in AGENTS.md and CLAUDE.md. No runtime, publication or posting-order changes.
+- Added `docs/technical-carousel-project-prompt.md` with the reusable project prompt reflecting the current diagram-led design, AI-engineer audience and public-wording direction. Synchronized the durable public-copy rule in repository guidelines. No runtime, publication or posting-order changes.
 
 ## 2026-10-19 - Technical carousel caption verification
 
@@ -44,7 +44,7 @@ Last updated: 2026-10-20
 
 - Implemented the user-approved density/layout assessment while retaining eleven slides and the applied-AI hiring audience. Supporting body copy fell from 459 to 279 words (39.2%); diagrams, schema fields, numbered steps and result rows now carry detail. Shortened the caption and strengthened the cover around individual approval.
 - Reordered reproducibility before runtime validation, followed by two defects, model failure, recorded verification and three future priorities. Added distinct architecture lanes, model/code columns, a schema table, source/build/import steps, an explicit retry/revalidation branch, before/after validation flows, large state transitions, a vertical failure route and a check/result table. Replaced the large 14/14 headline and oversized evidence payoff with ordinary labeled results. The single Zodiak landing word is now approval on the cover.
-- Added shared `.technical--visual` and `.v-*` layouts, documented them in the design system, and synchronized durable guidance in AGENTS.md/CLAUDE.md. Blue/gold marks now emphasize the approval gate, recheck, retained SENT state, retry bound and unestablished classifier generalization. Corrected unequal diagram-node rule alignment and placed the unchecked-gap callout between Edit and Send; editing is no longer struck as though removed.
+- Added shared `.technical--visual` and `.v-*` layouts, documented them in the design system, and synchronized durable guidance in repository guidelines. Blue/gold marks now emphasize the approval gate, recheck, retained SENT state, retry bound and unestablished classifier generalization. Corrected unequal diagram-node rule alignment and placed the unchecked-gap callout between Edit and Send; editing is no longer struck as though removed.
 - Verification passed against the final PDF: eleven pages at expected portrait dimensions; title/body/footer copy preserved; eleven font subsets and one shared grain image; no internal notes/paths; no geometry overflow or furniture collision. PDF is 176,289 bytes. Inspected every page at native resolution, the contact sheet, and changed-page re-renders. No runtime changes, live tests, publication or posting-order changes were made; the eight-post queue is preserved.
 
 ## 2026-10-19 - Posting queue narrowed to eight technical posts
@@ -57,14 +57,14 @@ Last updated: 2026-10-20
 
 - Revised the technical retrospective caption, 11 slide scripts, generated HTML, PDF and contact sheet after the user requested the maintenance-triage carousel kit as a reference and an AI-engineer hiring audience. Read both reference decks' source and inspected their rendered examples. Maintenance-triage files were read only.
 - Replaced the Telegram card-parameter slide with the classifier schema contract and added explicit bounded-draft-retry and model-error-routing coverage. Kept the validation/edit and Skip/state defects as engineering examples. Clarified that the recorded 14/14 result concerns draft wording, not classifier accuracy; a held-out reply set, concurrent-send controls and uncertain-send recovery remain proposed work. All implementation claims were checked against shared logic, schemas and builders; no new live integration run or production outcome is implied.
-- Expanded annotation use following the user's explicit color direction: every shape can use blue or gold. The final deck has eight highlights (five blue), seven double-stroke circles, six underlines, four strikes and two selection boxes (one blue, one gold). Marks appear on headlines and state/validation diagrams as well as body text. Added scoped color variants and the larger `.technical--ai` layout, with both colors handled on the dark slide. Existing carousels retain their styles. Updated design-system.md, AGENTS.md and CLAUDE.md to preserve this user direction.
+- Expanded annotation use following the user's explicit color direction: every shape can use blue or gold. The final deck has eight highlights (five blue), seven double-stroke circles, six underlines, four strikes and two selection boxes (one blue, one gold). Marks appear on headlines and state/validation diagrams as well as body text. Added scoped color variants and the larger `.technical--ai` layout, with both colors handled on the dark slide. Existing carousels retain their styles. Updated design-system.md, repository guidelines to preserve this user direction.
 - Rebuilt and visually inspected all 11 pages plus the contact sheet. Corrected a split dark-page highlight and rechecked changed final pages. Final checks pass: all title/body/footer wording preserved, 11 expected portrait pages, eight font subsets, one shared grain image, no internal paths/notes, and no geometry overflow or furniture collisions. PDF is 158,452 bytes. Copy remains a draft for user review; no publication or posting-order change.
 
 ## 2026-10-19 - Rendered technical retrospective carousel
 
 - Built `carousel-kit/technical-retrospective-renewal-retention.html`, an 11-page review PDF in `carousel-kit/out/technical-retrospective-renewal-retention.pdf`, and `carousel-kit/out/technical-retrospective-preview.png`. Preserved all drafted title/body/footer wording; added explanatory process labels from the visual directions. No publication or queue change.
 - Added the reusable, scoped `.technical` layout to the shared stylesheet and documented it in `carousel-kit/design-system.md`: existing cream paper, Switzer, blue/gold annotations, one dark slide and one Zodiak payoff, with 40/48px explanatory copy and 32/48px process rows. Existing deck classes remain unaffected. Added a Markdown-to-HTML builder and a PDF copy/structure verifier.
-- Found that the combined Fontshare URL omitted Zodiak. Separate family stylesheet links restored the intended serif; browser font loading and visual inspection confirmed it. Updated both AGENTS.md and CLAUDE.md with this durable gotcha and the new builder command.
+- Found that the combined Fontshare URL omitted Zodiak. Separate family stylesheet links restored the intended serif; browser font loading and visual inspection confirmed it. Updated both repository guidelines with this durable gotcha and the new builder command.
 - Verification passed: 11 pages, expected approximately 810 x 1013pt portrait dimensions, all title/body/footer wording preserved through positioned PDF extraction (whitespace and middle-dot mapping normalized), eight embedded font subsets and one shared grain image. PDF is 151,971 bytes. Browser geometry checks found no content overflow or furniture collisions. Inspected the contact sheet and every final-PDF page at native size, including diagram rows and annotation placement. Review copy remains open for the user's wording changes.
 
 ## 2026-10-19 - Technical retrospective carousel copy
@@ -72,7 +72,7 @@ Last updated: 2026-10-20
 - Created `docs/build-4-content-strategy/technical-retrospective-carousel.md`: an additional 11-slide technical retrospective and LinkedIn caption for user review, aimed at builders and people hiring for automation/integration roles. Covers scope, architecture, AI boundaries, the single resident send path, three recorded defects, reproducible exports, synthetic verification and proposed production improvements.
 - Checked claims against v2 builders, shared logic, committed exports and recorded verification. Parsed the five exports to confirm 25/21/21/18/3 nodes (88 total), one Gmail send node in WF6 and one Gmail read node in WF8. Distinguished sequential duplicate-approval refusal from unproven concurrency/crash safety; atomic send claims and send/state reconciliation are proposed work, not demo features.
 - Copy checks passed: 11 sequential slides, a 39-character document title, no em dashes or exclamation points in public copy, and explicit synthetic-test boundaries. Slide bodies range from 23 to 50 words. Included internal evidence mapping and visual directions for later production; no artwork, PDF, runtime changes, fresh integration test, publication or posting-order change was performed.
-- No new durable command, workaround or repository rule arose from this writing task; existing AGENTS.md and CLAUDE.md guidance remains applicable without changes. Copy approval and visual production remain separate work.
+- No new durable command, workaround or repository rule arose from this writing task; existing repository guidelines guidance remains applicable without changes. Copy approval and visual production remain separate work.
 
 ## 2026-10-10 - Work sample footer revision
 
@@ -301,9 +301,9 @@ by unread state.
 
 2026-08-04: Made the n8n OpenAI credential explicit and confirmed the build should use n8n's built-in OpenAI/OpenAI Chat Model nodes for AI calls. Also marked a temporary local tunnel as acceptable for demo/testing convenience.
 
-2026-08-04: Rewrote `AGENTS.md` using the pasted guide from a similar automation project, adapted to this repo's decisions: local-first n8n, Data Tables, Gmail OAuth2, Telegram manager alerts, built-in OpenAI nodes, deterministic tenant matching, and no legal notices or auto-replies.
+2026-08-04: Rewrote `repository guidelines` using the pasted guide from a similar automation project, adapted to this repo's decisions: local-first n8n, Data Tables, Gmail OAuth2, Telegram manager alerts, built-in OpenAI nodes, deterministic tenant matching, and no legal notices or auto-replies.
 
-2026-08-04: Added Git workflow guidance to `AGENTS.md`: check status/log commands, commit and push to `main` after every completed task unless explicitly told not to, and report push failures clearly.
+2026-08-04: Added Git workflow guidance to `repository guidelines`: check status/log commands, commit and push to `main` after every completed task unless explicitly told not to, and report push failures clearly.
 
 2026-08-04: Implemented Stage 1 local-first runtime scaffolding using repo-owned Docker Compose instead of VPS/Caddy/domain setup. Added `.env.example`, ignored local `.env`, `docker-compose.yml`, `scripts/verify-stage-1.ps1`, and `docs/stage-1-local-environment.md`.
 
@@ -603,7 +603,7 @@ tracker, per the user's clarification. Interleaved all thirteen active Build 5 p
 in their planned sequence and excluded standalone image posts. The remaining queue
 has 42 slots: 9 carousels, 26 text posts and 7 videos. Source copy is unchanged.
 Verified slot numbering, format totals, local links/anchors and build/format adjacency.
-No durable implementation command or gotcha arose; AGENTS.md/CLAUDE.md need no change.
+No durable implementation command or gotcha arose; repository guidelines need no change.
 
 ## 2026-09-20 — Posting queue synchronized with Build 5 edits
 
