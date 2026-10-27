@@ -1,4 +1,4 @@
-﻿# Case Study: Autonomous Pre-Renewal Retention & Grievance-Resolution Loop
+# Case Study: Customer Retention & Proactive Outreach Automation
 
 > *A complete portfolio case study detailing the architecture, engineering decisions, and business impact of an enterprise property management automation build.*
 
@@ -6,7 +6,7 @@
 
 ## Project Hero
 
-* **Project Title**: Autonomous Pre-Renewal Resident Retention & Grievance-Resolution Loop
+* **Project Title**: Customer Retention & Proactive Outreach Automation
 * **Subtitle**: An event-driven n8n and AI orchestration engine that identifies resident dissatisfaction 90 days before lease expiration, running mobile-first human-in-the-loop remediation to protect turnover revenue.
 * **Role**: Lead Workflow Automation Architect & Backend Engineer
 * **Timeline**: 3 Weeks (Architecture, Implementation, Hardening, and Work Sample Release)

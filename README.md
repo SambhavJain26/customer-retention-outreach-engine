@@ -1,4 +1,4 @@
-﻿# Pre-Renewal Resident Retention & Grievance-Resolution Loop
+# Customer Retention & Proactive Outreach Automation
 
 [![n8n](https://img.shields.io/badge/Orchestration-n8n_v1.x-EA4B71?style=flat-square&logo=n8n)](https://n8n.io)
 [![Docker](https://img.shields.io/badge/Runtime-Docker_Compose-2496ED?style=flat-square&logo=docker)](https://www.docker.com)
