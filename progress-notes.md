@@ -1,6 +1,12 @@
 ﻿# Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-10-20
+Last updated: 2026-11-05
+
+## 2026-11-05 - Fix retrospective links in VS Code Markdown preview
+
+- Diagnosed all ten retrospective caption/PDF links in `docs/posting-order.md`: their files exist, but bare `D:/...` targets parse with URL scheme `d`, rather than as relative local files. Replaced them with document-relative paths, using sibling-project paths for the other four builds and local paths for renewal.
+- Verified all 48 linked file targets resolve, all five caption heading fragments exist, and all 24 queue entries retain their content and order. No PDFs, captions, source assets or editor security settings changed. Verification covered path resolution and URI parsing; no live VS Code click test was performed.
+- Added the durable repository-Markdown link rule to AGENTS.md and CLAUDE.md. Updated the posting-order date and documented the sibling-folder requirement. Diff whitespace checks passed.
 
 ## 2026-10-20 - Remove the five flagged posts
 
