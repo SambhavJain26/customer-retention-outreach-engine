@@ -1,6 +1,6 @@
 # Posting order across all five builds
 
-Created: 2026-09-02. Updated: 2026-11-05.
+Created: 2026-09-02. Updated: 2026-11-07.
 
 This queue starts with the first unpublished post. The user has posted through original #14; those published entries are excluded. Queue numbers restart at 1, while the original-slot column preserves the old reference numbers.
 
@@ -36,6 +36,18 @@ The queue includes the retained non-video posts after original #14 in their orig
 | 22 | New | Renewal retention build retrospective | [A renewal check-in that starts with listening](build-4-content-strategy/technical-retrospective-carousel.md#linkedin-caption) | Carousel | [PDF](../carousel-kit/out/technical-retrospective-renewal-retention.pdf) | Whole-build retrospective; caption and PDF linked. |
 | 23 | 40 | Make-ready 14 | [Most turn software is not built for a portfolio your size](build-3-content-strategy/linkedin-post-scripts.md#post-14-most-turn-software-is-not-built-for-a-portfolio-your-size) | Carousel | [plan](build-3-content-strategy/linkedin-content-plan.md#14-most-turn-software-is-not-built-for-a-portfolio-your-size) |  |
 | 24 | New | Leasing and screening build retrospective | [Fast leasing without the shortcuts](../../leasing-tenant-screening/docs/build-5-content-strategy/technical-retrospective-carousel.md#linkedin-caption) | Carousel | [PDF](../../leasing-tenant-screening/output/pdf/technical-retrospective-leasing-screening.pdf) | Whole-build retrospective; caption and PDF linked. |
+
+## LinkedIn document titles for the build retrospectives
+
+Copy the matching title into LinkedIn's document-title field when uploading the PDF. These are upload titles, separate from the post captions.
+
+| Queue # | Build | Document title |
+|---|---|---|
+| #14 | Vendor COI chasing | I built a follow-up process for vendor paperwork. |
+| #17 | Maintenance triage | Maintenance triage that puts safety first |
+| #20 | Make-ready sequencing | Turnover coordination that protects the sequence |
+| #22 | Renewal retention | A renewal check-in that starts with listening |
+| #24 | Leasing and screening | Fast leasing without the shortcuts |
 
 ## Scope and readiness
 

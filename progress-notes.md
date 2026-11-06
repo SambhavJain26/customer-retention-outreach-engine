@@ -1,6 +1,11 @@
 ﻿# Pre-Renewal Retention Loop - Progress Notes
 
-Last updated: 2026-11-05
+Last updated: 2026-11-07
+
+## 2026-11-07 - Complete document upload titles for all five retrospectives
+
+- Checked all five canonical retrospective copy files. Vendor COI already had an explicit upload title; added missing LinkedIn document-title metadata to maintenance, make-ready, renewal and leasing, matching their existing cover wording. Added a five-build title reference table to `docs/posting-order.md` at the current queue slots.
+- Verified every build has an explicit title, each is 34-49 characters, and all captions and slide fields are unchanged. No PDF rendering was needed for publishing metadata. Queue membership/order remains 24 posts. Added the durable explicit-upload-title rule to AGENTS.md and CLAUDE.md; sibling repository changes are limited to their title metadata and task logs, preserving unrelated working changes.
 
 ## 2026-11-05 - Fix retrospective links in VS Code Markdown preview
 

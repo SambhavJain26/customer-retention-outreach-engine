@@ -2,6 +2,8 @@
 
 Revised: 2026-10-20. Status: rendered draft for review; not published or queued.
 
+**LinkedIn document title:** `A renewal check-in that starts with listening`
+
 Review PDF: `carousel-kit/out/technical-retrospective-renewal-retention.pdf`.
 Editable HTML: `carousel-kit/technical-retrospective-renewal-retention.html`.
 Build: `node carousel-kit/scripts/build-technical-retrospective.cjs`.
