@@ -233,5 +233,5 @@ renewal-retention/
 
 ---
 
-## License & Security
+## Security & Privacy
 Private Client Build - Proprietary Intellectual Property. All credentials, API tokens, and resident identities in this repository are sanitized mock data.
