@@ -50,7 +50,7 @@ A typical property management team spends **66% of its working hours on routine,
 
 ## The System Solution
 
-The solution is an **autonomous early-warning and grievance-resolution loop** operating across three coordinated surfaces:
+The solution is a **manager-approved early-warning and grievance-resolution loop** operating across three coordinated surfaces:
 1. **The Filing Cabinet (Airtable)**: Serves as the real-time operational database, tracking residents, cohorts, drafts, classification statuses, and financial recovery metrics without requiring a custom frontend.
 2. **The Orchestration Engine (n8n)**: An 88-node, 5-workflow cluster deployed on Docker that executes scheduled data sweeps, runs dual-pass regex guardrails, coordinates LLM drafting, and handles webhook dispatching.
 3. **The Mobile Action Surface (Telegram)**: Delivers interactive cards with inline action buttons directly to property managers, enabling 1-tap approvals and edits in the field.
